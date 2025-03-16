@@ -1,0 +1,135 @@
+.card {
+    position: relative; /* Make the card a positioning context */
+    font: Georgia;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    width: 300px;
+    max-height: 485px;
+    margin: 8px;
+    background-color: #fff;
+    
+}
+.card-content{
+    padding:10px;
+}
+
+.card-state{
+    position: absolute; /* Position the state absolutely */
+    top: 10px; /* Adjust the distance from the top */
+    left: 10px; /* Adjust the distance from the left */
+    background-color: #ff0000; /* Example background color */
+    color: #fff; /* Example text color */
+    padding: 5px 10px; /* Add padding */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 0.8em; /* Adjust font size */
+    font-weight: bold; /* Make text bold */
+    z-index: 1; /* Ensure it appears above the image */
+
+}
+
+.card-image {
+    position: relative; 
+
+    max-width: 300px;
+    width: 300px;
+    height: auto;
+    display: block; 
+    
+}
+
+
+.card-title {
+    color: #8d8d8d;
+    font-size: .8em;
+    margin-bottom: 8px;
+    text-align:start;
+    margin-top: 0px;
+}
+
+.card-description {
+    font-weight: 400;
+    font-size: 1em;
+    /* font-weight: bold; */
+    color: #000000;
+    margin-top: -5px;
+}
+
+.card-price {
+    text-align:start;
+    font-size: 1.25em;
+    color: #333;
+    
+    font-weight: 600;
+    margin-top: 10px;
+    
+}
+
+.card-options {
+    display: flex;
+    font-size: .8em;
+    gap: 6px;
+    margin-top: -10px;
+}
+
+.card-options span {
+    padding: 2px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    
+}
+
+.card-quantity {
+    text-align:start;
+    margin-bottom: 16px;
+    font-size: .8em;
+    background-color: #ececec;
+    padding: 7px;
+    border-radius: 10px;
+    color:#a3a3a3;;
+    width: 65px;
+    margin-top: 10px;
+}
+
+.card-quantity label {
+    margin-right: 8px;
+    color: #646464;
+
+}
+
+.card-quantity input {
+    width: 25px;
+    padding: 4px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: .8em;
+    color: #a3a3a3;
+    
+    
+}
+
+.card-button-quantity{
+    display: flex; /* Use Flexbox */
+    align-items: center; /* Vertically center items */
+    gap: 10px; /* Add space between quantity and button */
+}
+
+.card-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 130px;
+    font-size: .8em;
+    margin-top: -5px;
+
+}
+
+.card-button:hover {
+    background-color: #218838;
+}
