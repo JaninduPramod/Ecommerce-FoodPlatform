@@ -16,22 +16,22 @@ const NavBar = () => {
           sx={{
             height: "90px",
             width: "90%",
-            backgroundColor: "white",
+            backgroundColor: "lightyellow",
             marginTop: 1,
             borderRadius: "18px",
             position: "fixed",
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-evenly",
+            justifyContent: "space-between",
           }}
         >
           <Box
             component="img"
-            src="https://miro.medium.com/v2/resize:fit:1400/1*MF5V_dkybUTcfzwHFh0VSw.jpeg"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Foody-Logo.svg/2093px-Foody-Logo.svg.png"
             sx={{
               color: "black",
-              height: "75%",
-              width: "10%",
+              height: "100%",
+
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
