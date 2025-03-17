@@ -26,17 +26,17 @@ const NavBar = () => {
           }}
         >
           <Box
+            component="img"
+            src="https://miro.medium.com/v2/resize:fit:1400/1*MF5V_dkybUTcfzwHFh0VSw.jpeg"
             sx={{
               color: "black",
               height: "75%",
-              width: "20%",
+              width: "10%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
-          >
-            Icon
-          </Box>
+          ></Box>
           <Box
             sx={{
               height: "75%",
@@ -51,7 +51,7 @@ const NavBar = () => {
             <Typography
               variant="h6"
               component={Link}
-              to="/home"
+              to="/"
               sx={{
                 fontFamily: "cursive",
                 color: "black",
