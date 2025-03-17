@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import React from "react";
 import Card from "./components/Card.jsx";
+import Footer from "./components/Footer.jsx";
 import img from "./assets/img1.jpg";
 
 
@@ -20,9 +21,9 @@ function App() {
     return (
         <div className="app">
             <Card
-                image="" 
+                
                 state="sold out"
-                //  image= {img} 
+                image= {img} 
                 title="Organic Fruits"
                 description="Kitchen Spices - Fregfdgfdgsh And Healthy"
                 price={904.00}
@@ -31,7 +32,9 @@ function App() {
                 onQuantityChange={handleQuantityChange}
                 onAddToCart={handleAddToCart}
             />
+            <Footer />
         </div>
+        
     );
 }
 
