@@ -1,12 +1,13 @@
 import React from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Container } from "@mui/material";
+import ImageListComponent from "../components/imglist";
 
 const HomePage = () => {
   return (
     <>
       <Box
         sx={{
-          width: "100vw",
+          width: "100%vw",
           height: "500px",
           mt: "75px",
           backgroundImage:
@@ -46,6 +47,14 @@ const HomePage = () => {
           </Button>
         </Box>
       </Box>
+      <ImageListComponent />
+      <Container sx={{ mt: 10, display: "flex", justifyContent: "center" }}>
+        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+          Trending Products
+        </Typography>
+      </Container>
+
+      <Box sx={{ height: "800px" }}></Box>
     </>
   );
 };
