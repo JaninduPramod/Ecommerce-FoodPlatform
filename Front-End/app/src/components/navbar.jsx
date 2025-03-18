@@ -60,6 +60,7 @@ const NavBar = () => {
             <Typography
               variant="h6"
               component={Link}
+              to="/product"
               sx={{
                 fontFamily: "cursive",
                 color: "black",
@@ -67,7 +68,7 @@ const NavBar = () => {
                 ":hover": { color: "#ff7d01" },
               }}
             >
-              Tab3
+              Products
             </Typography>
             <Typography
               variant="h6"

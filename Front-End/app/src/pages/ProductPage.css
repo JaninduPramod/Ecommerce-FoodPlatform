@@ -1,0 +1,108 @@
+/* Main Container */
+.product-page {
+    display: flex;
+    margin: 20px;
+    padding: 0px 200px 20px 200px;
+}
+
+
+.sidebar {
+    width: 250px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+}
+
+.sidebar h2 {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    margin: 0;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    border-radius: 5px 5px 0 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.sidebar li:hover {
+    background-color: #eaeaea;
+}
+
+.sidebar li span {
+    color: orange;
+    font-weight: bold;
+}
+
+.sub-category {
+    padding-left: 20px;
+    font-size: 0.9em;
+    
+}
+
+
+.card-container3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    flex-grow: 1;
+    padding: 50px;
+}
+
+
+
+
+
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items:end;
+    margin-top: 20px;
+    padding: 10px;
+    gap: 0px; 
+}
+
+.pagination button {
+    background-color: #04a72d;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px 5px 5px 5px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    
+   
+}
+
+.pagination button:hover {
+    background-color: #00b336;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    color: #777;
+    cursor: not-allowed;
+}
+
+
+.pagination span {
+    font-size: 1.1em;
+    padding: 6px;
+    color: #919191;
+    
+    
+}
