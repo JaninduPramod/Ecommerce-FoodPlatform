@@ -8,13 +8,13 @@ function Card({ state, image, title, description, price, options, quantity, onQu
     return (
         <div className="card-outer2">
         <div className="card2">
-        <div className="card2-flex">
             <p className="card2-state">{state}</p>
             <img src={img3} alt="icon" className="card2-icon" />
             <img src={image ? image : img2} alt={title} className="card2-image" />
-            </div >
+
 
             <div className="card2-content">
+            
           <p className="card2-title">{title}</p>
 
                 <div className="card2-description">

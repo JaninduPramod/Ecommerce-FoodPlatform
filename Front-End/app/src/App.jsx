@@ -14,7 +14,7 @@ function App() {
     return (
         <div className="app">
             <HomePage /> 
-            <ProductPage /> 
+            {/* <ProductPage />  */}
             <Footer /> 
         </div>
         
