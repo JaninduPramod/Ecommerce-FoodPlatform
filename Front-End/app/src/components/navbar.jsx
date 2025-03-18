@@ -1,13 +1,11 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Box, Paper, Button } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import Person2Icon from "@mui/icons-material/Person2";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const NavBar = () => {
-  const navigate = useNavigate();
-
   return (
     <>
       <AppBar sx={{ alignItems: "center" }}>
@@ -31,7 +29,6 @@ const NavBar = () => {
             sx={{
               color: "black",
               height: "100%",
-
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -44,7 +41,6 @@ const NavBar = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-
               gap: 5,
             }}
           >
@@ -64,20 +60,6 @@ const NavBar = () => {
             <Typography
               variant="h6"
               component={Link}
-              to="/profile"
-              sx={{
-                fontFamily: "cursive",
-                color: "black",
-                textDecoration: "none",
-                ":hover": { color: "#ff7d01" },
-              }}
-            >
-              Profile
-            </Typography>
-            <Typography
-              variant="h6"
-              component={Link}
-              to="/profile"
               sx={{
                 fontFamily: "cursive",
                 color: "black",
@@ -90,7 +72,6 @@ const NavBar = () => {
             <Typography
               variant="h6"
               component={Link}
-              to="/profile"
               sx={{
                 fontFamily: "cursive",
                 color: "black",
@@ -103,7 +84,6 @@ const NavBar = () => {
             <Typography
               variant="h6"
               component={Link}
-              to="/profile"
               sx={{
                 fontFamily: "cursive",
                 color: "black",
@@ -139,7 +119,6 @@ const NavBar = () => {
                 ":hover": { color: "#ff7d01" },
                 cursor: "pointer",
               }}
-              onClick={() => navigate("/login")}
             >
               <Person2Icon sx={{ fontSize: "30px" }} />
               <Typography

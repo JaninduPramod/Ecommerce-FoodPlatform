@@ -3,7 +3,6 @@ import { Box, Container, Paper } from "@mui/material";
 const ImageListComponent = () => {
   return (
     <>
-      {/* main container */}
       <Box
         sx={{
           marginTop: "50px",
@@ -14,7 +13,6 @@ const ImageListComponent = () => {
           flexDirection: "row",
         }}
       >
-        {/* left container */}
         <Paper
           elevation={3}
           sx={{
@@ -31,9 +29,7 @@ const ImageListComponent = () => {
           }}
         ></Paper>
 
-        {/* right container */}
         <Box sx={{ width: "70%", height: "100%" }}>
-          {/* upper part */}
           <Box
             sx={{
               width: "100%",
@@ -72,7 +68,7 @@ const ImageListComponent = () => {
               }}
             ></Paper>
           </Box>
-          {/* lower part */}
+
           <Paper
             elevation={3}
             sx={{

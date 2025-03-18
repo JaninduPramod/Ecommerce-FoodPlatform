@@ -7,7 +7,7 @@ const HomePage = () => {
     <>
       <Box
         sx={{
-          width: "100%vw",
+          width: "100vw",
           height: "500px",
           mt: "75px",
           backgroundImage:
@@ -53,7 +53,6 @@ const HomePage = () => {
           Trending Products
         </Typography>
       </Container>
-
       <Box sx={{ height: "800px" }}></Box>
     </>
   );
