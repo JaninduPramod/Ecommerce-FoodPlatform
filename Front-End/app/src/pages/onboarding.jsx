@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography, Button, Container } from "@mui/material";
 import ImageListComponent from "../components/imglist";
 
-const HomePage = () => {
+const Onboarding = () => {
   return (
     <>
       <Box
@@ -57,4 +57,4 @@ const HomePage = () => {
     </>
   );
 };
-export default HomePage;
+export default Onboarding;
