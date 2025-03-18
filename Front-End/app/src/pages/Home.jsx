@@ -7,6 +7,7 @@ import CardImg2 from "../assets/img4.png";
 import CardImg from "../assets/img1.jpg";
 import Card from "../components/Card"; //img4.png
 import Card2 from "../components/Card2";
+import { Box } from "@mui/material";
 function Home() {
   const [quantity, setQuantity] = useState(1);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -89,7 +90,7 @@ function Home() {
         </div>
       </div>
 
-      
+      <Box sx={{mx:'100px'}}>
       <div className="card-container1">
         {[...Array(6)].map((_, index) => (
           <Card
@@ -122,6 +123,7 @@ function Home() {
           />
         ))}
       </div>
+      </Box>
     </div>
   );
 }

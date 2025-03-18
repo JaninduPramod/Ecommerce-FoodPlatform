@@ -1,90 +1,73 @@
-
 .carousel {
-  
-    position: relative;
-    max-width: 100%;
-    min-width: 100%;
-    margin: 0 auto;
-    overflow: hidden;
-    height: 600px;
-  }
-  
- 
-  .carousel-inner {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-  }
-  
-  
-  .carousel-item {
-    min-width: 100%;
-    box-sizing: border-box;
-    display: none;
-  }
-  
-  .carousel-item.active {
-    display: block;
-  }
-  
+  position: relative;
+  max-width: 100%;
+  min-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  height: 600px;
+}
 
-  .carousel-image {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  
- 
-  .carousel-control {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.5);
-    color: rgb(150, 150, 150);
-    border: 3px;
-    border-radius: 50px;
-    padding: 10px 26px 10px 26px;
-    cursor: pointer;
-    font-size: 38px;
-  }
-  
-  .carousel-control.prev {
-    left: 10px;
-  }
-  
-  .carousel-control.next {
-    right: 10px;
-  }
-  
- 
+.carousel-inner {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
 
-  .indicator.active {
-    background-color: rgba(255, 255, 255, 1);
-  }
+.carousel-item {
+  min-width: 100%;
+  box-sizing: border-box;
+  display: none;
+}
 
-  .card-container1 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); 
-    grid-template-rows: repeat(2); 
-    margin-top: 50px; 
-    margin-left: 10%;
-    margin-right: 10%;
-  
-  }
-  
-  .card-container1 .card {
-    
-  }
-  .card-container2 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    grid-template-rows: repeat(2); 
-    margin-top: 50px; 
-    margin-left: 10%;
-    margin-right: 10%;
-  
-  }
-  
-  .card-container2 .card {
-    
-  }
-  
+.carousel-item.active {
+  display: block;
+}
+
+.carousel-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.5);
+  color: rgb(150, 150, 150);
+  border: 3px;
+  border-radius: 50px;
+  padding: 10px 26px 10px 26px;
+  cursor: pointer;
+  font-size: 38px;
+}
+
+.carousel-control.prev {
+  left: 10px;
+}
+
+.carousel-control.next {
+  right: 10px;
+}
+
+.indicator.active {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.card-container1 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2);
+  margin-top: 50px;
+}
+
+.card-container1 .card {
+}
+.card-container2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2);
+  margin-top: 50px;
+}
+
+.card-container2 .card {
+}
