@@ -1,5 +1,6 @@
 
 .carousel {
+  
     position: relative;
     max-width: 100%;
     min-width: 100%;
@@ -60,11 +61,24 @@
     background-color: rgba(255, 255, 255, 1);
   }
 
+  .card-container1 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    grid-template-rows: repeat(2); 
+    margin-top: 50px; 
+    margin-left: 10%;
+    margin-right: 10%;
+  
+  }
+  
+  .card-container1 .card {
+    
+  }
   .card-container2 {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columns */
-    
-    margin-top: 50px; /* space between cards */
+    grid-template-columns: repeat(3, 1fr); 
+    grid-template-rows: repeat(2); 
+    margin-top: 50px; 
     margin-left: 10%;
     margin-right: 10%;
   

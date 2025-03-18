@@ -3,9 +3,10 @@ import "./Home.css"; // Custom CSS for the carousel
 import img from "../assets/v_image.png";
 import img1 from "../assets/v_image1.png";
 import img2 from "../assets/v_image2.png";
+import CardImg2 from "../assets/img4.png";
 import CardImg from "../assets/img1.jpg";
-import Card from "../components/Card"; // ✅ Import Card component
-
+import Card from "../components/Card"; //img4.png
+import Card2 from "../components/Card2";
 function Home() {
   const [quantity, setQuantity] = useState(1);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -88,13 +89,29 @@ function Home() {
         </div>
       </div>
 
-      {/* Card Section (Grid Layout) */}
-      <div className="card-container2">
+      
+      <div className="card-container1">
         {[...Array(6)].map((_, index) => (
           <Card
             key={index}
             state="sold out"
             image={CardImg}
+            title="Organic Fruits"
+            description="Kitchen Spices - Freshrerere and Healthy"
+            price={904.0}
+            options={["3 kg", "7 kg"]}
+            quantity={quantity}
+            onQuantityChange={handleQuantityChange}
+            onAddToCart={handleAddToCart}
+          />
+        ))}
+      </div>
+      <div className="card-container2">
+        {[...Array(4)].map((_, index) => (
+          <Card2
+            key={index}
+            state="sold out"
+            image={CardImg2}
             title="Organic Fruits"
             description="Kitchen Spices - Fresh and Healthy"
             price={904.0}
