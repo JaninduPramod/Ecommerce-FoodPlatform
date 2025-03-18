@@ -1,3 +1,4 @@
+.card-outer{padding:0px 0px 20px 0px ;}
 .card {
     position: relative; /* Make the card a positioning context */
     font: Georgia;
@@ -46,14 +47,19 @@
 }
 
 .card-image {
-    position: relative; 
-
+    position: relative;
     max-width: 300px;
     width: 300px;
     height: auto;
-    display: block; 
-    
+    display: block;
+    transition: transform 0.3s ease-in-out; /* Smooth transition */
+    cursor: pointer; /* Change cursor to pointer */
 }
+
+.card-image:hover {
+    transform: scale(1.1); /* Scale up the image */
+}
+
 
 
 .card-title {
@@ -148,3 +154,4 @@
 .card-button:hover {
     background-color: #218838;
 }
+

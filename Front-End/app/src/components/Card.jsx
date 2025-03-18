@@ -6,6 +6,7 @@ import { Typography } from '@mui/material';
 
 function Card({ state, image, title, description, price, options, quantity, onQuantityChange, onAddToCart }) {
     return (
+        <div className="card-outer">
         <div className="card">
             <p className="card-state">{state}</p>
             <img src={img3} alt="icon" className="card-icon" />
@@ -37,6 +38,7 @@ function Card({ state, image, title, description, price, options, quantity, onQu
                     <button className="card-button" onClick={onAddToCart}>ADD TO CART</button>
                 </div>
             </div>
+        </div>
         </div>
     );
 }

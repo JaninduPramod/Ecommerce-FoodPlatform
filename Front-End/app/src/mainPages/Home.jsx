@@ -1,100 +1,112 @@
-import React from 'react';
-import './Home.css';
-
+import React, { useState, useEffect } from "react";
+import "./Home.css"; // Custom CSS for the carousel
+import img from "../assets/v_image.png";
+import img1 from "../assets/v_image1.png";
+import img2 from "../assets/v_image2.png";
+import CardImg from "../assets/img1.jpg";
+import Card from "../components/Card"; // ✅ Import Card component
 
 function Home() {
+  const [quantity, setQuantity] = useState(1);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      id: 1,
+      image: img,
+      alt: "First slide",
+    },
+    {
+      id: 2,
+      image: img1,
+      alt: "Second slide",
+    },
+    {
+      id: 3,
+      image: img2,
+      alt: "Third slide",
+    },
+  ];
+
+  const handleQuantityChange = (event) => {
+    setQuantity(parseInt(event.target.value, 10));
+  };
+
+  const handleAddToCart = () => {
+    alert(`Added ${quantity} item(s) to the cart`);
+  };
+
+  const goToNextSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+  };
+
+  const goToPrevSlide = () => {
+    setCurrentSlide((prevSlide) =>
+      prevSlide === 0 ? slides.length - 1 : prevSlide - 1
+    );
+  };
+
+  // Auto-slide functionality
+  useEffect(() => {
+    const interval = setInterval(goToNextSlide, 4000); // Change slide every 4 seconds
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, []); // ✅ Only runs once on mount
+
   return (
     <div>
-      {/* Carousel Component */}
-      <div id="controls-carousel" className="relative w-full" data-carousel="static">
-        {/* Carousel wrapper */}
-        <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
-          {/* Item 1 */}
-          <div className="hidden duration-700 ease-in-out" data-carousel-item>
-            <img
-              src="/docs/images/carousel/carousel-1.svg" // Make sure this path is correct
-              className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-              alt="Carousel Item 1"
-            />
-          </div>
-          {/* Item 2 */}
-          <div className="hidden duration-700 ease-in-out" data-carousel-item="active">
-            <img
-              src="/docs/images/carousel/carousel-2.svg" // Make sure this path is correct
-              className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-              alt="Carousel Item 2"
-            />
-          </div>
-          {/* Item 3 */}
-          <div className="hidden duration-700 ease-in-out" data-carousel-item>
-            <img
-              src="/docs/images/carousel/carousel-3.svg" // Make sure this path is correct
-              className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-              alt="Carousel Item 3"
-            />
-          </div>
-          {/* Item 4 */}
-          <div className="hidden duration-700 ease-in-out" data-carousel-item>
-            <img
-              src="/docs/images/carousel/carousel-4.svg" // Make sure this path is correct
-              className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-              alt="Carousel Item 4"
-            />
-          </div>
-          {/* Item 5 */}
-          <div className="hidden duration-700 ease-in-out" data-carousel-item>
-            <img
-              src="/docs/images/carousel/carousel-5.svg" // Make sure this path is correct
-              className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-              alt="Carousel Item 5"
-            />
-          </div>
+      {/* Carousel Section */}
+      <div className="carousel">
+        <div className="carousel-inner">
+          {slides.map((slide, index) => (
+            <div
+              key={slide.id}
+              className={`carousel-item ${index === currentSlide ? "active" : ""}`}
+            >
+              <img src={slide.image} alt={slide.alt} className="carousel-image" />
+            </div>
+          ))}
         </div>
 
-        {/* Slider controls */}
-        <button
-          type="button"
-          className="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-          data-carousel-prev
-        >
-          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-            <svg
-              className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 6 10"
-            >
-              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 1 1 5l4 4" />
-            </svg>
-            <span className="sr-only">Previous</span>
-          </span>
+        {/* Previous and Next Buttons */}
+        <button className="carousel-control prev" onClick={goToPrevSlide}>
+          &#10094;
+        </button>
+        <button className="carousel-control next" onClick={goToNextSlide}>
+          &#10095;
         </button>
 
-        <button
-          type="button"
-          className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-          data-carousel-next
-        >
-          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-            <svg
-              className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 6 10"
-            >
-              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
-            </svg>
-            <span className="sr-only">Next</span>
-          </span>
-        </button>
+        {/* Indicators */}
+        <div className="carousel-indicators">
+          {slides.map((slide, index) => (
+            <button
+              key={slide.id}
+              className={`indicator ${index === currentSlide ? "active" : ""}`}
+              onClick={() => setCurrentSlide(index)}
+            ></button>
+          ))}
+        </div>
+      </div>
+
+      {/* Card Section (Grid Layout) */}
+      <div className="card-container2">
+        {[...Array(6)].map((_, index) => (
+          <Card
+            key={index}
+            state="sold out"
+            image={CardImg}
+            title="Organic Fruits"
+            description="Kitchen Spices - Fresh and Healthy"
+            price={904.0}
+            options={["3 kg", "7 kg"]}
+            quantity={quantity}
+            onQuantityChange={handleQuantityChange}
+            onAddToCart={handleAddToCart}
+          />
+        ))}
       </div>
     </div>
   );
 }
 
 export default Home;
-
-
-
