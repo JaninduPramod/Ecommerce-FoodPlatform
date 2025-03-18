@@ -54,7 +54,7 @@ const footerData = {
 
 function Footer() {
   return (
-    <div className="container">
+    <div className="containercc">
       <footer className="footer">
         <div className="footer-content">
           {/* Newsletter Section */}
@@ -72,6 +72,7 @@ function Footer() {
           </div>
 
           {/* Products Section */}
+          
           <div className="footer-section">
             <h2>{footerData.products.title}</h2>
             <ul>

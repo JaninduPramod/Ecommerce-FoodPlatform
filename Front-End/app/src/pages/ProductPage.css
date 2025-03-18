@@ -5,7 +5,7 @@
     padding: 0px 200px 20px 200px;
 }
 
-/* Sidebar (Categories) */
+
 .sidebar {
     width: 250px;
     padding: 15px;
@@ -52,7 +52,7 @@
     
 }
 
-/* Product Grid */
+
 .card-container3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

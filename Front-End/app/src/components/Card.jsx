@@ -34,6 +34,7 @@ function Card({ state, image, title, description, price, options, quantity, onQu
                             onChange={onQuantityChange}
                             min="1"
                         />
+                        
                     </div>
                     <button className="card-button" onClick={onAddToCart}>ADD TO CART</button>
                 </div>

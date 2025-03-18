@@ -17,7 +17,7 @@ const categories = [
   { name: "Mango", count: 0 }
 ];
 
-const products = Array.from({ length: 24 }, (_, index) => ({
+const products = Array.from({ length: 20 }, (_, index) => ({
   id: index,
   state: index % 2 === 0 ? "Sold Out" : "Available",
   image: CardImg,

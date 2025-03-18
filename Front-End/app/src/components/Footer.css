@@ -1,7 +1,8 @@
-.container {
+.containercc {
     min-width: 96vw;
     max-width: 97vw;  
     margin: 0 auto; 
+    
 }
 
 .footer {
@@ -10,7 +11,7 @@
     border-top: 1px solid #ddd;
     font-family: Arial, sans-serif;
     width: 100%;
-    margin-left: -30px;
+   
 }
 
 .footer-content {
@@ -27,6 +28,7 @@
     flex: 1;
     min-width: 200px;
     max-width: 300px;
+    
 }
 
 .footer-section h2 {
