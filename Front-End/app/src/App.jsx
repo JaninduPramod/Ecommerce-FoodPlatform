@@ -6,6 +6,7 @@ import ProductPage from "./pages/ProductPage.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/navbar";
 import Onboarding from "./pages/onboarding";
+import AuthSection from "./pages/Login.jsx";
 
 
 function App() {
@@ -20,7 +21,7 @@ function App() {
         <Router>
         <NavBar />
         <Routes>
-          <Route path="/" element={<Onboarding />} />
+          <Route path="/" element={<AuthSection />} />
           <Route path="/product" element={<ProductPage />} />
         </Routes>
         <Footer /> 
