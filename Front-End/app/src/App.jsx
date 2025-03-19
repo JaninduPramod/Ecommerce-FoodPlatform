@@ -6,12 +6,14 @@ import ProductPage from "./pages/ProductPage.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/navbar";
 import Onboarding from "./pages/onboarding";
+import AuthSection from "./pages/Login.jsx";
+import SignUpPage from "./pages/SignUp.jsx";
 
 
 function App() {
   
 
-    return (
+    return ( 
         // <div className="app">
         //     <HomePage /> 
         //      
@@ -22,6 +24,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Onboarding />} />
           <Route path="/product" element={<ProductPage />} />
+          <Route path='/login' element={<AuthSection />} /> 
+          <Route path='/signup' element={<SignUpPage />} />
         </Routes>
         <Footer /> 
       </Router>

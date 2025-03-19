@@ -73,6 +73,7 @@ const NavBar = () => {
             <Typography
               variant="h6"
               component={Link}
+              to={'/signup'}
               sx={{
                 fontFamily: "cursive",
                 color: "black",
@@ -80,11 +81,12 @@ const NavBar = () => {
                 ":hover": { color: "#ff7d01" },
               }}
             >
-              Tab 4
+              Sign up
             </Typography>
             <Typography
               variant="h6"
               component={Link}
+              
               sx={{
                 fontFamily: "cursive",
                 color: "black",
@@ -120,10 +122,12 @@ const NavBar = () => {
                 ":hover": { color: "#ff7d01" },
                 cursor: "pointer",
               }}
+              
             >
               <Person2Icon sx={{ fontSize: "30px" }} />
               <Typography
                 component={Link}
+                to={'/login'}
                 sx={{
                   fontSize: "16px",
                   color: "black",
