@@ -26,7 +26,7 @@ const SignUpPage = () => {
           Sign Up
         </Button>
         <Typography variant="body2" sx={{ mt: 2 }}>
-          Already have an account? <Link to="/"><span style={{ color: "blue", cursor: "pointer", "&:hover":{color:"ff7f00"} }}   >Login</span></Link> 
+          Already have an account? <Link to="/login"><span style={{ color: "blue", cursor: "pointer", "&:hover":{color:"ff7f00"} }}   >Login</span></Link> 
         </Typography>
       </Paper>
     </Box>
