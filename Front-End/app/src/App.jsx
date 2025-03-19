@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/navbar";
 import Onboarding from "./pages/onboarding";
 import AuthSection from "./pages/Login.jsx";
+import SignUpPage from "./pages/SignUp.jsx";
 
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
         <Router>
         <NavBar />
         <Routes>
-          <Route path="/" element={<AuthSection />} />
+          <Route path="/" element={<SignUpPage />} />
           <Route path="/product" element={<ProductPage />} />
         </Routes>
         <Footer /> 
