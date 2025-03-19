@@ -8,6 +8,7 @@ import NavBar from "./components/navbar";
 import Onboarding from "./pages/onboarding";
 import AuthSection from "./pages/Login.jsx";
 import SignUpPage from "./pages/SignUp.jsx";
+import Testing from "./pages/testing.jsx";
 
 
 function App() {
@@ -20,14 +21,14 @@ function App() {
         //     
         // </div>
         <Router>
-        <NavBar />
+        {/* <NavBar /> */}
         <Routes>
-          <Route path="/" element={<Onboarding />} />
+          <Route path="/" element={<Testing />} />
           <Route path="/product" element={<ProductPage />} />
           <Route path='/login' element={<AuthSection />} /> 
           <Route path='/signup' element={<SignUpPage />} />
         </Routes>
-        <Footer /> 
+        {/* <Footer />  */}
       </Router>
         
     );
