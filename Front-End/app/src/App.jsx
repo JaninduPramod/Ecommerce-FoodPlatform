@@ -13,7 +13,7 @@ import SignUpPage from "./pages/SignUp.jsx";
 function App() {
   
 
-    return (
+    return ( 
         // <div className="app">
         //     <HomePage /> 
         //      
@@ -22,8 +22,10 @@ function App() {
         <Router>
         <NavBar />
         <Routes>
-          <Route path="/" element={<SignUpPage />} />
+          <Route path="/" element={<Onboarding />} />
           <Route path="/product" element={<ProductPage />} />
+          <Route path='/login' element={<AuthSection />} /> 
+          <Route path='/signup' element={<SignUpPage />} />
         </Routes>
         <Footer /> 
       </Router>
