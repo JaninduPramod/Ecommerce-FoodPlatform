@@ -8,13 +8,14 @@ const CardLayout = ({ Person }) => {
         sx={{
           backgroundColor: "white",
           width: "20%",
-          height: "80%",
+          height: "380px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-evenly",
           mt: "30px",
           mx: "30px",
+          mb: "30px",
           "& *": {
             fontWeight: "bold",
           },
@@ -37,34 +38,12 @@ const MapBox = () => {
       address: "Matara",
       email: "jp@gmail",
     },
-    {
-      name: "shan",
-      age: 28,
-      address: "Matara",
-      email: "jp@gmail",
-    },
-    {
-      name: "janindu",
-      age: 21,
-      address: "Matara",
-      email: "jp@gmail",
-    },
-
-    {
-      name: "janindu",
-      age: 21,
-      address: "Matara",
-      email: "jp@gmail",
-    },
   ];
 
   return (
     <>
       <Box
         sx={{
-          backgroundColor: "lightsteelblue",
-          width: "100vw",
-          height: "100vh",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -72,6 +51,7 @@ const MapBox = () => {
       >
         <Box
           sx={{
+            mt: "25px",
             backgroundColor: "#121212",
             width: "75%",
             height: "50%",

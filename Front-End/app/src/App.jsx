@@ -8,7 +8,7 @@ import NavBar from "./components/navbar";
 import Onboarding from "./pages/onboarding";
 import AuthSection from "./pages/Login.jsx";
 import SignUpPage from "./pages/SignUp.jsx";
-import Testing from "./pages/testing.jsx";
+import Testing from "./Test/ArrayMap.jsx";
 
 
 function App() {
