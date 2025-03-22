@@ -5,6 +5,7 @@ import {  useNavigate } from 'react-router-dom'
 import axios from "axios";
 
 const AuthSection = () => {
+  
   const navigate = useNavigate();
 
   const handleCreateAccount = () => {
@@ -26,7 +27,7 @@ const AuthSection = () => {
     e.preventDefault();
 
     try{
-      const response = await axios.post("http://localhost:8080/login", f, formData);
+      const response = await axios.post("http://localhost:8080/login", formData , {withCredentials: true}, );
 
       if(response.data.success){
         console.log("Login successful:", response.data);
