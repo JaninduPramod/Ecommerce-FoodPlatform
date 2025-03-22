@@ -8,12 +8,12 @@ import NavBar from "./components/navbar";
 import Onboarding from "./pages/onboarding";
 import AuthSection from "./pages/Login.jsx";
 import SignUpPage from "./pages/SignUp.jsx";
-import Testing from "./Test/ArrayMap.jsx";
+import Profile from "./pages/Profile.jsx";
+
 
 
 function App() {
   
-
     return ( 
         // <div className="app">
         //     <HomePage /> 
@@ -27,6 +27,7 @@ function App() {
           <Route path="/product" element={<ProductPage />} />
           <Route path='/login' element={<AuthSection />} /> 
           <Route path='/signup' element={<SignUpPage />} />
+          <Route path='profile' element={<Profile />} />
         </Routes>
         {/* <Footer />  */}
       </Router>

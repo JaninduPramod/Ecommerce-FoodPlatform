@@ -1,13 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, TextField, Button, Paper } from "@mui/material";
 import LoginIcon from '@mui/icons-material/Login';
 import {  useNavigate } from 'react-router-dom'
+import axios from "axios";
 
 const AuthSection = () => {
+  
   const navigate = useNavigate();
 
   const handleCreateAccount = () => {
     navigate('/signup');
+  };
+
+  const [ formData, setFormData ] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [ errorMessage, setErrorMessage ] = useState("");
+
+  const handleChange = (e) =>{
+    setFormData({...formData, [e.target.name]: e.target.value});
+  };
+
+  const handleSubmit = async (e) =>{
+    e.preventDefault();
+
+    try{
+      const response = await axios.post("http://localhost:8080/login", formData , {withCredentials: true}, );
+
+      if(response.data.success){
+        console.log("Login successful:", response.data);
+        navigate('/');
+      }
+
+      else{
+        setErrorMessage("Login failed.Please try Again!");
+      }
+
+    }catch(error){
+      console.error("Error during login:", error);
+      setErrorMessage("An error occurred during login.");
+    }
+
   };
 
   return (
@@ -38,7 +73,7 @@ const AuthSection = () => {
       
         </Paper>
 
-        {/* Login Section */}
+        {/* Login */}
         <Paper sx={{ padding: 2, textAlign: "center", height:"300px" }} elevation={3}>
           <Typography variant="h5" gutterBottom sx={{ display:"flex", alignItems:"center", textAlign:"left" , fontWeight:"bold" }}>
             <LoginIcon sx={{ mr:1 }} />
@@ -47,18 +82,46 @@ const AuthSection = () => {
           <Typography variant="body2" color="textSecondary" sx={{ textAlign:"left" }}>
             If you have an account, please log in.
           </Typography>
-          <TextField fullWidth label="Email" variant="outlined" sx={{ mt: 2 }} />
-          <TextField fullWidth label="Password" type="password" variant="outlined" sx={{ mt: 2 }} />
-          <Typography variant="body2"  color="textSecondary" sx={{ mt: 2, cursor: "pointer", textAlign: "right",
-            "&:hover":{
-                color: "red",   
-            }
-           }} >
-            Forgot your password?
-          </Typography>
-          <Button variant="contained" sx={{ mt: 3, backgroundColor: "#ff7f00", }} >
-            Sign In
-          </Button>
+
+          <form action="" onSubmit={handleSubmit}>
+              <TextField 
+                fullWidth 
+                label="Email" 
+                variant="outlined" 
+                sx={{ mt: 2 }}
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+               />
+
+              <TextField 
+                fullWidth 
+                label="Password" 
+                type="password" 
+                variant="outlined" 
+                sx={{ mt: 2 }}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+               />
+
+              <Typography variant="body2"  color="textSecondary" sx={{ mt: 2, cursor: "pointer", textAlign: "right",
+                "&:hover":{
+                    color: "red",   
+                }
+              }} >
+                Forgot your password?
+              </Typography>
+
+              <Button 
+                variant="contained" 
+                sx={{ mt: 3, backgroundColor: "#ff7f00", }}
+                type="submit"
+              >
+                Sign In
+              </Button>
+          </form>
+
         </Paper>
       </Box>
     </Box>
