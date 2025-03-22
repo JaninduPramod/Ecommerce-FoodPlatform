@@ -10,29 +10,25 @@ import AuthSection from "./pages/Login.jsx";
 import SignUpPage from "./pages/SignUp.jsx";
 import Profile from "./pages/Profile.jsx";
 
-
-
 function App() {
-  
-    return ( 
-        // <div className="app">
-        //     <HomePage /> 
-        //      
-        //     
-        // </div>
-        <Router>
-        {/* <NavBar /> */}
-        <Routes>
-          <Route path="/" element={<Testing />} />
-          <Route path="/product" element={<ProductPage />} />
-          <Route path='/login' element={<AuthSection />} /> 
-          <Route path='/signup' element={<SignUpPage />} />
-          <Route path='profile' element={<Profile />} />
-        </Routes>
-        {/* <Footer />  */}
-      </Router>
-        
-    );
+  return (
+    // <div className="app">
+    //     <HomePage />
+    //
+    //
+    // </div>
+    <Router>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<Onboarding />} />
+        <Route path="/product" element={<ProductPage />} />
+        <Route path="/login" element={<AuthSection />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="profile" element={<Profile />} />
+      </Routes>
+      <Footer />
+    </Router>
+  );
 }
 
 export default App;
