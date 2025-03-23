@@ -1,7 +1,7 @@
 import oracledb from "oracledb";
 
 const dbconfig = {
-  user: "system",
+  user: "urban_food",
   password: "702150",
   connectString: "localhost:1521/FREEPDB1",
 };
@@ -13,6 +13,7 @@ const execution = async (query, bodyParam = []) => {
 
     const result = await connection.execute(query, bodyParam, {
       outFormat: oracledb.OUT_FORMAT_OBJECT,
+      autoCommit: true,
     });
     return result.rows;
   } else {

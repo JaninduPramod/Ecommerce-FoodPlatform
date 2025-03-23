@@ -1,5 +1,5 @@
 import express, { json, urlencoded } from "express";
-import userRoute from "./src/Routes/userRoute.mjs";
+import customerRoute from "./src/Routes/customerRoute.mjs";
 
 const app = express();
 
@@ -10,7 +10,7 @@ app.use(
   })
 );
 
-app.use(userRoute);
+app.use(customerRoute);
 
 const server = app.listen(3000, () => {
   console.log(server.address().port);
