@@ -7,20 +7,22 @@ const dbconfig = {
 };
 
 const execution = async (query, bodyParam = []) => {
-  const connection = await oracledb.getConnection(dbconfig);
-  if (connection) {
-    console.log("database connected");
-
+  let connection;
+  try {
+    connection = await oracledb.getConnection(dbconfig);
     const result = await connection.execute(query, bodyParam, {
       outFormat: oracledb.OUT_FORMAT_OBJECT,
       autoCommit: true,
     });
-    return result.rows;
-  } else {
-    console.log("Something went wrong");
-  }
 
-  connection.close();
+    return result.rows;
+  } catch (error) {
+    console.error("Database Error:", error);
+  } finally {
+    if (connection) {
+      await connection.close();
+    }
+  }
 };
 
 export default execution;

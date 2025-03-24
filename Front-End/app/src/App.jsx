@@ -9,6 +9,7 @@ import Onboarding from "./pages/onboarding";
 import AuthSection from "./pages/Login.jsx";
 import SignUpPage from "./pages/SignUp.jsx";
 import Profile from "./pages/Profile.jsx";
+import MappingDiv from "./Test/ArrayMap.jsx";
 
 function App() {
   return (

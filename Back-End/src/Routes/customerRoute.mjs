@@ -19,7 +19,7 @@ customerRoute.get("/api/v1/allcustomers", async (_, res) => {
     });
   }
   res.status(200).json({
-    data: users,
+    customers: users,
   });
 });
 
