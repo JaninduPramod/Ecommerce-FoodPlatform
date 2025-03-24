@@ -20,7 +20,7 @@ function App() {
     //
     // </div>
     <Router>
-      {/* <NavBar /> */}
+      <NavBar />
       <Routes>
         <Route path="/" element={<Onboarding />} />
         <Route path="/product" element={<ProductPage />} />
@@ -28,7 +28,7 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="profile" element={<Profile />} />
       </Routes>
-      {/* <Footer /> */}
+      <Footer />
     </Router>
   );
 }
