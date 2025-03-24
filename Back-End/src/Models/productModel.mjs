@@ -11,4 +11,21 @@ const getAllProducts = async () => {
   }
 };
 
-export { getAllProducts };
+// Create new User Method
+const createProduct = async (newproduct) => {
+  const params = {
+    product_category: newproduct.product_category,
+    product_name: newproduct.product_name,
+    user_id: newproduct.user_id,
+    product_price: newproduct.product_price,
+  };
+
+  const query = `
+      INSERT INTO products (product_category, product_name, user_id,product_price) 
+      VALUES (:product_category, :product_name, :user_id, :product_price)
+    `;
+
+  await execution(query, params);
+};
+
+export { getAllProducts, createProduct };

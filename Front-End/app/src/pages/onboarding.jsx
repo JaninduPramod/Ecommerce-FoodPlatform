@@ -1,7 +1,9 @@
 import React from "react";
 import { Box, Typography, Button, Container } from "@mui/material";
 import ImageListComponent from "../components/imglist";
-import ProductSetup from "../Test/ProductSetup";
+import ProductSlider from "../Test/ProductCard/ProductCard";
+// import ProductCard from "../Test/ProductCard/ProductCard";
+// import ProductSetup from "../Test/ProductSetup";
 
 const Onboarding = () => {
   return (
@@ -54,7 +56,7 @@ const Onboarding = () => {
           Trending Products
         </Typography>
       </Container>
-      <ProductSetup />
+      <ProductSlider />
       <Box sx={{ height: "800px" }}></Box>
     </>
   );

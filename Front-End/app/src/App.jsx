@@ -9,7 +9,8 @@ import Onboarding from "./pages/onboarding";
 import AuthSection from "./pages/Login.jsx";
 import SignUpPage from "./pages/SignUp.jsx";
 import Profile from "./pages/Profile.jsx";
-import MappingDiv from "./Test/ArrayMap.jsx";
+// import ProductCard from "./Test/ProductCard/ProductCard.jsx";
+// import ProductSetup from "./Test/ProductSetup.jsx";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
     //
     // </div>
     <Router>
-      <NavBar />
+      {/* <NavBar /> */}
       <Routes>
         <Route path="/" element={<Onboarding />} />
         <Route path="/product" element={<ProductPage />} />
@@ -27,7 +28,7 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="profile" element={<Profile />} />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </Router>
   );
 }
