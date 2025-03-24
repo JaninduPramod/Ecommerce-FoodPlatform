@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -13,20 +13,25 @@ import {
   Paper,
 } from "@mui/material";
 
-const products = [
-  {
-    id: 1,
-    image:
-      "https://freshgo-webibazaar.myshopify.com/cdn/shop/products/14_ac27a02a-b802-4898-8323-1ffd20cde171_350x.jpg?v=1625661113",
-    name: "Pomegranate - Small",
-    category: "Summer Fruits",
-    price: "$280.00",
-    oldPrice: "$390.00",
-    available: true,
-  },
-];
-
 const ProductSlider = () => {
+  const [products, setProducts] = useState([]);
+
+  const cardMapper = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/v4/allproducts");
+
+      const data = await res.json();
+
+      setProducts(data.data || []);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  useEffect(() => {
+    cardMapper();
+  }, []);
+
   return (
     <Swiper
       modules={[Navigation, Pagination]}
@@ -38,29 +43,23 @@ const ProductSlider = () => {
     >
       {products.map(product => (
         <SwiperSlide key={product.id}>
-          <Paper elevation={2} sx={{ width: "400px", textAlign: "center" }}>
-            <Card>
+          <Paper elevation={2} sx={{ width: "400px", borderRadius: "25px" }}>
+            <Card sx={{ borderRadius: "25px" }}>
               <CardMedia
                 component="img"
-                image={product.image}
-                alt={product.name}
+                image="https://freshgo-webibazaar.myshopify.com/cdn/shop/products/1_350x.jpg?v=1625658832"
               />
               <CardContent>
                 <Typography variant="body2" color="text.secondary">
-                  {product.category}
+                  {product.PRODUCT_CATEGORY}
                 </Typography>
-                <Typography variant="h6">{product.name}</Typography>
+                <Typography sx={{ mt: "5px" }} variant="h6">
+                  {product.PRODUCT_NAME}
+                </Typography>
                 <Typography variant="h6" color="primary">
-                  {product.price}
+                  {product.PRODUCT_PRICE}
                 </Typography>
-                {product.oldPrice && (
-                  <Typography
-                    variant="body2"
-                    sx={{ textDecoration: "line-through", color: "gray" }}
-                  >
-                    {product.oldPrice}
-                  </Typography>
-                )}
+
                 <Button
                   variant="contained"
                   color={product.available ? "primary" : "error"}
