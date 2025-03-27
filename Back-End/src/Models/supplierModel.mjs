@@ -73,9 +73,16 @@ const updateSupplier = async (SUPPLIER_ID, updateFields) => {
   ];
 
   try {
-    await execution(query, params);
-
-    return "Supplier Updated Successfully ...";
+    const supplierAvailablity = await getSupplierByID(SUPPLIER_ID);
+    if (
+      !supplierAvailablity ||
+      supplierAvailablity == "Invalid Supplier ID !!!"
+    ) {
+      return "Invalid Supplier ID !!!";
+    } else {
+      await execution(query, params);
+      return "Supplier Updated Successfully ...";
+    }
   } catch (error) {
     if (error.errorNum === 2290) {
       return "Invalid User Role !!!";

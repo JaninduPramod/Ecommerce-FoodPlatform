@@ -2,6 +2,7 @@ import express, { json, response, urlencoded } from "express";
 import customerRoute from "./src/Routes/customerRoute.mjs";
 import userRoute from "./src/Routes/userRoute.mjs";
 import supplierRoute from "./src/Routes/supplierRoute.mjs";
+import CategoriesRoute from "./src/Routes/categoryRoute.mjs";
 import cors from "cors";
 import productRoute from "./src/Routes/productRoute.mjs";
 import mongoose from "mongoose";
@@ -16,7 +17,7 @@ app.use(
 );
 app.use(cors());
 
-app.use(customerRoute, userRoute, productRoute, supplierRoute);
+app.use(customerRoute, userRoute, productRoute, supplierRoute, CategoriesRoute);
 
 const uri =
   "mongodb+srv://JaninduPramod:702150@urbanfoodecommerce.jebi4.mongodb.net/?retryWrites=true&w=majority&appName=UrbanFoodEcommerce";
