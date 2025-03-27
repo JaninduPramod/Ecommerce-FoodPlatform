@@ -11,33 +11,25 @@ const userRoute = Router();
 
 // API for fetch ALL users
 userRoute.get("/api/v2/allusers", async (_, res) => {
-  const users = await getAllUsers();
+  const response = await getAllUsers();
 
-  if (users == "false") {
-    res.status(400).json({
-      message: "No Users ...",
-    });
-  } else {
-    res.status(200).json({
-      data: users,
-    });
-  }
+  res.status(200).json({ data: response });
 });
 
 // Create new User
 userRoute.post("/api/v2/newuser", async (req, res) => {
-  const { username, user_password, user_email, user_role } = req.body;
+  const { USER_ROLE, USER_NAME, USER_EMAIL, USER_PASSWORD } = req.body;
 
   const newuser = {
-    username,
-    user_password,
-    user_email,
-    user_role,
+    USER_ROLE,
+    USER_NAME,
+    USER_EMAIL,
+    USER_PASSWORD,
   };
 
   const response = await createUser(newuser);
 
-  res.status(200).json({ data: response });
+  res.status(200).json({ msg: response });
 });
 
 // Fetching User by ID
@@ -46,34 +38,26 @@ userRoute.post("/api/v2/user-byid", async (req, res) => {
 
   const response = await getUserByID(user_id);
 
-  if (response == "false") {
-    res.status(400).json({ msg: "Unavailable !!!" });
-  } else {
-    res.status(200).json({ msg: "User available", data: response });
-  }
+  res.status(200).json({ msg: response });
 });
 
 // Update User By ID
 userRoute.put("/api/v2/updateuser", async (req, res) => {
-  const { user_id, username, user_password, user_email, user_role } = req.body;
+  const { USER_ID, USER_ROLE, USER_NAME, USER_EMAIL, USER_PASSWORD } = req.body;
 
-  const updateFields = { username, user_password, user_email, user_role };
+  const updateFields = { USER_ROLE, USER_NAME, USER_EMAIL, USER_PASSWORD };
 
-  const response = await updateUser(user_id, updateFields);
+  const response = await updateUser(USER_ID, updateFields);
 
-  res.status(200).json({ msg: "Updated", data: response });
+  res.status(200).json({ msg: response });
 });
 
 // Delete User By ID
 userRoute.delete("/api/v2/deleteuser", async (req, res) => {
-  const { user_id } = req.body;
+  const { USER_ID } = req.body;
 
-  if ((await getUserByID(user_id)) == "false") {
-    res.status(400).json({ msg: "Invalid User !!!" });
-  } else {
-    await deleteUser(user_id);
-    res.status(200).json({ msg: "User Deleted successfully ..." });
-  }
+  const response = await deleteUser(USER_ID);
+  res.status(200).json({ msg: response });
 });
 
 export default userRoute;

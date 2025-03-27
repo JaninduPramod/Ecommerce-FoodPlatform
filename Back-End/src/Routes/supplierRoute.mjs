@@ -1,79 +1,63 @@
-// import { Router } from "express";
-// import {
-//   getAllSuppliers,
-//   createSupplier,
-//   getSupplierByID,
-//   updateSupplier,
-//   deleteSupplier,
-// } from "../Models/supplierModel.mjs";
-
-// const supplierRoute = Router();
+import { Router } from "express";
+import {
+  createSupplier,
+  getAllSuppliers,
+  getSupplierByID,
+  updateSupplier,
+  deleteSupplier,
+} from "../Models/supplierModel.mjs";
+const supplierRoute = Router();
 
 // // API for fetch ALL Suppliers
-// supplierRoute.get("/api/v3/allsuppliers", async (_, res) => {
-//   const users = await getAllSuppliers();
+supplierRoute.get("/api/v3/allSuppliers", async (_, res) => {
+  const response = await getAllSuppliers();
 
-//   if (users == "false") {
-//     res.status(400).json({
-//       message: "No suppliers ...",
-//     });
-//   } else {
-//     res.status(200).json({
-//       data: users,
-//     });
-//   }
-// });
+  res.status(200).json({ data: response });
+});
 
-// // Create new Supplier
-// supplierRoute.post("/api/v3/newuser", async (req, res) => {
-//   const { username, user_password, user_email, user_role } = req.body;
+// Create new Supplier
+supplierRoute.post("/api/v3/newSupplier", async (req, res) => {
+  const { SUPPLIER_ID, FULL_NAME, PHONE, ADDRESS, IMAGE_URL } = req.body;
 
-//   const newuser = {
-//     username,
-//     user_password,
-//     user_email,
-//     user_role,
-//   };
+  const newSupplier = {
+    SUPPLIER_ID,
+    FULL_NAME,
+    PHONE,
+    ADDRESS,
+    IMAGE_URL,
+  };
 
-//   const response = await createUser(newuser);
+  const response = await createSupplier(newSupplier);
 
-//   res.status(200).json({ data: response });
-// });
+  res.status(200).json({ msg: response });
+});
 
 // // Fetching Supplier by ID
-// supplierRoute.post("/api/v3/user-byid", async (req, res) => {
-//   const { user_id } = req.body;
+supplierRoute.post("/api/v3/supplier-byid", async (req, res) => {
+  const { SUPPLIER_ID } = req.body;
 
-//   const response = await getUserByID(user_id);
+  const response = await getSupplierByID(SUPPLIER_ID);
 
-//   if (response == "false") {
-//     res.status(400).json({ msg: "Unavailable !!!" });
-//   } else {
-//     res.status(200).json({ msg: "User available", data: response });
-//   }
-// });
+  res.status(200).json({ msg: response });
+});
 
-// // Update Supplier By ID
-// supplierRoute.put("/api/v3/updateuser", async (req, res) => {
-//   const { user_id, username, user_password, user_email, user_role } = req.body;
+// Update Supplier By ID
+supplierRoute.put("/api/v3/updateSupplier", async (req, res) => {
+  const { SUPPLIER_ID, FULL_NAME, PHONE, ADDRESS, IMAGE_URL } = req.body;
 
-//   const updateFields = { username, user_password, user_email, user_role };
+  const updateFields = { FULL_NAME, PHONE, ADDRESS, IMAGE_URL };
 
-//   const response = await updateUser(user_id, updateFields);
+  const response = await updateSupplier(SUPPLIER_ID, updateFields);
 
-//   res.status(200).json({ msg: "Updated", data: response });
-// });
+  res.status(200).json({ msg: response });
+});
 
-// // Delete Supplier By ID
-// supplierRoute.delete("/api/v3/deleteuser", async (req, res) => {
-//   const { user_id } = req.body;
+// Delete Supplier By ID
+supplierRoute.delete("/api/v3/deleteSupplier", async (req, res) => {
+  const { SUPPLIER_ID } = req.body;
 
-//   if ((await getUserByID(user_id)) == "false") {
-//     res.status(400).json({ msg: "Invalid User !!!" });
-//   } else {
-//     await deleteUser(user_id);
-//     res.status(200).json({ msg: "User Deleted successfully ..." });
-//   }
-// });
+  const response = await deleteSupplier(SUPPLIER_ID);
+  res.status(200).json({ msg: response });
+});
 
-// export default supplierRoute;
+export default supplierRoute;

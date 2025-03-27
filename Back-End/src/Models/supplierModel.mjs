@@ -1,78 +1,114 @@
-// import execution from "../config/db.mjs";
+import execution from "../config/db.mjs";
 
-// // All Users Method
-// const getAllSuppliers = async () => {
-//   const query = "SELECT * FROM suppliers";
-//   const users = await execution(query);
-//   if (users.length > 0) {
-//     return users;
-//   } else {
-//     return "false";
-//   }
-// };
+// // All Suppliers Method
+const getAllSuppliers = async () => {
+  const query = "SELECT * FROM SUPPLIER";
+  const response = await execution(query);
 
-// // Create new User Method
-// const createSupplier = async (newuser) => {
-//   const params = {
-//     username: newuser.username,
-//     user_password: newuser.user_password,
-//     user_email: newuser.user_email,
-//     user_role: newuser.user_role,
-//   };
+  if (response.length > 0) {
+    return response;
+  } else {
+    return "No users Available !!!";
+  }
+};
 
-//   const query = `
-//       INSERT INTO mainusers (username, user_password, user_email,user_role)
-//       VALUES (:username, :user_password, :user_email, :user_role)
-//     `;
+// Create new Supplier Method
+const createSupplier = async (newSupplier) => {
+  const params = {
+    SUPPLIER_ID: newSupplier.SUPPLIER_ID,
+    FULL_NAME: newSupplier.FULL_NAME,
+    PHONE: newSupplier.PHONE,
+    ADDRESS: newSupplier.ADDRESS,
+    IMAGE_URL: newSupplier.IMAGE_URL,
+  };
 
-//   await execution(query, params);
-// };
+  const query = `
+      INSERT INTO SUPPLIER (SUPPLIER_ID, FULL_NAME, PHONE,ADDRESS,IMAGE_URL)
+      VALUES (:SUPPLIER_ID, :FULL_NAME, :PHONE, :ADDRESS, :IMAGE_URL)
+    `;
 
-// //  User by ID Method
-// const getSupplierByID = async (id) => {
-//   const query = "SELECT * FROM mainusers WHERE user_id = :id";
-//   const user = await execution(query, [id]);
-//   if (user.length < 1) {
-//     return "false";
-//   }
-//   return user;
-// };
+  try {
+    await execution(query, params);
+    return "Supplier Created Successfully ...";
+  } catch (error) {
+    if (error.errorNum === 1) {
+      return "Supplier Already Exists !!!";
+    } else if (error.errorNum === 1400) {
+      return "Null values are Not accepted !!!";
+    } else if (error.errorNum === 2291) {
+      return "The ID is not a User !!!";
+    }
+  }
+};
 
-// // Update User By ID
-// const updateSupplier = async (id, updateFields) => {
-//   const query = `
-//       UPDATE mainusers
-//       SET username = :username,
-//           user_password = :user_password,
-//           user_email = :user_email,
-//           user_role = :user_role
+// //  Supplier by ID Method
+const getSupplierByID = async (SUPPLIER_ID) => {
+  const query = "SELECT * FROM SUPPLIER WHERE SUPPLIER_ID = :SUPPLIER_ID";
+  const response = await execution(query, [SUPPLIER_ID]);
+  if (response.length <= 0) {
+    return "Invalid Supplier ID !!!";
+  } else {
+    return response;
+  }
+};
 
-//       WHERE user_id = :id
-//     `;
+// Update Supplier By ID
+const updateSupplier = async (SUPPLIER_ID, updateFields) => {
+  const query = `
+        UPDATE SUPPLIER
+        SET FULL_NAME = :FULL_NAME,
+            PHONE = :PHONE,
+            ADDRESS = :ADDRESS,
+            IMAGE_URL = :IMAGE_URL
+            
+        WHERE SUPPLIER_ID = :SUPPLIER_ID
+      `;
 
-//   const params = [
-//     updateFields.username,
-//     updateFields.user_password,
-//     updateFields.user_email,
-//     updateFields.user_role,
-//     id,
-//   ];
+  const params = [
+    updateFields.FULL_NAME,
+    updateFields.PHONE,
+    updateFields.ADDRESS,
+    updateFields.IMAGE_URL,
+    SUPPLIER_ID,
+  ];
 
-//   await execution(query, params);
+  try {
+    await execution(query, params);
 
-//   return getUserByID(id);
-// };
+    return "Supplier Updated Successfully ...";
+  } catch (error) {
+    if (error.errorNum === 2290) {
+      return "Invalid User Role !!!";
+    } else if (error.errorNum === 1407) {
+      return "Null values are Not accepted !!!";
+    }
+  }
+};
 
-// // Delete User By ID Method
-// const deleteSupplier = async (id) => {
-//   const query = "DELETE FROM mainusers WHERE user_id = :id";
-//   return await execution(query, [id]);
-// };
+// Delete Supplier By ID Method
+const deleteSupplier = async (SUPPLIER_ID) => {
+  const query = "DELETE FROM SUPPLIER WHERE SUPPLIER_ID = :SUPPLIER_ID";
 
-// export {
-//   getAllSuppliers,
-//   createSupplier,
-//   getSupplierByID,
-//   updateSupplier,
-//   deleteSupplier,
-// };
+  try {
+    const supplierAvailablity = await getSupplierByID(SUPPLIER_ID);
+    if (
+      !supplierAvailablity ||
+      supplierAvailablity == "Invalid Supplier ID !!!"
+    ) {
+      return "Invalid Supplier ID !!!";
+    } else {
+      await execution(query, [SUPPLIER_ID]);
+      return "Supplier Deleted Successfully ...";
+    }
+  } catch (error) {
+    console.log("Database error :", error);
+  }
+};
+
+export {
+  getAllSuppliers,
+  createSupplier,
+  getSupplierByID,
+  updateSupplier,
+  deleteSupplier,
+};

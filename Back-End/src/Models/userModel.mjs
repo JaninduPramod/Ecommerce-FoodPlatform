@@ -2,71 +2,107 @@ import execution from "../config/db.mjs";
 
 // All Users Method
 const getAllUsers = async () => {
-  const query = "SELECT * FROM mainusers";
-  const users = await execution(query);
-  if (users.length > 0) {
-    return users;
+  const query = "SELECT * FROM USERS";
+  const response = await execution(query);
+
+  if (response.length > 0) {
+    return response;
   } else {
-    return "false";
+    return "No users Available !!!";
   }
 };
 
 // Create new User Method
 const createUser = async (newuser) => {
   const params = {
-    username: newuser.username,
-    user_password: newuser.user_password,
-    user_email: newuser.user_email,
-    user_role: newuser.user_role,
+    USER_ROLE: newuser.USER_ROLE,
+    USER_NAME: newuser.USER_NAME,
+    USER_EMAIL: newuser.USER_EMAIL,
+    USER_PASSWORD: newuser.USER_PASSWORD,
   };
 
   const query = `
-      INSERT INTO mainusers (username, user_password, user_email,user_role) 
-      VALUES (:username, :user_password, :user_email, :user_role)
+      INSERT INTO USERS (USER_ROLE, USER_NAME, USER_EMAIL,USER_PASSWORD) 
+      VALUES (:USER_ROLE, :USER_NAME, :USER_EMAIL, :USER_PASSWORD)
     `;
 
-  await execution(query, params);
+  try {
+    await execution(query, params);
+    return "User Created Successfully ...";
+  } catch (error) {
+    if (error.errorNum === 1) {
+      return "Email Already Exists !!!";
+    } else if (error.errorNum === 2290) {
+      return "Invalid User Role !!!";
+    } else if (error.errorNum === 1400) {
+      return "Null values are Not accepted !!!";
+    }
+  }
 };
 
 //  User by ID Method
-const getUserByID = async (id) => {
-  const query = "SELECT * FROM mainusers WHERE user_id = :id";
-  const user = await execution(query, [id]);
-  if (user.length < 1) {
-    return "false";
+const getUserByID = async (USER_ID) => {
+  const query = "SELECT * FROM USERS WHERE USER_ID = :USER_ID";
+  const response = await execution(query, [USER_ID]);
+  if (response.length <= 0) {
+    return "Invalid User ID !!!";
+  } else {
+    return response;
   }
-  return user;
 };
 
 // Update User By ID
-const updateUser = async (id, updateFields) => {
+const updateUser = async (USER_ID, updateFields) => {
   const query = `
-      UPDATE mainusers
-      SET username = :username,
-          user_password = :user_password,
-          user_email = :user_email,
-          user_role = :user_role
+      UPDATE USERS
+      SET USER_ROLE = :USER_ROLE,
+          USER_NAME = :USER_NAME,
+          USER_EMAIL = :USER_EMAIL,
+          USER_PASSWORD = :USER_PASSWORD
           
-      WHERE user_id = :id
+      WHERE USER_ID = :USER_ID
     `;
 
   const params = [
-    updateFields.username,
-    updateFields.user_password,
-    updateFields.user_email,
-    updateFields.user_role,
-    id,
+    updateFields.USER_ROLE,
+    updateFields.USER_NAME,
+    updateFields.USER_EMAIL,
+    updateFields.USER_PASSWORD,
+    USER_ID,
   ];
 
-  await execution(query, params);
+  try {
+    await execution(query, params);
 
-  return getUserByID(id);
+    return "User Updated Successfully ...";
+  } catch (error) {
+    if (error.errorNum === 2290) {
+      return "Invalid User Role !!!";
+    } else if (error.errorNum === 1407) {
+      return "Null values are Not accepted !!!";
+    }
+  }
 };
 
 // Delete User By ID Method
-const deleteUser = async (id) => {
-  const query = "DELETE FROM mainusers WHERE user_id = :id";
-  return await execution(query, [id]);
+const deleteUser = async (USER_ID) => {
+  const query = "DELETE FROM USERS WHERE USER_ID = :USER_ID";
+
+  try {
+    const userAvailablity = await getUserByID(USER_ID);
+    if (!userAvailablity || userAvailablity == "Invalid User ID !!!") {
+      return "Invalid User ID !!!";
+    } else {
+      await execution(query, [USER_ID]);
+      return "User Deleted Successfully ...";
+    }
+  } catch (error) {
+    if (error.errorNum === 2292) {
+      return "User is already assigned to some other table ...";
+    } else if (error.errorNum === 1403) {
+      return "Null values are Not accepted !!!";
+    }
+  }
 };
 
 export { getAllUsers, createUser, getUserByID, updateUser, deleteUser };

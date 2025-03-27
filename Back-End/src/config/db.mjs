@@ -8,8 +8,10 @@ const dbconfig = {
 
 const execution = async (query, bodyParam = []) => {
   let connection;
+
   try {
     connection = await oracledb.getConnection(dbconfig);
+
     const result = await connection.execute(query, bodyParam, {
       outFormat: oracledb.OUT_FORMAT_OBJECT,
       autoCommit: true,
@@ -18,9 +20,14 @@ const execution = async (query, bodyParam = []) => {
     return result.rows;
   } catch (error) {
     console.error("Database Error:", error);
+    throw error;
   } finally {
     if (connection) {
-      await connection.close();
+      try {
+        await connection.close();
+      } catch (error) {
+        console.error("Database Error:", error);
+      }
     }
   }
 };

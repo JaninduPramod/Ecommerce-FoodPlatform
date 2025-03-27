@@ -2,70 +2,110 @@ import execution from "../config/db.mjs";
 
 // All customers Method
 const getAllCustomers = async () => {
-  const query = "SELECT * FROM customer";
-  const users = await execution(query);
-  if (users.length > 0) {
-    return users;
+  const query = "SELECT * FROM CUSTOMER";
+  const response = await execution(query);
+
+  if (response.length > 0) {
+    return response;
   } else {
-    return "false";
+    return "No Customers Available !!!";
   }
 };
 
-//  customer by ID Method
-const getCustomerByID = async (id) => {
-  const query = "SELECT * FROM customer WHERE customer_id = :id";
-  const user = await execution(query, [id]);
-  if (user.length < 1) {
-    return "false";
+// //  customer by ID Method
+const getCustomerByID = async (CUSTOMER_ID) => {
+  const query = "SELECT * FROM CUSTOMER WHERE CUSTOMER_ID = :CUSTOMER_ID";
+  const response = await execution(query, [CUSTOMER_ID]);
+  if (response.length <= 0) {
+    return "Invalid Customer ID !!!";
+  } else {
+    return response;
   }
-  return user;
 };
 
-// Update customer By ID
-const updateCustomer = async (id, updateFields) => {
+// Update Customer By ID
+const updateCustomer = async (CUSTOMER_ID, updateFields) => {
   const query = `
-    UPDATE customer
-    SET customer_name = :customer_name,
-        customer_age = :customer_age,
-        customer_email = :customer_email
-        
-    WHERE customer_id = :id
-  `;
+        UPDATE CUSTOMER
+        SET FULL_NAME = :FULL_NAME,
+            PHONE = :PHONE,
+            ADDRESS = :ADDRESS,
+            IMAGE_URL = :IMAGE_URL
+            
+        WHERE CUSTOMER_ID = :CUSTOMER_ID
+      `;
 
   const params = [
-    updateFields.customer_name,
-    updateFields.customer_age,
-    updateFields.customer_email,
-    id,
+    updateFields.FULL_NAME,
+    updateFields.PHONE,
+    updateFields.ADDRESS,
+    updateFields.IMAGE_URL,
+    CUSTOMER_ID,
   ];
 
-  await execution(query, params);
-
-  return getCustomerByID(id);
+  try {
+    const customerAvailablity = await getCustomerByID(CUSTOMER_ID);
+    if (
+      !customerAvailablity ||
+      customerAvailablity == "Invalid Customer ID !!!"
+    ) {
+      return "Invalid Customer ID !!!";
+    } else {
+      await execution(query, params);
+      return "Customer Updated Successfully ...";
+    }
+  } catch (error) {
+    console.log("Database Error:", error);
+  }
 };
 
-// Delete customer By ID Method
-const deleteCustomer = async (id) => {
-  const query = "DELETE FROM customer WHERE customer_id = :id";
-  return await execution(query, [id]);
+// Delete Customer By ID Method
+const deleteCustomer = async (CUSTOMER_ID) => {
+  const query = "DELETE FROM CUSTOMER WHERE CUSTOMER_ID = :CUSTOMER_ID";
+
+  try {
+    const customerAvailablity = await getCustomerByID(CUSTOMER_ID);
+    if (
+      !customerAvailablity ||
+      customerAvailablity == "Invalid Customer ID !!!"
+    ) {
+      return "Invalid Customer ID !!!";
+    } else {
+      await execution(query, [CUSTOMER_ID]);
+      return "Customer Deleted Successfully ...";
+    }
+  } catch (error) {
+    console.log("Database error :", error);
+  }
 };
 
 // Create new Customer Method
-const createCustomer = async (newcustomer) => {
+const createCustomer = async (newCustomer) => {
   const params = {
-    customer_id: newcustomer.customer_id,
-    customer_name: newcustomer.customer_name,
-    customer_age: newcustomer.customer_age,
-    customer_email: newcustomer.customer_email,
+    CUSTOMER_ID: newCustomer.CUSTOMER_ID,
+    FULL_NAME: newCustomer.FULL_NAME,
+    PHONE: newCustomer.PHONE,
+    ADDRESS: newCustomer.ADDRESS,
+    IMAGE_URL: newCustomer.IMAGE_URL,
   };
 
   const query = `
-    INSERT INTO customer (customer_id, customer_name, customer_age, customer_email) 
-    VALUES (:customer_id, :customer_name, :customer_age, :customer_email)
-  `;
+      INSERT INTO CUSTOMER (CUSTOMER_ID, FULL_NAME, PHONE,ADDRESS,IMAGE_URL)
+      VALUES (:CUSTOMER_ID, :FULL_NAME, :PHONE, :ADDRESS, :IMAGE_URL)
+    `;
 
-  await execution(query, params);
-  return getCustomerByID(params.customer_id);
+  try {
+    await execution(query, params);
+    return "Customer Created Successfully ...";
+  } catch (error) {
+    if (error.errorNum === 1) {
+      return "Customer Already Exists !!!";
+    } else if (error.errorNum === 1400) {
+      return "Null values are Not accepted !!!";
+    } else if (error.errorNum === 2291) {
+      return "The ID is not a User !!!";
+    }
+  }
 };
 
 export {
