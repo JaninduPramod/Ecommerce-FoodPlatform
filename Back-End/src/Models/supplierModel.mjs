@@ -8,7 +8,7 @@ const getAllSuppliers = async () => {
   if (response.length > 0) {
     return response;
   } else {
-    return "No users Available !!!";
+    return "No Suppliers Available !!!";
   }
 };
 
@@ -108,7 +108,9 @@ const deleteSupplier = async (SUPPLIER_ID) => {
       return "Supplier Deleted Successfully ...";
     }
   } catch (error) {
-    console.log("Database error :", error);
+    if (error.errorNum === 2292) {
+      return "Supplier is Connected to product table  !!!";
+    }
   }
 };
 

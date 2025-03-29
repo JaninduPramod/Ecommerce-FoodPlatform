@@ -80,6 +80,8 @@ const updateUser = async (USER_ID, updateFields) => {
       return "Invalid User Role !!!";
     } else if (error.errorNum === 1407) {
       return "Null values are Not accepted !!!";
+    } else if (error.errorNum === 1) {
+      return "Email Already Exists !!!";
     }
   }
 };

@@ -34,9 +34,9 @@ userRoute.post("/api/v2/newuser", async (req, res) => {
 
 // Fetching User by ID
 userRoute.post("/api/v2/user-byid", async (req, res) => {
-  const { user_id } = req.body;
+  const { USER_ID } = req.body;
 
-  const response = await getUserByID(user_id);
+  const response = await getUserByID(USER_ID);
 
   res.status(200).json({ msg: response });
 });

@@ -5,6 +5,7 @@ import supplierRoute from "./src/Routes/supplierRoute.mjs";
 import CategoriesRoute from "./src/Routes/categoryRoute.mjs";
 import cors from "cors";
 import productRoute from "./src/Routes/productRoute.mjs";
+import feedBackRoute from "./src/Routes/feedbackRoute.mjs";
 import mongoose from "mongoose";
 
 const app = express();
@@ -17,7 +18,14 @@ app.use(
 );
 app.use(cors());
 
-app.use(customerRoute, userRoute, productRoute, supplierRoute, CategoriesRoute);
+app.use(
+  customerRoute,
+  userRoute,
+  productRoute,
+  supplierRoute,
+  CategoriesRoute,
+  feedBackRoute
+);
 
 const uri =
   "mongodb+srv://JaninduPramod:702150@urbanfoodecommerce.jebi4.mongodb.net/?retryWrites=true&w=majority&appName=UrbanFoodEcommerce";
