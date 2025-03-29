@@ -1,6 +1,12 @@
 import execution from "../config/db.mjs";
 import { getUserByID } from "./userModel.mjs";
-export { getAllFeedbacks, submitFeedback };
+export {
+  getAllFeedbacks,
+  submitFeedback,
+  getFeedbackByID,
+  updateFeedback,
+  deleteFeedback,
+};
 
 // // All Feedbacks Method
 const getAllFeedbacks = async () => {
@@ -39,8 +45,77 @@ const submitFeedback = async (newFeedback) => {
   } catch (error) {
     if (error.errorNum === 2291) {
       return "Invalid Product !!!";
-    } else if (error.errorNum === 2290) {
-      return "The values must be greater than 0 !!!";
     }
+  }
+};
+
+// //  Feedback by ID Method
+const getFeedbackByID = async (FEEDBACK_ID) => {
+  const query =
+    "SELECT * FROM CUSTOMER_FEEDBACK WHERE FEEDBACK_ID = :FEEDBACK_ID";
+  const response = await execution(query, [FEEDBACK_ID]);
+  if (response.length <= 0) {
+    return "Invalid Feedback ID !!!";
+  } else {
+    return response;
+  }
+};
+
+// Update Feeback By ID
+const updateFeedback = async (FEEDBACK_ID, updateFields) => {
+  const query = `
+          UPDATE CUSTOMER_FEEDBACK
+          SET PRODUCT_ID = :PRODUCT_ID,
+              USER_ID = :USER_ID,
+              MESSAGE = :MESSAGE,
+              TYPE = :TYPE
+  
+          WHERE FEEDBACK_ID = :FEEDBACK_ID
+        `;
+
+  const params = [
+    updateFields.PRODUCT_ID,
+    updateFields.USER_ID,
+    updateFields.MESSAGE,
+    updateFields.TYPE,
+    FEEDBACK_ID,
+  ];
+
+  try {
+    const feedbackAvailablity = await getFeedbackByID(FEEDBACK_ID);
+    if (
+      !feedbackAvailablity ||
+      feedbackAvailablity == "Invalid Feedback ID !!!"
+    ) {
+      return "Invalid Feedback ID !!!";
+    } else {
+      await execution(query, params);
+      return "Feedback Updated Successfully ...";
+    }
+  } catch (error) {
+    if (error.errorNum === 2291) {
+      return "Invalid Product or UserID !!!";
+    }
+  }
+};
+
+// Delete Feedback By ID Method
+const deleteFeedback = async (FEEDBACK_ID) => {
+  const query =
+    "DELETE FROM CUSTOMER_FEEDBACK WHERE FEEDBACK_ID = :FEEDBACK_ID";
+
+  try {
+    const feedbackAvailablity = await getFeedbackByID(FEEDBACK_ID);
+    if (
+      !feedbackAvailablity ||
+      feedbackAvailablity == "Invalid Feedback ID !!!"
+    ) {
+      return "Invalid Feedback ID !!!";
+    } else {
+      await execution(query, [FEEDBACK_ID]);
+      return "Feedback Deleted Successfully ...";
+    }
+  } catch (error) {
+    console.log("Database error :", error);
   }
 };
