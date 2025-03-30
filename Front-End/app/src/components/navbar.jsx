@@ -26,7 +26,7 @@ const NavBar = () => {
         >
           <Box
             component="img"
-            src= {img4}
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Foody-Logo.svg/2093px-Foody-Logo.svg.png"
             sx={{
               color: "black",
               height: "100%",
@@ -61,7 +61,10 @@ const NavBar = () => {
             <Typography
               variant="h6"
               component={Link}
+<<<<<<<<< Temporary merge branch 1
+=========
               to="/product"
+>>>>>>>>> Temporary merge branch 2
               sx={{
                 fontFamily: "cursive",
                 color: "black",
@@ -69,12 +72,15 @@ const NavBar = () => {
                 ":hover": { color: "#ff7d01" },
               }}
             >
+<<<<<<<<< Temporary merge branch 1
+              Tab3
+=========
               Products
+>>>>>>>>> Temporary merge branch 2
             </Typography>
             <Typography
               variant="h6"
               component={Link}
-              to={'/signup'}
               sx={{
                 fontFamily: "cursive",
                 color: "black",
@@ -82,21 +88,20 @@ const NavBar = () => {
                 ":hover": { color: "#ff7d01" },
               }}
             >
-              Sign up
+              Tab 4
             </Typography>
             <Typography
-  variant="h6"
-  component={Link}
-  to="/admin"
-  sx={{
-    fontFamily: "cursive",
-    color: "black",
-    textDecoration: "none",
-    ":hover": { color: "#ff7d01" },
-  }}
->
-  Tab 5
-</Typography>;
+              variant="h6"
+              component={Link}
+              sx={{
+                fontFamily: "cursive",
+                color: "black",
+                textDecoration: "none",
+                ":hover": { color: "#ff7d01" },
+              }}
+            >
+              Tab 5
+            </Typography>
           </Box>
           <Box
             sx={{
@@ -123,12 +128,10 @@ const NavBar = () => {
                 ":hover": { color: "#ff7d01" },
                 cursor: "pointer",
               }}
-              
             >
               <Person2Icon sx={{ fontSize: "30px" }} />
               <Typography
                 component={Link}
-                to={'/login'}
                 sx={{
                   fontSize: "16px",
                   color: "black",
@@ -155,4 +158,5 @@ const NavBar = () => {
     </>
   );
 };
+
 export default NavBar;
