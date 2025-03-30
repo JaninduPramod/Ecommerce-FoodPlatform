@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import Person2Icon from "@mui/icons-material/Person2";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import img4 from '../assets/foodylogo.png';
 
 const NavBar = () => {
   return (
@@ -25,7 +26,7 @@ const NavBar = () => {
         >
           <Box
             component="img"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Foody-Logo.svg/2093px-Foody-Logo.svg.png"
+            src= {img4}
             sx={{
               color: "black",
               height: "100%",
@@ -84,18 +85,18 @@ const NavBar = () => {
               Sign up
             </Typography>
             <Typography
-              variant="h6"
-              component={Link}
-              
-              sx={{
-                fontFamily: "cursive",
-                color: "black",
-                textDecoration: "none",
-                ":hover": { color: "#ff7d01" },
-              }}
-            >
-              Tab 5
-            </Typography>
+  variant="h6"
+  component={Link}
+  to="/admin"
+  sx={{
+    fontFamily: "cursive",
+    color: "black",
+    textDecoration: "none",
+    ":hover": { color: "#ff7d01" },
+  }}
+>
+  Tab 5
+</Typography>;
           </Box>
           <Box
             sx={{

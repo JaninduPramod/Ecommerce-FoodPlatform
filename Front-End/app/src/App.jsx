@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/navbar";
 import Onboarding from "./pages/onboarding";
 import AuthSection from "./pages/Login.jsx";
+import Admin from "./pages/AdminPage.jsx";
 import SignUpPage from "./pages/SignUp.jsx";
 import Profile from "./pages/Profile.jsx";
 // import ProductCard from "./Test/ProductCard/ProductCard.jsx";
@@ -26,6 +27,7 @@ function App() {
         <Route path="/product" element={<ProductPage />} />
         <Route path="/login" element={<AuthSection />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/admin" element={<Admin />}/>
         <Route path="profile" element={<Profile />} />
       </Routes>
       <Footer />
