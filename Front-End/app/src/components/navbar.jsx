@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import Person2Icon from "@mui/icons-material/Person2";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import img4 from '../assets/foodylogo.png';
 
 const NavBar = () => {
   return (
@@ -61,10 +60,7 @@ const NavBar = () => {
             <Typography
               variant="h6"
               component={Link}
-<<<<<<<<< Temporary merge branch 1
-=========
               to="/product"
->>>>>>>>> Temporary merge branch 2
               sx={{
                 fontFamily: "cursive",
                 color: "black",
@@ -72,15 +68,12 @@ const NavBar = () => {
                 ":hover": { color: "#ff7d01" },
               }}
             >
-<<<<<<<<< Temporary merge branch 1
-              Tab3
-=========
               Products
->>>>>>>>> Temporary merge branch 2
             </Typography>
             <Typography
               variant="h6"
               component={Link}
+              to="/tab4"
               sx={{
                 fontFamily: "cursive",
                 color: "black",
@@ -93,6 +86,7 @@ const NavBar = () => {
             <Typography
               variant="h6"
               component={Link}
+              to="/tab5"
               sx={{
                 fontFamily: "cursive",
                 color: "black",
@@ -132,6 +126,7 @@ const NavBar = () => {
               <Person2Icon sx={{ fontSize: "30px" }} />
               <Typography
                 component={Link}
+                to="/login"
                 sx={{
                   fontSize: "16px",
                   color: "black",
@@ -160,3 +155,4 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
