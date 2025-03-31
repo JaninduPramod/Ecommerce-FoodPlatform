@@ -46,17 +46,24 @@ customerRoute.put("/api/v1/updateCustomer", async (req, res) => {
 
 // Delete Customer By ID
 customerRoute.delete("/api/v1/deleteCustomer", async (req, res) => {
-  const { CUSTOMER_ID } = req.body;
+  const { CRUD_TYPE, CUSTOMER_ID } = req.body;
 
-  const response = await deleteCustomer(CUSTOMER_ID);
+  const deleteFields = {
+    CRUD_TYPE,
+    CUSTOMER_ID,
+  };
+
+  const response = await deleteCustomer(deleteFields);
   res.status(200).json({ msg: response });
 });
 
 // Create new customer
 customerRoute.post("/api/v1/newcustomer", async (req, res) => {
-  const { CUSTOMER_ID, FULL_NAME, PHONE, ADDRESS, IMAGE_URL } = req.body;
+  const { CRUD_TYPE, CUSTOMER_ID, FULL_NAME, PHONE, ADDRESS, IMAGE_URL } =
+    req.body;
 
   const newCustomer = {
+    CRUD_TYPE,
     CUSTOMER_ID,
     FULL_NAME,
     PHONE,

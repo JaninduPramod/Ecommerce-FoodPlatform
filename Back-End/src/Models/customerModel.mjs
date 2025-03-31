@@ -61,11 +61,24 @@ const updateCustomer = async (updateFields) => {
 };
 
 // Delete Customer By ID Method
-const deleteCustomer = async (CUSTOMER_ID) => {
-  const query = "BEGIN DeleteCustomer(:CUSTOMER_ID); END;";
+const deleteCustomer = async (deleteFields) => {
+  const query = `
+  
+    BEGIN
+    CustomerControllerProcedure(
+        p_CrudType    => :p_CrudType,
+        p_CUSTOMER_ID => :p_CUSTOMER_ID 
+      );
+    END;
+  `;
+
+  const params = {
+    p_CUSTOMER_ID: deleteFields.CUSTOMER_ID,
+    p_CrudType: deleteFields.CRUD_TYPE,
+  };
 
   try {
-    await execution(query, [CUSTOMER_ID]);
+    await execution(query, params);
     return "Customer Deleted Successfully ...";
   } catch (error) {
     console.log("Database Error:", error);
@@ -78,14 +91,27 @@ const deleteCustomer = async (CUSTOMER_ID) => {
 // Create new Customer Method
 const createCustomer = async (newCustomer) => {
   const params = {
-    CUSTOMER_ID: newCustomer.CUSTOMER_ID,
-    FULL_NAME: newCustomer.FULL_NAME,
-    PHONE: newCustomer.PHONE,
-    ADDRESS: newCustomer.ADDRESS,
-    IMAGE_URL: newCustomer.IMAGE_URL,
+    p_CUSTOMER_ID: newCustomer.CUSTOMER_ID,
+    p_FULL_NAME: newCustomer.FULL_NAME,
+    p_PHONE: newCustomer.PHONE,
+    p_ADDRESS: newCustomer.ADDRESS,
+    p_IMAGE_URL: newCustomer.IMAGE_URL,
+    p_CrudType: newCustomer.CRUD_TYPE,
   };
 
-  const query = `BEGIN NewCustomer(:CUSTOMER_ID, :FULL_NAME, :PHONE, :ADDRESS, :IMAGE_URL); END;`;
+  const query = `
+  
+    BEGIN
+    CustomerControllerProcedure(
+        p_CrudType    => :p_CrudType,
+        p_CUSTOMER_ID => :p_CUSTOMER_ID, 
+        p_FULL_NAME   => :p_FULL_NAME,
+        p_PHONE       => :p_PHONE,
+        p_ADDRESS     => :p_ADDRESS,
+        p_IMAGE_URL   => :p_IMAGE_URL
+      );
+    END;
+  `;
 
   try {
     await execution(query, params);
