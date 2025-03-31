@@ -25,13 +25,21 @@ customerRoute.post("/api/v1/customer-byid", async (req, res) => {
   res.status(200).json({ msg: response });
 });
 
-// Update Supplier By ID
+// Update Customer By ID
 customerRoute.put("/api/v1/updateCustomer", async (req, res) => {
-  const { CUSTOMER_ID, FULL_NAME, PHONE, ADDRESS, IMAGE_URL } = req.body;
+  const { CRUD_TYPE, CUSTOMER_ID, FULL_NAME, PHONE, ADDRESS, IMAGE_URL } =
+    req.body;
 
-  const updateFields = { FULL_NAME, PHONE, ADDRESS, IMAGE_URL };
+  const updateFields = {
+    CRUD_TYPE,
+    CUSTOMER_ID,
+    FULL_NAME,
+    PHONE,
+    ADDRESS,
+    IMAGE_URL,
+  };
 
-  const response = await updateCustomer(CUSTOMER_ID, updateFields);
+  const response = await updateCustomer(updateFields);
 
   res.status(200).json({ msg: response });
 });

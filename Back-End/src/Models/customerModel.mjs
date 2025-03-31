@@ -24,58 +24,54 @@ const getCustomerByID = async (CUSTOMER_ID) => {
 };
 
 // Update Customer By ID
-const updateCustomer = async (CUSTOMER_ID, updateFields) => {
+const updateCustomer = async (updateFields) => {
   const query = `
-        UPDATE CUSTOMER
-        SET FULL_NAME = :FULL_NAME,
-            PHONE = :PHONE,
-            ADDRESS = :ADDRESS,
-            IMAGE_URL = :IMAGE_URL
-            
-        WHERE CUSTOMER_ID = :CUSTOMER_ID
-      `;
-
-  const params = [
-    updateFields.FULL_NAME,
-    updateFields.PHONE,
-    updateFields.ADDRESS,
-    updateFields.IMAGE_URL,
-    CUSTOMER_ID,
-  ];
+  
+    BEGIN
+    CustomerControllerProcedure(
+        p_CrudType    => :p_CrudType,
+        p_CUSTOMER_ID => :p_CUSTOMER_ID, 
+        p_FULL_NAME   => :p_FULL_NAME,
+        p_PHONE       => :p_PHONE,
+        p_ADDRESS     => :p_ADDRESS,
+        p_IMAGE_URL   => :p_IMAGE_URL
+      );
+    END;
+  `;
+  const params = {
+    p_CUSTOMER_ID: updateFields.CUSTOMER_ID,
+    p_FULL_NAME: updateFields.FULL_NAME,
+    p_PHONE: updateFields.PHONE,
+    p_ADDRESS: updateFields.ADDRESS,
+    p_IMAGE_URL: updateFields.IMAGE_URL,
+    p_CrudType: updateFields.CRUD_TYPE,
+  };
 
   try {
-    const customerAvailablity = await getCustomerByID(CUSTOMER_ID);
-    if (
-      !customerAvailablity ||
-      customerAvailablity == "Invalid Customer ID !!!"
-    ) {
-      return "Invalid Customer ID !!!";
-    } else {
-      await execution(query, params);
-      return "Customer Updated Successfully ...";
-    }
+    await execution(query, params);
+    return "Customer Updated Successfully ...";
   } catch (error) {
-    console.log("Database Error:", error);
+    if (error.errorNum === 20001) {
+      return "Customer ID Not Found !!!";
+    } else {
+      console.log("Database Error:", error);
+      return "Error in Updating Customer ...";
+    }
   }
 };
 
 // Delete Customer By ID Method
 const deleteCustomer = async (CUSTOMER_ID) => {
-  const query = "DELETE FROM CUSTOMER WHERE CUSTOMER_ID = :CUSTOMER_ID";
+  const query = "BEGIN DeleteCustomer(:CUSTOMER_ID); END;";
 
   try {
-    const customerAvailablity = await getCustomerByID(CUSTOMER_ID);
-    if (
-      !customerAvailablity ||
-      customerAvailablity == "Invalid Customer ID !!!"
-    ) {
-      return "Invalid Customer ID !!!";
-    } else {
-      await execution(query, [CUSTOMER_ID]);
-      return "Customer Deleted Successfully ...";
-    }
+    await execution(query, [CUSTOMER_ID]);
+    return "Customer Deleted Successfully ...";
   } catch (error) {
-    console.log("Database error :", error);
+    console.log("Database Error:", error);
+    if (error.errorNum == 20001) {
+      return "Customer ID Not Found !!!";
+    }
   }
 };
 
@@ -89,20 +85,16 @@ const createCustomer = async (newCustomer) => {
     IMAGE_URL: newCustomer.IMAGE_URL,
   };
 
-  const query = `
-      INSERT INTO CUSTOMER (CUSTOMER_ID, FULL_NAME, PHONE,ADDRESS,IMAGE_URL)
-      VALUES (:CUSTOMER_ID, :FULL_NAME, :PHONE, :ADDRESS, :IMAGE_URL)
-    `;
+  const query = `BEGIN NewCustomer(:CUSTOMER_ID, :FULL_NAME, :PHONE, :ADDRESS, :IMAGE_URL); END;`;
 
   try {
     await execution(query, params);
     return "Customer Created Successfully ...";
   } catch (error) {
-    if (error.errorNum === 1) {
+    console.log("Database Error:", error);
+    if (error.errorNum === 20000) {
       return "Customer Already Exists !!!";
-    } else if (error.errorNum === 1400) {
-      return "Null values are Not accepted !!!";
-    } else if (error.errorNum === 2291) {
+    } else if (error.errorNum === 20001) {
       return "The ID is not a User !!!";
     }
   }
