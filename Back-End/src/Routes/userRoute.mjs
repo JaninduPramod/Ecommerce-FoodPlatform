@@ -18,13 +18,20 @@ userRoute.get("/api/v2/allusers", async (_, res) => {
 
 // Create new User
 userRoute.post("/api/v2/newuser", async (req, res) => {
-  const { USER_ROLE, USER_NAME, USER_EMAIL, USER_PASSWORD } = req.body;
+  const {
+    p_CRUD_TYPE,
+    p_USER_ROLE,
+    p_USER_NAME,
+    p_USER_EMAIL,
+    p_USER_PASSWORD,
+  } = req.body;
 
   const newuser = {
-    USER_ROLE,
-    USER_NAME,
-    USER_EMAIL,
-    USER_PASSWORD,
+    p_CRUD_TYPE,
+    p_USER_ROLE,
+    p_USER_NAME,
+    p_USER_EMAIL,
+    p_USER_PASSWORD,
   };
 
   const response = await createUser(newuser);
@@ -43,20 +50,39 @@ userRoute.post("/api/v2/user-byid", async (req, res) => {
 
 // Update User By ID
 userRoute.put("/api/v2/updateuser", async (req, res) => {
-  const { USER_ID, USER_ROLE, USER_NAME, USER_EMAIL, USER_PASSWORD } = req.body;
+  const {
+    p_CRUD_TYPE,
+    p_USER_ID,
+    p_USER_ROLE,
+    p_USER_NAME,
+    p_USER_EMAIL,
+    p_USER_PASSWORD,
+  } = req.body;
 
-  const updateFields = { USER_ROLE, USER_NAME, USER_EMAIL, USER_PASSWORD };
+  const updateFields = {
+    p_CRUD_TYPE,
+    p_USER_ID,
+    p_USER_ROLE,
+    p_USER_NAME,
+    p_USER_EMAIL,
+    p_USER_PASSWORD,
+  };
 
-  const response = await updateUser(USER_ID, updateFields);
+  const response = await updateUser(updateFields);
 
   res.status(200).json({ msg: response });
 });
 
 // Delete User By ID
 userRoute.delete("/api/v2/deleteuser", async (req, res) => {
-  const { USER_ID } = req.body;
+  const { p_CRUD_TYPE, p_USER_ID } = req.body;
 
-  const response = await deleteUser(USER_ID);
+  const deleteFields = {
+    p_CRUD_TYPE,
+    p_USER_ID,
+  };
+
+  const response = await deleteUser(deleteFields);
   res.status(200).json({ msg: response });
 });
 

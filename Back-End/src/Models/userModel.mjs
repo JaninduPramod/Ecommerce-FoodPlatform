@@ -15,27 +15,36 @@ const getAllUsers = async () => {
 // Create new User Method
 const createUser = async (newuser) => {
   const params = {
-    USER_ROLE: newuser.USER_ROLE,
-    USER_NAME: newuser.USER_NAME,
-    USER_EMAIL: newuser.USER_EMAIL,
-    USER_PASSWORD: newuser.USER_PASSWORD,
+    p_CRUD_TYPE: newuser.p_CRUD_TYPE,
+    p_USER_ROLE: newuser.p_USER_ROLE,
+    p_USER_NAME: newuser.p_USER_NAME,
+    p_USER_EMAIL: newuser.p_USER_EMAIL,
+    p_USER_PASSWORD: newuser.p_USER_PASSWORD,
   };
 
   const query = `
-      INSERT INTO USERS (USER_ROLE, USER_NAME, USER_EMAIL,USER_PASSWORD) 
-      VALUES (:USER_ROLE, :USER_NAME, :USER_EMAIL, :USER_PASSWORD)
-    `;
+  
+    BEGIN
+    UsersControllerProcedure(
+        p_CRUD_TYPE     => :p_CRUD_TYPE,
+        p_USER_ROLE     => :p_USER_ROLE, 
+        p_USER_NAME     => :p_USER_NAME,
+        p_USER_EMAIL    => :p_USER_EMAIL,
+        p_USER_PASSWORD => :p_USER_PASSWORD
+      );
+    END;
+  `;
 
   try {
     await execution(query, params);
     return "User Created Successfully ...";
   } catch (error) {
-    if (error.errorNum === 1) {
-      return "Email Already Exists !!!";
-    } else if (error.errorNum === 2290) {
+    if (error.errorNum === 20002) {
+      return "User Email Already Exists!";
+    } else if (error.errorNum === 20000) {
       return "Invalid User Role !!!";
-    } else if (error.errorNum === 1400) {
-      return "Null values are Not accepted !!!";
+    } else if (error.errorNum === 20007) {
+      return "Null Values are not Accepted!";
     }
   }
 };
@@ -52,57 +61,69 @@ const getUserByID = async (USER_ID) => {
 };
 
 // Update User By ID
-const updateUser = async (USER_ID, updateFields) => {
-  const query = `
-      UPDATE USERS
-      SET USER_ROLE = :USER_ROLE,
-          USER_NAME = :USER_NAME,
-          USER_EMAIL = :USER_EMAIL,
-          USER_PASSWORD = :USER_PASSWORD
-          
-      WHERE USER_ID = :USER_ID
-    `;
+const updateUser = async (updateFields) => {
+  const params = {
+    p_USER_ID: updateFields.p_USER_ID,
+    p_CRUD_TYPE: updateFields.p_CRUD_TYPE,
+    p_USER_ROLE: updateFields.p_USER_ROLE,
+    p_USER_NAME: updateFields.p_USER_NAME,
+    p_USER_EMAIL: updateFields.p_USER_EMAIL,
+    p_USER_PASSWORD: updateFields.p_USER_PASSWORD,
+  };
 
-  const params = [
-    updateFields.USER_ROLE,
-    updateFields.USER_NAME,
-    updateFields.USER_EMAIL,
-    updateFields.USER_PASSWORD,
-    USER_ID,
-  ];
+  const query = `
+  
+    BEGIN
+    UsersControllerProcedure(
+        p_CRUD_TYPE     => :p_CRUD_TYPE,
+        p_USER_ID       => :p_USER_ID,
+        p_USER_ROLE     => :p_USER_ROLE, 
+        p_USER_NAME     => :p_USER_NAME,
+        p_USER_EMAIL    => :p_USER_EMAIL,
+        p_USER_PASSWORD => :p_USER_PASSWORD
+      );
+    END;
+  `;
 
   try {
     await execution(query, params);
-
     return "User Updated Successfully ...";
   } catch (error) {
-    if (error.errorNum === 2290) {
+    if (error.errorNum === 20001) {
+      return "Invalid User!";
+    } else if (error.errorNum === 20000) {
       return "Invalid User Role !!!";
-    } else if (error.errorNum === 1407) {
-      return "Null values are Not accepted !!!";
-    } else if (error.errorNum === 1) {
-      return "Email Already Exists !!!";
+    } else if (error.errorNum === 20007) {
+      return "Null Values are not Accepted!";
+    } else if (error.errorNum === 20002) {
+      return "User Email Already Exists!";
     }
   }
 };
 
 // Delete User By ID Method
-const deleteUser = async (USER_ID) => {
-  const query = "DELETE FROM USERS WHERE USER_ID = :USER_ID";
+const deleteUser = async (deleteFields) => {
+  const params = {
+    p_USER_ID: deleteFields.p_USER_ID,
+    p_CRUD_TYPE: deleteFields.p_CRUD_TYPE,
+  };
+
+  const query = `
+  
+    BEGIN
+    UsersControllerProcedure(
+        p_CRUD_TYPE     => :p_CRUD_TYPE,
+        p_USER_ID       => :p_USER_ID
+      );
+    END;
+  `;
 
   try {
-    const userAvailablity = await getUserByID(USER_ID);
-    if (!userAvailablity || userAvailablity == "Invalid User ID !!!") {
-      return "Invalid User ID !!!";
-    } else {
-      await execution(query, [USER_ID]);
-      return "User Deleted Successfully ...";
-    }
+    await execution(query, params);
+    return "User Deleted Successfully ...";
   } catch (error) {
-    if (error.errorNum === 2292) {
-      return "User is already assigned to some other table ...";
-    } else if (error.errorNum === 1403) {
-      return "Null values are Not accepted !!!";
+    if (error.errorNum === 20001) {
+      return "Invalid User!";
     }
   }
 };
