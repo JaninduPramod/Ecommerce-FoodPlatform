@@ -12,7 +12,6 @@ function Card({ state, image, title, description, price, options, quantity, onQu
             <img src={img3} alt="icon" className="card2-icon" />
             <img src={image ? image : img2} alt={title} className="card2-image" />
 
-
             <div className="card2-content">
             
           <p className="card2-title">{title}</p>
