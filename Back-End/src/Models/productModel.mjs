@@ -12,31 +12,45 @@ const getAllProducts = async () => {
   }
 };
 
-// Create new Supplier Method
+// Create new Product Method
 const createProduct = async (newProduct) => {
   const params = {
-    SUPPLIER_ID: newProduct.SUPPLIER_ID,
-    CATEGORY_ID: newProduct.CATEGORY_ID,
-    NAME: newProduct.NAME,
-    IMAGE_URL: newProduct.IMAGE_URL,
-    WEIGHT: newProduct.WEIGHT,
-    STOCK: newProduct.STOCK,
-    PRICE: newProduct.PRICE,
+    p_CRUD_TYPE: newProduct.p_CRUD_TYPE,
+    p_SUPPLIER_ID: newProduct.p_SUPPLIER_ID,
+    p_CATEGORY_ID: newProduct.p_CATEGORY_ID,
+    p_NAME: newProduct.p_NAME,
+    p_IMAGE_URL: newProduct.p_IMAGE_URL,
+    p_WEIGHT: newProduct.p_WEIGHT,
+    p_STOCK: newProduct.p_STOCK,
+    p_PRICE: newProduct.p_PRICE,
   };
 
   const query = `
-      INSERT INTO PRODUCTS (SUPPLIER_ID, CATEGORY_ID,NAME,IMAGE_URL,WEIGHT,STOCK,PRICE)
-      VALUES (:SUPPLIER_ID, :CATEGORY_ID,:NAME,:IMAGE_URL,:WEIGHT,:STOCK,:PRICE)
-    `;
+  
+    BEGIN
+    ProductControllerProcedure(
+        p_CRUD_TYPE    => :p_CRUD_TYPE,
+        p_SUPPLIER_ID  => :p_SUPPLIER_ID,
+        p_CATEGORY_ID  => :p_CATEGORY_ID, 
+        p_NAME         => :p_NAME,
+        p_IMAGE_URL    => :p_IMAGE_URL,
+        p_WEIGHT       => :p_WEIGHT,
+        p_STOCK        => :p_STOCK,
+        p_PRICE        => :p_PRICE
+      );
+    END;
+  `;
 
   try {
     await execution(query, params);
     return "Product Created Successfully ...";
   } catch (error) {
-    if (error.errorNum === 2291) {
-      return "Invalid Supplier or Category !!!";
-    } else if (error.errorNum === 2290) {
+    if (error.errorNum === 20003) {
+      return "Invalid Category ID or Supplier ID for the Product !!";
+    } else if (error.errorNum === 20000) {
       return "The values must be greater than 0 !!!";
+    } else {
+      console.log("Database error :", error);
     }
   }
 };
@@ -53,62 +67,78 @@ const getProductByID = async (PRODUCT_ID) => {
 };
 
 // Update Product By ID
-const updateProduct = async (PRODUCT_ID, updateFields) => {
+const updateProduct = async (updateFields) => {
+  const params = {
+    p_CRUD_TYPE: updateFields.p_CRUD_TYPE,
+    p_PRODUCT_ID: updateFields.p_PRODUCT_ID,
+    p_SUPPLIER_ID: updateFields.p_SUPPLIER_ID,
+    p_CATEGORY_ID: updateFields.p_CATEGORY_ID,
+    p_NAME: updateFields.p_NAME,
+    p_IMAGE_URL: updateFields.p_IMAGE_URL,
+    p_WEIGHT: updateFields.p_WEIGHT,
+    p_STOCK: updateFields.p_STOCK,
+    p_PRICE: updateFields.p_PRICE,
+  };
+
   const query = `
-        UPDATE PRODUCTS
-        SET SUPPLIER_ID = :SUPPLIER_ID,
-            CATEGORY_ID = :CATEGORY_ID,
-            NAME = :NAME,
-            IMAGE_URL = :IMAGE_URL,
-            WEIGHT = :WEIGHT,
-            STOCK = :STOCK,
-            PRICE = :PRICE
-
-        WHERE PRODUCT_ID = :PRODUCT_ID
-      `;
-
-  const params = [
-    updateFields.SUPPLIER_ID,
-    updateFields.CATEGORY_ID,
-    updateFields.NAME,
-    updateFields.IMAGE_URL,
-    updateFields.WEIGHT,
-    updateFields.STOCK,
-    updateFields.PRICE,
-    PRODUCT_ID,
-  ];
+  
+    BEGIN
+    ProductControllerProcedure(
+        p_CRUD_TYPE    => :p_CRUD_TYPE,
+        p_PRODUCT_ID   => :p_PRODUCT_ID,
+        p_SUPPLIER_ID  => :p_SUPPLIER_ID,
+        p_CATEGORY_ID  => :p_CATEGORY_ID, 
+        p_NAME         => :p_NAME,
+        p_IMAGE_URL    => :p_IMAGE_URL,
+        p_WEIGHT       => :p_WEIGHT,
+        p_STOCK        => :p_STOCK,
+        p_PRICE        => :p_PRICE
+      );
+    END;
+  `;
 
   try {
-    const productAvailablity = await getProductByID(PRODUCT_ID);
-    if (!productAvailablity || productAvailablity == "Invalid Product ID !!!") {
+    await execution(query, params);
+    return "Product Updated Successfully ...";
+  } catch (error) {
+    if (error.errorNum === 20003) {
+      return "Invalid Category ID or Supplier ID for the Product !!";
+    } else if (error.errorNum === 20000) {
+      return "The values must be greater than 0 !!!";
+    } else if (error.errorNum === 20001) {
       return "Invalid Product ID !!!";
     } else {
-      await execution(query, params);
-      return "Product Updated Successfully ...";
-    }
-  } catch (error) {
-    if (error.errorNum === 2291) {
-      return "Invalid Supplier or Category !!!";
-    } else if (error.errorNum === 2290) {
-      return "The values must be greater than 0 !!!";
+      console.log("Database error :", error);
     }
   }
 };
 
 // Delete Product By ID Method
-const deleteProduct = async (PRODUCT_ID) => {
-  const query = "DELETE FROM PRODUCTS WHERE PRODUCT_ID = :PRODUCT_ID";
+const deleteProduct = async (deleteFields) => {
+  const params = {
+    p_CRUD_TYPE: deleteFields.p_CRUD_TYPE,
+    p_PRODUCT_ID: deleteFields.p_PRODUCT_ID,
+  };
+
+  const query = `
+  
+    BEGIN
+    ProductControllerProcedure(
+        p_CRUD_TYPE    => :p_CRUD_TYPE,
+        p_PRODUCT_ID   => :p_PRODUCT_ID
+      );
+    END;
+  `;
 
   try {
-    const productAvailablity = await getProductByID(PRODUCT_ID);
-    if (!productAvailablity || productAvailablity == "Invalid Product ID !!!") {
+    await execution(query, params);
+    return "Product Deleted Successfully ...";
+  } catch (error) {
+    if (error.errorNum === 20001) {
       return "Invalid Product ID !!!";
     } else {
-      await execution(query, [PRODUCT_ID]);
-      return "Product Deleted Successfully ...";
+      console.log("Database error :", error);
     }
-  } catch (error) {
-    console.log("Database error :", error);
   }
 };
 
