@@ -29,7 +29,7 @@ const updateCustomer = async (updateFields) => {
   
     BEGIN
     CustomerControllerProcedure(
-        p_CrudType    => :p_CrudType,
+        p_CRUD_TYPE    => :p_CRUD_TYPE,
         p_CUSTOMER_ID => :p_CUSTOMER_ID, 
         p_FULL_NAME   => :p_FULL_NAME,
         p_PHONE       => :p_PHONE,
@@ -39,12 +39,12 @@ const updateCustomer = async (updateFields) => {
     END;
   `;
   const params = {
-    p_CUSTOMER_ID: updateFields.CUSTOMER_ID,
-    p_FULL_NAME: updateFields.FULL_NAME,
-    p_PHONE: updateFields.PHONE,
-    p_ADDRESS: updateFields.ADDRESS,
-    p_IMAGE_URL: updateFields.IMAGE_URL,
-    p_CrudType: updateFields.CRUD_TYPE,
+    p_CUSTOMER_ID: updateFields.p_CUSTOMER_ID,
+    p_FULL_NAME: updateFields.p_FULL_NAME,
+    p_PHONE: updateFields.p_PHONE,
+    p_ADDRESS: updateFields.p_ADDRESS,
+    p_IMAGE_URL: updateFields.p_IMAGE_URL,
+    p_CRUD_TYPE: updateFields.p_CRUD_TYPE,
   };
 
   try {
@@ -66,15 +66,15 @@ const deleteCustomer = async (deleteFields) => {
   
     BEGIN
     CustomerControllerProcedure(
-        p_CrudType    => :p_CrudType,
+        p_CRUD_TYPE    => :p_CRUD_TYPE,
         p_CUSTOMER_ID => :p_CUSTOMER_ID 
       );
     END;
   `;
 
   const params = {
-    p_CUSTOMER_ID: deleteFields.CUSTOMER_ID,
-    p_CrudType: deleteFields.CRUD_TYPE,
+    p_CUSTOMER_ID: deleteFields.p_CUSTOMER_ID,
+    p_CRUD_TYPE: deleteFields.p_CRUD_TYPE,
   };
 
   try {
@@ -91,19 +91,19 @@ const deleteCustomer = async (deleteFields) => {
 // Create new Customer Method
 const createCustomer = async (newCustomer) => {
   const params = {
-    p_CUSTOMER_ID: newCustomer.CUSTOMER_ID,
-    p_FULL_NAME: newCustomer.FULL_NAME,
-    p_PHONE: newCustomer.PHONE,
-    p_ADDRESS: newCustomer.ADDRESS,
-    p_IMAGE_URL: newCustomer.IMAGE_URL,
-    p_CrudType: newCustomer.CRUD_TYPE,
+    p_CUSTOMER_ID: newCustomer.p_CUSTOMER_ID,
+    p_FULL_NAME: newCustomer.p_FULL_NAME,
+    p_PHONE: newCustomer.p_PHONE,
+    p_ADDRESS: newCustomer.p_ADDRESS,
+    p_IMAGE_URL: newCustomer.p_IMAGE_URL,
+    p_CRUD_TYPE: newCustomer.p_CRUD_TYPE,
   };
 
   const query = `
   
     BEGIN
     CustomerControllerProcedure(
-        p_CrudType    => :p_CrudType,
+        p_CRUD_TYPE    => :p_CRUD_TYPE,
         p_CUSTOMER_ID => :p_CUSTOMER_ID, 
         p_FULL_NAME   => :p_FULL_NAME,
         p_PHONE       => :p_PHONE,

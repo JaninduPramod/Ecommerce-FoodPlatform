@@ -15,28 +15,38 @@ const getAllSuppliers = async () => {
 // Create new Supplier Method
 const createSupplier = async (newSupplier) => {
   const params = {
-    SUPPLIER_ID: newSupplier.SUPPLIER_ID,
-    FULL_NAME: newSupplier.FULL_NAME,
-    PHONE: newSupplier.PHONE,
-    ADDRESS: newSupplier.ADDRESS,
-    IMAGE_URL: newSupplier.IMAGE_URL,
+    p_SUPPLIER_ID: newSupplier.p_SUPPLIER_ID,
+    p_FULL_NAME: newSupplier.p_FULL_NAME,
+    p_PHONE: newSupplier.p_PHONE,
+    p_ADDRESS: newSupplier.p_ADDRESS,
+    p_IMAGE_URL: newSupplier.p_IMAGE_URL,
+    p_CRUD_TYPE: newSupplier.p_CRUD_TYPE,
   };
 
   const query = `
-      INSERT INTO SUPPLIER (SUPPLIER_ID, FULL_NAME, PHONE,ADDRESS,IMAGE_URL)
-      VALUES (:SUPPLIER_ID, :FULL_NAME, :PHONE, :ADDRESS, :IMAGE_URL)
-    `;
+  
+    BEGIN
+    SupplierControllerProcedure(
+        p_CRUD_TYPE    => :p_CRUD_TYPE,
+        p_SUPPLIER_ID => :p_SUPPLIER_ID, 
+        p_FULL_NAME   => :p_FULL_NAME,
+        p_PHONE       => :p_PHONE,
+        p_ADDRESS     => :p_ADDRESS,
+        p_IMAGE_URL   => :p_IMAGE_URL
+      );
+    END;
+  `;
 
   try {
     await execution(query, params);
     return "Supplier Created Successfully ...";
   } catch (error) {
-    if (error.errorNum === 1) {
+    if (error.errorNum === 20002) {
       return "Supplier Already Exists !!!";
-    } else if (error.errorNum === 1400) {
+    } else if (error.errorNum === 20007) {
       return "Null values are Not accepted !!!";
-    } else if (error.errorNum === 2291) {
-      return "The ID is not a User !!!";
+    } else if (error.errorNum === 20001) {
+      return "The Supplier ID is not a User !!!";
     }
   }
 };
@@ -53,63 +63,63 @@ const getSupplierByID = async (SUPPLIER_ID) => {
 };
 
 // Update Supplier By ID
-const updateSupplier = async (SUPPLIER_ID, updateFields) => {
+const updateSupplier = async (updateFields) => {
   const query = `
-        UPDATE SUPPLIER
-        SET FULL_NAME = :FULL_NAME,
-            PHONE = :PHONE,
-            ADDRESS = :ADDRESS,
-            IMAGE_URL = :IMAGE_URL
-            
-        WHERE SUPPLIER_ID = :SUPPLIER_ID
-      `;
+  
+    BEGIN
+    SupplierControllerProcedure(
+        p_CRUD_TYPE    => :p_CRUD_TYPE,
+        p_SUPPLIER_ID => :p_SUPPLIER_ID, 
+        p_FULL_NAME   => :p_FULL_NAME,
+        p_PHONE       => :p_PHONE,
+        p_ADDRESS     => :p_ADDRESS,
+        p_IMAGE_URL   => :p_IMAGE_URL
+      );
+    END;
+  `;
 
-  const params = [
-    updateFields.FULL_NAME,
-    updateFields.PHONE,
-    updateFields.ADDRESS,
-    updateFields.IMAGE_URL,
-    SUPPLIER_ID,
-  ];
+  const params = {
+    p_SUPPLIER_ID: updateFields.p_SUPPLIER_ID,
+    p_FULL_NAME: updateFields.p_FULL_NAME,
+    p_PHONE: updateFields.p_PHONE,
+    p_ADDRESS: updateFields.p_ADDRESS,
+    p_IMAGE_URL: updateFields.p_IMAGE_URL,
+    p_CRUD_TYPE: updateFields.p_CRUD_TYPE,
+  };
 
   try {
-    const supplierAvailablity = await getSupplierByID(SUPPLIER_ID);
-    if (
-      !supplierAvailablity ||
-      supplierAvailablity == "Invalid Supplier ID !!!"
-    ) {
-      return "Invalid Supplier ID !!!";
-    } else {
-      await execution(query, params);
-      return "Supplier Updated Successfully ...";
-    }
+    await execution(query, params);
+    return "Supplier Updated Successfully ...";
   } catch (error) {
-    if (error.errorNum === 2290) {
-      return "Invalid User Role !!!";
-    } else if (error.errorNum === 1407) {
+    if (error.errorNum === 20007) {
       return "Null values are Not accepted !!!";
+    } else if (error.errorNum === 20001) {
+      return "Invalid Supplier ID !!!";
     }
   }
 };
 
 // Delete Supplier By ID Method
-const deleteSupplier = async (SUPPLIER_ID) => {
-  const query = "DELETE FROM SUPPLIER WHERE SUPPLIER_ID = :SUPPLIER_ID";
+const deleteSupplier = async (deleteFields) => {
+  const query = `
+  
+    BEGIN
+    SupplierControllerProcedure(
+        p_CRUD_TYPE    => :p_CRUD_TYPE,
+        p_SUPPLIER_ID => :p_SUPPLIER_ID
+      );
+    END;
+  `;
 
   try {
-    const supplierAvailablity = await getSupplierByID(SUPPLIER_ID);
-    if (
-      !supplierAvailablity ||
-      supplierAvailablity == "Invalid Supplier ID !!!"
-    ) {
-      return "Invalid Supplier ID !!!";
-    } else {
-      await execution(query, [SUPPLIER_ID]);
-      return "Supplier Deleted Successfully ...";
-    }
+    await execution(query, deleteFields);
+    return "Supplier Deleted Successfully ...";
   } catch (error) {
-    if (error.errorNum === 2292) {
+    if (error.errorNum === 20003) {
       return "Supplier is Connected to product table  !!!";
+    }
+    if (error.errorNum === 20001) {
+      return "Supplier ID does not exists!";
     }
   }
 };

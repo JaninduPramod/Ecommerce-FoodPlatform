@@ -17,14 +17,22 @@ supplierRoute.get("/api/v3/allSuppliers", async (_, res) => {
 
 // Create new Supplier
 supplierRoute.post("/api/v3/newSupplier", async (req, res) => {
-  const { SUPPLIER_ID, FULL_NAME, PHONE, ADDRESS, IMAGE_URL } = req.body;
+  const {
+    p_CRUD_TYPE,
+    p_SUPPLIER_ID,
+    p_FULL_NAME,
+    p_PHONE,
+    p_ADDRESS,
+    p_IMAGE_URL,
+  } = req.body;
 
   const newSupplier = {
-    SUPPLIER_ID,
-    FULL_NAME,
-    PHONE,
-    ADDRESS,
-    IMAGE_URL,
+    p_CRUD_TYPE,
+    p_SUPPLIER_ID,
+    p_FULL_NAME,
+    p_PHONE,
+    p_ADDRESS,
+    p_IMAGE_URL,
   };
 
   const response = await createSupplier(newSupplier);
@@ -43,20 +51,39 @@ supplierRoute.post("/api/v3/supplier-byid", async (req, res) => {
 
 // Update Supplier By ID
 supplierRoute.put("/api/v3/updateSupplier", async (req, res) => {
-  const { SUPPLIER_ID, FULL_NAME, PHONE, ADDRESS, IMAGE_URL } = req.body;
+  const {
+    p_CRUD_TYPE,
+    p_SUPPLIER_ID,
+    p_FULL_NAME,
+    p_PHONE,
+    p_ADDRESS,
+    p_IMAGE_URL,
+  } = req.body;
 
-  const updateFields = { FULL_NAME, PHONE, ADDRESS, IMAGE_URL };
+  const updateFields = {
+    p_CRUD_TYPE,
+    p_SUPPLIER_ID,
+    p_FULL_NAME,
+    p_PHONE,
+    p_ADDRESS,
+    p_IMAGE_URL,
+  };
 
-  const response = await updateSupplier(SUPPLIER_ID, updateFields);
+  const response = await updateSupplier(updateFields);
 
   res.status(200).json({ msg: response });
 });
 
 // Delete Supplier By ID
 supplierRoute.delete("/api/v3/deleteSupplier", async (req, res) => {
-  const { SUPPLIER_ID } = req.body;
+  const { p_CRUD_TYPE, p_SUPPLIER_ID } = req.body;
 
-  const response = await deleteSupplier(SUPPLIER_ID);
+  const deleteFields = {
+    p_CRUD_TYPE,
+    p_SUPPLIER_ID,
+  };
+
+  const response = await deleteSupplier(deleteFields);
   res.status(200).json({ msg: response });
 });
 

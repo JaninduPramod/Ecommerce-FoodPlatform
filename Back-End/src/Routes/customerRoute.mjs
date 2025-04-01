@@ -27,16 +27,22 @@ customerRoute.post("/api/v1/customer-byid", async (req, res) => {
 
 // Update Customer By ID
 customerRoute.put("/api/v1/updateCustomer", async (req, res) => {
-  const { CRUD_TYPE, CUSTOMER_ID, FULL_NAME, PHONE, ADDRESS, IMAGE_URL } =
-    req.body;
+  const {
+    p_CRUD_TYPE,
+    p_CUSTOMER_ID,
+    p_FULL_NAME,
+    p_PHONE,
+    p_ADDRESS,
+    p_IMAGE_URL,
+  } = req.body;
 
   const updateFields = {
-    CRUD_TYPE,
-    CUSTOMER_ID,
-    FULL_NAME,
-    PHONE,
-    ADDRESS,
-    IMAGE_URL,
+    p_CRUD_TYPE,
+    p_CUSTOMER_ID,
+    p_FULL_NAME,
+    p_PHONE,
+    p_ADDRESS,
+    p_IMAGE_URL,
   };
 
   const response = await updateCustomer(updateFields);
@@ -46,11 +52,11 @@ customerRoute.put("/api/v1/updateCustomer", async (req, res) => {
 
 // Delete Customer By ID
 customerRoute.delete("/api/v1/deleteCustomer", async (req, res) => {
-  const { CRUD_TYPE, CUSTOMER_ID } = req.body;
+  const { p_CRUD_TYPE, p_CUSTOMER_ID } = req.body;
 
   const deleteFields = {
-    CRUD_TYPE,
-    CUSTOMER_ID,
+    p_CRUD_TYPE,
+    p_CUSTOMER_ID,
   };
 
   const response = await deleteCustomer(deleteFields);
@@ -59,16 +65,22 @@ customerRoute.delete("/api/v1/deleteCustomer", async (req, res) => {
 
 // Create new customer
 customerRoute.post("/api/v1/newcustomer", async (req, res) => {
-  const { CRUD_TYPE, CUSTOMER_ID, FULL_NAME, PHONE, ADDRESS, IMAGE_URL } =
-    req.body;
+  const {
+    p_CRUD_TYPE,
+    p_CUSTOMER_ID,
+    p_FULL_NAME,
+    p_PHONE,
+    p_ADDRESS,
+    p_IMAGE_URL,
+  } = req.body;
 
   const newCustomer = {
-    CRUD_TYPE,
-    CUSTOMER_ID,
-    FULL_NAME,
-    PHONE,
-    ADDRESS,
-    IMAGE_URL,
+    p_CRUD_TYPE,
+    p_CUSTOMER_ID,
+    p_FULL_NAME,
+    p_PHONE,
+    p_ADDRESS,
+    p_IMAGE_URL,
   };
 
   const response = await createCustomer(newCustomer);
