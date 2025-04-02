@@ -15,22 +15,27 @@ const getAllCategories = async () => {
 // Create new Category Method
 const createCategory = async (newCategory) => {
   const params = {
-    NAME: newCategory.NAME,
-    DESCRIPTION: newCategory.DESCRIPTION,
+    p_CRUD_TYPE: newCategory.p_CRUD_TYPE,
+    p_NAME: newCategory.p_NAME,
+    p_DESCRIPTION: newCategory.p_DESCRIPTION,
   };
 
   const query = `
-        INSERT INTO CATEGORIES (NAME, DESCRIPTION)
-        VALUES (:NAME, :DESCRIPTION)
-      `;
+  
+    BEGIN
+    CategoryControllerProcedure(
+        p_CRUD_TYPE   => :p_CRUD_TYPE,
+        p_NAME        => :p_NAME, 
+        p_DESCRIPTION => :p_DESCRIPTION
+      );
+    END;
+  `;
 
   try {
     await execution(query, params);
     return "Category Created Successfully ...";
   } catch (error) {
-    if (error.errorNum === 1) {
-      return "Category Already Exists !!!";
-    }
+    console.log(error);
   }
 };
 
@@ -46,50 +51,62 @@ const getCategoryByID = async (CATEGORY_ID) => {
 };
 
 // Update Category By ID
-const updateCategory = async (CATEGORY_ID, updateFields) => {
-  const query = `
-          UPDATE CATEGORIES
-          SET NAME = :NAME,
-              DESCRIPTION = :DESCRIPTION
-              
-          WHERE CATEGORY_ID = :CATEGORY_ID
-        `;
+const updateCategory = async (updateFields) => {
+  const params = {
+    p_CRUD_TYPE: updateFields.p_CRUD_TYPE,
+    p_CATEGORY_ID: updateFields.p_CATEGORY_ID,
+    p_NAME: updateFields.p_NAME,
+    p_DESCRIPTION: updateFields.p_DESCRIPTION,
+  };
 
-  const params = [updateFields.NAME, updateFields.DESCRIPTION, CATEGORY_ID];
+  const query = `
+  
+    BEGIN
+    CategoryControllerProcedure(
+        p_CRUD_TYPE   => :p_CRUD_TYPE,
+        p_CATEGORY_ID => :p_CATEGORY_ID,
+        p_NAME        => :p_NAME, 
+        p_DESCRIPTION => :p_DESCRIPTION
+      );
+    END;
+  `;
 
   try {
-    const categoryAvailablity = await getCategoryByID(CATEGORY_ID);
-    if (
-      !categoryAvailablity ||
-      categoryAvailablity == "Invalid Category ID !!!"
-    ) {
-      return "Invalid Category ID !!!";
-    } else {
-      await execution(query, params);
-      return "Category Updated Successfully ...";
-    }
+    await execution(query, params);
+    return "Category Updated Successfully ...";
   } catch (error) {
-    console.log("Database Error:", error);
+    console.log(error);
+    if (error.errorNum === 20001) {
+      return "Invalid Category ID !!!";
+    }
   }
 };
 
 // Delete Supplier By ID Method
-const deleteCategory = async (CATEGORY_ID) => {
-  const query = "DELETE FROM CATEGORIES WHERE CATEGORY_ID = :CATEGORY_ID";
+const deleteCategory = async (deleteFields) => {
+  const params = {
+    p_CRUD_TYPE: deleteFields.p_CRUD_TYPE,
+    p_CATEGORY_ID: deleteFields.p_CATEGORY_ID,
+  };
+
+  const query = `
+  
+    BEGIN
+    CategoryControllerProcedure(
+        p_CRUD_TYPE   => :p_CRUD_TYPE,
+        p_CATEGORY_ID => :p_CATEGORY_ID
+      );
+    END;
+  `;
 
   try {
-    const categoryAvailablity = await getCategoryByID(CATEGORY_ID);
-    if (
-      !categoryAvailablity ||
-      categoryAvailablity == "Invalid Category ID !!!"
-    ) {
-      return "Invalid Category ID !!!";
-    } else {
-      await execution(query, [CATEGORY_ID]);
-      return "Category Deleted Successfully ...";
-    }
+    await execution(query, params);
+    return "Category Deleted Successfully ...";
   } catch (error) {
-    console.log("Database error :", error);
+    console.log(error);
+    if (error.errorNum === 20001) {
+      return "Invalid Category ID !!!";
+    }
   }
 };
 
