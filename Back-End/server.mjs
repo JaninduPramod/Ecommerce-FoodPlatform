@@ -28,7 +28,7 @@ app.use(
 );
 
 const uri =
-  "mongodb+srv://JaninduPramod:702150@urbanfoodecommerce.jebi4.mongodb.net/?retryWrites=true&w=majority&appName=UrbanFoodEcommerce";
+  "mongodb+srv://JaninduPramod:702150@urbanfoodecommerce.jebi4.mongodb.net/UrbanFood";
 
 const connectMongoose = () => {
   mongoose
@@ -37,7 +37,7 @@ const connectMongoose = () => {
     .catch((error) => console.log("Error: ", error));
 };
 
-// connectMongoose();
+connectMongoose();
 
 const server = app.listen(3000, () => {
   console.log(server.address().port);
