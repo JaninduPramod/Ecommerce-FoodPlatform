@@ -49,12 +49,13 @@ const createUser = async (newuser) => {
   }
 };
 
-//  User by ID Method
-const getUserByID = async (USER_ID) => {
-  const query = "SELECT * FROM USERS WHERE USER_ID = :USER_ID";
-  const response = await execution(query, [USER_ID]);
+//  User Login Method
+const userLogin = async (loginCredentials) => {
+  const query =
+    "SELECT * FROM USERS WHERE USER_EMAIL = :USER_EMAIL AND USER_PASSWORD=:USER_PASSWORD";
+  const response = await execution(query, loginCredentials);
   if (response.length <= 0) {
-    return "Invalid User ID !!!";
+    return "No user Available !!!";
   } else {
     return response;
   }
@@ -128,4 +129,4 @@ const deleteUser = async (deleteFields) => {
   }
 };
 
-export { getAllUsers, createUser, getUserByID, updateUser, deleteUser };
+export { getAllUsers, createUser, userLogin, updateUser, deleteUser };

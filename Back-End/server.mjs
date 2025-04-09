@@ -37,7 +37,7 @@ const connectMongoose = () => {
     .catch((error) => console.log("Error: ", error));
 };
 
-connectMongoose();
+// connectMongoose();
 
 const server = app.listen(3000, () => {
   console.log(server.address().port);

@@ -18,11 +18,12 @@ const ProductSlider = () => {
 
   const cardMapper = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/v4/allproducts");
+      const res = await fetch("http://localhost:3000/api/v5/allproducts");
 
       const data = await res.json();
+      console.log("data", data.msg);
 
-      setProducts(data.data || []);
+      setProducts(data.msg || []);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -42,7 +43,7 @@ const ProductSlider = () => {
       style={{ padding: "20px" }}
     >
       {products.map(product => (
-        <SwiperSlide key={product.id}>
+        <SwiperSlide key={product.PRODUCT_ID}>
           <Paper elevation={2} sx={{ width: "400px", borderRadius: "25px" }}>
             <Card sx={{ borderRadius: "25px" }}>
               <CardMedia
@@ -51,21 +52,21 @@ const ProductSlider = () => {
               />
               <CardContent>
                 <Typography variant="body2" color="text.secondary">
-                  {product.PRODUCT_CATEGORY}
+                  {product.CATEGORY_ID}
                 </Typography>
                 <Typography sx={{ mt: "5px" }} variant="h6">
-                  {product.PRODUCT_NAME}
+                  {product.NAME}
                 </Typography>
                 <Typography variant="h6" color="primary">
-                  {product.PRODUCT_PRICE}
+                  {product.PRICE}
                 </Typography>
 
                 <Button
                   variant="contained"
-                  color={product.available ? "primary" : "error"}
+                  color={product.STOCK ? "primary" : "error"}
                   sx={{ mt: 1 }}
                 >
-                  {product.available ? "Add to Cart" : "Sold Out"}
+                  {product.STOCK ? "Add to Cart" : "Sold Out"}
                 </Button>
               </CardContent>
             </Card>
