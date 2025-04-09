@@ -2,10 +2,11 @@ import { Router } from "express";
 import {
   getAllUsers,
   createUser,
-  userLogin,
   updateUser,
   deleteUser,
 } from "../Models/userModel.mjs";
+
+import { LoginUser } from "../Auth/AuthController.mjs";
 
 const userRoute = Router();
 
@@ -26,13 +27,7 @@ userRoute.post("/api/v2/newuser", async (req, res) => {
 });
 
 // User Login
-userRoute.post("/api/v2/userLogin", async (req, res) => {
-  // body should contain USER_EMAIL and USER_PASSWORD
-  const loginCredentials = req.body;
-  const response = await userLogin(loginCredentials);
-
-  res.status(200).json({ msg: response });
-});
+userRoute.post("/api/v2/userLogin", LoginUser);
 
 // Update User By ID
 userRoute.put("/api/v2/updateuser", async (req, res) => {

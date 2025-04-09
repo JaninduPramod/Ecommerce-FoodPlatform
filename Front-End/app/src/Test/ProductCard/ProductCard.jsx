@@ -16,14 +16,40 @@ import {
 const ProductSlider = () => {
   const [products, setProducts] = useState([]);
 
+  // handling add to cart
+  // Inside ProductSlider Component
+  const handleAddToCart = async product => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:3000/api/v6/addToCart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          p_PRODUCT_ID: product.PRODUCT_ID,
+          p_QUANTITY: 1,
+        }),
+      });
+
+      const data = await res.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      alert("Something went wrong.");
+    }
+  };
+
   const cardMapper = async () => {
     try {
       const res = await fetch("http://localhost:3000/api/v5/allproducts");
 
       const data = await res.json();
+      if (!data == "data No Products Available !!!") {
+        setProducts(data.msg || []);
+      }
       console.log("data", data.msg);
-
-      setProducts(data.msg || []);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -52,7 +78,7 @@ const ProductSlider = () => {
               />
               <CardContent>
                 <Typography variant="body2" color="text.secondary">
-                  {product.CATEGORY_ID}
+                  {product.PRODUCT_ID}
                 </Typography>
                 <Typography sx={{ mt: "5px" }} variant="h6">
                   {product.NAME}
@@ -65,6 +91,7 @@ const ProductSlider = () => {
                   variant="contained"
                   color={product.STOCK ? "primary" : "error"}
                   sx={{ mt: 1 }}
+                  onClick={() => handleAddToCart(product)}
                 >
                   {product.STOCK ? "Add to Cart" : "Sold Out"}
                 </Button>

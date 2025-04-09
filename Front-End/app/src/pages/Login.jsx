@@ -16,8 +16,6 @@ const AuthSection = () => {
     password: "",
   });
 
-  const [errorMessage, setErrorMessage] = useState("");
-
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -31,14 +29,16 @@ const AuthSection = () => {
         { USER_EMAIL: formData.email, USER_PASSWORD: formData.password },
       );
 
-      if (response.data.msg == "No user Available !!!") {
-        alert("No user Available !!!");
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+
+        console.log(response.data.token);
+        navigate("/onboarding");
       } else {
-        navigate("/");
+        alert(response.data.msg);
       }
     } catch (error) {
       console.error("Error during login:", error);
-      setErrorMessage("An error occurred during login.");
     }
   };
 

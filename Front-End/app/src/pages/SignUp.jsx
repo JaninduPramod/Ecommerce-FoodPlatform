@@ -3,10 +3,12 @@ import { Box, Typography, TextField, Button, Paper } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LockPersonIcon from "@mui/icons-material/LockPerson";
 import axios from "axios";
 
 const SignUpPage = () => {
+  const navigate = useNavigate();
   //handle formData
   const [formData, setFormData] = useState({
     username: "",
@@ -14,8 +16,6 @@ const SignUpPage = () => {
     password: "",
     role: "",
   });
-
-  const [message, setMessage] = useState("");
 
   //handle input changes
   const handleChange = e => {
@@ -42,10 +42,8 @@ const SignUpPage = () => {
       if (response.data.msg == "Null Values are not Accepted!") {
         alert("Null Values are not Accepted!");
       } else {
-        setMessage("Register successful! Redirecting...");
-
         setTimeout(() => {
-          window.location.href = "/login";
+          navigate("/onboarding");
         }, 2000);
       }
     } catch (error) {
@@ -152,7 +150,7 @@ const SignUpPage = () => {
 
           <Typography variant="body2" sx={{ mt: 2 }}>
             Already have an account?{" "}
-            <Link to="/login">
+            <Link to="/">
               <span
                 style={{
                   color: "blue",

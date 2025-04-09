@@ -6,6 +6,7 @@ import CategoriesRoute from "./src/Routes/categoryRoute.mjs";
 import cors from "cors";
 import productRoute from "./src/Routes/productRoute.mjs";
 import feedBackRoute from "./src/Routes/feedbackRoute.mjs";
+import CartRoute from "./src/Routes/CartRoute.mjs";
 import mongoose from "mongoose";
 
 const app = express();
@@ -24,7 +25,8 @@ app.use(
   productRoute,
   supplierRoute,
   CategoriesRoute,
-  feedBackRoute
+  feedBackRoute,
+  CartRoute
 );
 
 const uri =

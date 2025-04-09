@@ -1,34 +1,45 @@
 import "./App.css";
 import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Footer from "./components/Footer.jsx";
+import NavBar from "./components/navbar";
 import HomePage from "./pages/Home.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import NavBar from "./components/navbar";
 import Onboarding from "./pages/onboarding";
 import AuthSection from "./pages/Login.jsx";
 import SignUpPage from "./pages/SignUp.jsx";
 import Profile from "./pages/Profile.jsx";
-// import ProductCard from "./Test/ProductCard/ProductCard.jsx";
-// import ProductSetup from "./Test/ProductSetup.jsx";
 
-function App() {
+const AppLayout = () => {
+  const location = useLocation();
+
+  const hideLayout = ["/", "/signup"];
+  const shouldHideLayout = hideLayout.includes(location.pathname);
+
   return (
-    // <div className="app">
-    //     <HomePage />
-    //
-    //
-    // </div>
-    <Router>
-      <NavBar />
+    <>
+      {!shouldHideLayout && <NavBar />}
       <Routes>
-        <Route path="/" element={<Onboarding />} />
+        <Route path="/" element={<AuthSection />} />
+        <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/product" element={<ProductPage />} />
-        <Route path="/login" element={<AuthSection />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
-      <Footer />
+      {!shouldHideLayout && <Footer />}
+    </>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <AppLayout />
     </Router>
   );
 }
