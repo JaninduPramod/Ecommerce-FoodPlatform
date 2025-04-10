@@ -13,40 +13,50 @@ import {
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Profile = () => {
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
-
   const [openDialog, setOpenDialog] = useState(false);
 
   const [user, setUser] = useState({
-    fullName: " Hansi Tharuka",
-    email: " janinduPramod@gmail.com",
-    contact: "0767608263",
-    address1: "Nandana, Aththudawa, Palatuwa, Matara",
-    company: "NIBM",
-    city: "Matara",
-    postalCode: "81000",
+    fullName: "",
+    email: "",
+    contact: "",
+    address: "",
+    password: "",
+    username: "",
+    role: "",
   });
 
   useEffect(() => {
     fetchUserProfile();
-  }, []); //The empty dependency array ([]) means this effect runs only once, when the component first mounts.
+  }, []);
 
   const fetchUserProfile = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/user/profile", {
-        withCredentials: true,
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:3000/api/v2/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      setUser(response.data);
+      setUser({
+        fullName: response.data.FULLNAME || "",
+        email: response.data.EMAIL || "",
+        contact: response.data.CONTACT || "",
+        address: response.data.ADDRESS || "",
+        password: response.data.PASSWORD || "",
+        username: response.data.USERNAME || "",
+        role: response.data.ROLE || "",
+      });
     } catch (error) {
       console.error("Error fetching profile:", error);
-      // navigate("/login");
+      navigate("/login");
     }
   };
 
@@ -60,15 +70,31 @@ const Profile = () => {
 
   const handleUpdateProfile = async () => {
     try {
-      await axios.put("http://localhost:8080/user/profile", user, {
-        withCredentials: true,
-      });
+      const token = localStorage.getItem("token");
+
+      const updateData = {
+        p_CRUD_TYPE: "UPDATE",
+        p_FULL_NAME: user.fullName,
+        p_PHONE: user.contact,
+        p_ADDRESS: user.address,
+      };
+
+      await axios.put(
+        "http://localhost:3000/api/v1/updateCustomer",
+        updateData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
       setIsEditing(false);
-
       fetchUserProfile();
+      alert("Profile updated successfully!");
     } catch (error) {
       console.error("Error updating profile:", error);
+      alert("Failed to update profile. Please try again.");
     }
   };
 
@@ -78,20 +104,20 @@ const Profile = () => {
 
   const handleDeleteUser = async () => {
     try {
-      await axios.delete("http://localhost:8080/user/profile", {
-        withCredentials: true,
+      const token = localStorage.getItem("token");
+      await axios.delete("http://localhost:3000/api/v2/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       alert("Your account has been deleted successfully.");
-
       localStorage.removeItem("token");
-
       navigate("/login");
     } catch (error) {
       console.error("Error deleting user:", error);
       alert("Failed to delete the account. Please try again.");
     }
-
     setOpenDialog(false);
   };
 
@@ -101,6 +127,7 @@ const Profile = () => {
 
   const handleCancel = () => {
     setIsEditing(false);
+    fetchUserProfile();
   };
 
   const handleLogout = () => {
@@ -123,7 +150,7 @@ const Profile = () => {
         <Paper
           sx={{
             bgcolor: "lightyellow",
-            width: { xs: "80%", md: "50%" },
+            width: { xs: "80%", md: "40%" },
             padding: 5,
             mt: 9.5,
           }}
@@ -181,7 +208,7 @@ const Profile = () => {
                   gutterBottom
                   sx={{ fontSize: "15px" }}
                 >
-                  {user.address1}
+                  {user.address}
                 </Typography>
 
                 <Typography
@@ -190,7 +217,7 @@ const Profile = () => {
                   gutterBottom
                   sx={{ fontSize: "15px" }}
                 >
-                  {user.company}
+                  {user.role}
                 </Typography>
 
                 <Typography
@@ -199,16 +226,7 @@ const Profile = () => {
                   gutterBottom
                   sx={{ fontSize: "15px" }}
                 >
-                  {user.city}
-                </Typography>
-
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  gutterBottom
-                  sx={{ fontSize: "15px" }}
-                >
-                  {user.postalCode}
+                  {user.username}
                 </Typography>
               </Paper>
 
@@ -234,9 +252,6 @@ const Profile = () => {
             </>
           ) : (
             <>
-              <Typography variant="h6" sx={{ mt: 2 }}>
-                Edit Address
-              </Typography>
               <TextField
                 fullWidth
                 label="Full Name"
@@ -244,16 +259,6 @@ const Profile = () => {
                 sx={{ mt: 2 }}
                 name="fullName"
                 value={user.fullName}
-                onChange={handleChange}
-              />
-
-              <TextField
-                fullWidth
-                label="Email"
-                variant="outlined"
-                sx={{ mt: 2 }}
-                name="email"
-                value={user.email}
                 onChange={handleChange}
               />
 
@@ -269,41 +274,11 @@ const Profile = () => {
 
               <TextField
                 fullWidth
-                label="Address 1"
+                label="Address"
                 variant="outlined"
                 sx={{ mt: 2 }}
-                name="address1"
-                value={user.address1}
-                onChange={handleChange}
-              />
-
-              <TextField
-                fullWidth
-                label="Company"
-                variant="outlined"
-                sx={{ mt: 2 }}
-                name="company"
-                value={user.company}
-                onChange={handleChange}
-              />
-
-              <TextField
-                fullWidth
-                label="City"
-                variant="outlined"
-                sx={{ mt: 2 }}
-                name="city"
-                value={user.city}
-                onChange={handleChange}
-              />
-
-              <TextField
-                fullWidth
-                label="Postal/ZIP Code"
-                variant="outlined"
-                sx={{ mt: 2 }}
-                name="postalCode"
-                value={user.postalCode}
+                name="address"
+                value={user.address}
                 onChange={handleChange}
               />
 

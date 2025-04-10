@@ -1,20 +1,10 @@
 import execution from "../config/db.mjs";
-import jwt from "jsonwebtoken";
 
 // Add product to Cart Method
-const addToCart = async (newProduct) => {
+export const addToCart = async (newProduct) => {
   try {
-    const token = newProduct.token?.split(" ")[1];
-
-    if (!token) {
-      throw new Error("No token provided");
-    }
-
-    const decoded = jwt.verify(token, "urbanEcommerceSecretKey");
-    const USER_ID = decoded.userId;
-
     const params = {
-      p_CUSTOMER_ID: USER_ID,
+      p_CUSTOMER_ID: newProduct.p_USER_ID,
       p_PRODUCT_ID: newProduct.p_PRODUCT_ID,
       p_QUANTITY: newProduct.p_QUANTITY,
     };
@@ -37,4 +27,15 @@ const addToCart = async (newProduct) => {
   }
 };
 
-export default addToCart;
+// Get cart Products Method
+export const getMyProducts = async (IncomingData) => {
+  const query = `SELECT * FROM CART WHERE CUSTOMER_ID=:p_USER_ID`;
+  const response = await execution(query, [IncomingData.p_USER_ID]);
+  if (response.length <= 0) {
+    return "No products added to Cart ...";
+  } else {
+    return response;
+  }
+};
+
+export default { addToCart, getMyProducts };

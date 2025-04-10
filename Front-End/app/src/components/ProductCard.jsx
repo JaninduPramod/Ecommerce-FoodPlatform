@@ -44,12 +44,16 @@ const ProductSlider = () => {
   const cardMapper = async () => {
     try {
       const res = await fetch("http://localhost:3000/api/v5/allproducts");
-
       const data = await res.json();
-      if (!data == "data No Products Available !!!") {
-        setProducts(data.msg || []);
+
+      if (data.msg && Array.isArray(data.msg)) {
+        setProducts(data.msg);
+      } else {
+        console.warn("No products available or invalid response format.");
+        setProducts([]);
       }
-      console.log("data", data.msg);
+
+      console.log("Fetched products:", data.msg);
     } catch (error) {
       console.error("Error fetching products:", error);
     }

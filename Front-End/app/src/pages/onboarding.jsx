@@ -1,11 +1,12 @@
 import React from "react";
 import { Box, Typography, Button, Container } from "@mui/material";
 import ImageListComponent from "../components/imglist";
-import ProductSlider from "../Test/ProductCard/ProductCard";
-// import ProductCard from "../Test/ProductCard/ProductCard";
-// import ProductSetup from "../Test/ProductSetup";
+import ProductSlider from "../components/ProductCard";
+import MapBox from "../components/AllProducts";
+import { useNavigate } from "react-router-dom";
 
 const Onboarding = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Box
@@ -37,6 +38,9 @@ const Onboarding = () => {
             eiusmod tempor incididunt ut <br /> labore et dolore magna aliqua.
           </Typography>
           <Button
+            onClick={() => {
+              navigate("/product");
+            }}
             sx={{
               width: "140px",
               height: "45px",
@@ -56,7 +60,7 @@ const Onboarding = () => {
           Trending Products
         </Typography>
       </Container>
-      <ProductSlider />
+      <MapBox />
       <Box sx={{ height: "800px" }}></Box>
     </>
   );

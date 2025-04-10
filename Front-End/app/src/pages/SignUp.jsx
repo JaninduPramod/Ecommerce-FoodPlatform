@@ -43,7 +43,7 @@ const SignUpPage = () => {
         alert("Null Values are not Accepted!");
       } else {
         setTimeout(() => {
-          navigate("/onboarding");
+          navigate("/");
         }, 2000);
       }
     } catch (error) {

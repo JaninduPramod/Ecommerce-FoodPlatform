@@ -61,6 +61,35 @@ const userLogin = async (loginCredentials) => {
   }
 };
 
+// Get User by ID Method
+const getUserProfile = async (userId) => {
+  const query = `
+    SELECT 
+      USERS.USER_EMAIL as email,
+      USERS.USER_PASSWORD as password,
+      USERS.USER_ROLE as role,
+      USERS.USER_NAME as username,
+      CUSTOMER.PHONE as contact,
+      CUSTOMER.ADDRESS as address,
+      CUSTOMER.FULL_NAME as fullname
+    FROM 
+      USERS
+    LEFT JOIN 
+      CUSTOMER ON USERS.USER_ID = CUSTOMER.CUSTOMER_ID
+    WHERE 
+      USERS.USER_ID = :userId
+  `;
+
+  const params = { userId };
+  const response = await execution(query, params);
+
+  if (response.length === 0) {
+    throw new Error("User not found");
+  }
+
+  return response[0];
+};
+
 // Update User By ID
 const updateUser = async (updateFields) => {
   const params = {
@@ -129,4 +158,11 @@ const deleteUser = async (deleteFields) => {
   }
 };
 
-export { getAllUsers, createUser, userLogin, updateUser, deleteUser };
+export {
+  getAllUsers,
+  createUser,
+  userLogin,
+  updateUser,
+  deleteUser,
+  getUserProfile,
+};

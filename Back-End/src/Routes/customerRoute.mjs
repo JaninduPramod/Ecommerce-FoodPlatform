@@ -6,8 +6,24 @@ import {
   deleteCustomer,
   createCustomer,
 } from "../Models/customerModel.mjs";
+import jwt from "jsonwebtoken";
 
 const customerRoute = Router();
+const SECRET_KEY = "urbanEcommerceSecretKey";
+
+// JWT Verification Middleware
+const verifyToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "No token provided" });
+
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    req.userId = decoded.userId;
+    next();
+  } catch (error) {
+    return res.status(403).json({ error: "Invalid token" });
+  }
+};
 
 // // API for fetch ALL Customers
 customerRoute.get("/api/v1/allcustomers", async (_, res) => {
@@ -26,24 +42,8 @@ customerRoute.post("/api/v1/customer-byid", async (req, res) => {
 });
 
 // Update Customer By ID
-customerRoute.put("/api/v1/updateCustomer", async (req, res) => {
-  const {
-    p_CRUD_TYPE,
-    p_CUSTOMER_ID,
-    p_FULL_NAME,
-    p_PHONE,
-    p_ADDRESS,
-    p_IMAGE_URL,
-  } = req.body;
-
-  const updateFields = {
-    p_CRUD_TYPE,
-    p_CUSTOMER_ID,
-    p_FULL_NAME,
-    p_PHONE,
-    p_ADDRESS,
-    p_IMAGE_URL,
-  };
+customerRoute.put("/api/v1/updateCustomer", verifyToken, async (req, res) => {
+  const updateFields = { ...req.body, p_CUSTOMER_ID: req.userId };
 
   const response = await updateCustomer(updateFields);
 

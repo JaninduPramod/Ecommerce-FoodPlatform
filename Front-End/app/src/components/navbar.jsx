@@ -1,11 +1,59 @@
-import React from "react";
-import { AppBar, Toolbar, Typography, Box, Paper, Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Paper,
+  Button,
+  Badge,
+  IconButton,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import Person2Icon from "@mui/icons-material/Person2";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import CartDialog from "./CartDialog"; // Import the CartDialog
+import axios from "axios";
 
 const NavBar = () => {
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+  const [cartCount, setCartCount] = useState(0);
+
+  // Fetch cart items when dialog opens
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          "http://localhost:3000/api/v6/cartProducts",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        console.log("Fetched cart items:", response.data);
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+      }
+    };
+
+    if (cartOpen) fetchCartItems();
+  }, [cartOpen]);
+
+  const handleCartOpen = () => setCartOpen(true);
+  const handleCartClose = () => setCartOpen(false);
+
+  const removeItem = async cartId => {
+    try {
+      await axios.delete(`http://localhost:3000/api/cart/${cartId}`);
+      setCartItems(cartItems.filter(item => item.CART_ID !== cartId));
+      setCartCount(cartCount - 1);
+    } catch (error) {
+      console.error("Error removing item:", error);
+    }
+  };
+
   return (
     <>
       <AppBar sx={{ alignItems: "center" }}>
@@ -23,6 +71,7 @@ const NavBar = () => {
             justifyContent: "space-between",
           }}
         >
+          {/* Left side - Logo */}
           <Box
             component="img"
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Foody-Logo.svg/2093px-Foody-Logo.svg.png"
@@ -34,6 +83,8 @@ const NavBar = () => {
               justifyContent: "center",
             }}
           ></Box>
+
+          {/* Middle - Navigation Links */}
           <Box
             sx={{
               height: "75%",
@@ -70,7 +121,6 @@ const NavBar = () => {
             >
               Products
             </Typography>
-
             <Typography
               variant="h6"
               component={Link}
@@ -84,6 +134,8 @@ const NavBar = () => {
               Tab 5
             </Typography>
           </Box>
+
+          {/* Right side - Icons */}
           <Box
             sx={{
               color: "black",
@@ -102,6 +154,7 @@ const NavBar = () => {
                 cursor: "pointer",
               }}
             />
+
             <Box
               sx={{
                 display: "flex",
@@ -123,21 +176,37 @@ const NavBar = () => {
                 Profile
               </Typography>
             </Box>
-            <Button
-              variant="contained"
-              startIcon={<ShoppingCartIcon />}
+
+            <IconButton
+              onClick={handleCartOpen}
               sx={{
                 backgroundColor: "#ff7d01",
-                height: "30px",
+                height: "40px",
+                width: "120px",
                 ":hover": { backgroundColor: "black" },
+                borderRadius: "20px",
               }}
             >
-              1 Item
-            </Button>
+              <Badge badgeContent={cartCount} color="error">
+                <ShoppingCartIcon sx={{ color: "white" }} />
+              </Badge>
+              <Typography variant="body2" sx={{ color: "white", ml: 1 }}>
+                {cartCount === 1 ? "1 Item" : `${cartCount} Items`}
+              </Typography>
+            </IconButton>
           </Box>
         </Paper>
       </AppBar>
+
+      {/* Cart Dialog */}
+      <CartDialog
+        open={cartOpen}
+        onClose={handleCartClose}
+        cartItems={cartItems}
+        removeItem={removeItem}
+      />
     </>
   );
 };
+
 export default NavBar;
