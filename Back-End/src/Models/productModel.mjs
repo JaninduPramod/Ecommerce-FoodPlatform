@@ -142,10 +142,37 @@ const deleteProduct = async (deleteFields) => {
   }
 };
 
+// // Get Product details to Frontend Method
+const getProductDetails = async () => {
+  const query = `
+    SELECT 
+  PRODUCTS.PRODUCT_ID,
+  PRODUCTS.NAME AS product_name,
+  PRODUCTS.IMAGE_URL,
+  PRODUCTS.WEIGHT,
+  PRODUCTS.STOCK,
+  PRODUCTS.PRICE,
+  CATEGORIES.NAME AS category_name,
+  CATEGORIES.DESCRIPTION AS category_description
+    FROM 
+    PRODUCTS
+    LEFT JOIN 
+  CATEGORIES ON PRODUCTS.CATEGORY_ID = CATEGORIES.CATEGORY_ID
+  `;
+  const response = await execution(query);
+
+  if (response.length > 0) {
+    return response;
+  } else {
+    return "No Products Available !!!";
+  }
+};
+
 export {
   getAllProducts,
   createProduct,
   getProductByID,
   updateProduct,
   deleteProduct,
+  getProductDetails,
 };

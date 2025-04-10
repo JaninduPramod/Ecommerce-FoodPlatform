@@ -5,6 +5,7 @@ import {
   getProductByID,
   updateProduct,
   deleteProduct,
+  getProductDetails,
 } from "../Models/productModel.mjs";
 
 const productRoute = Router();
@@ -92,6 +93,13 @@ productRoute.delete("/api/v5/deleteProduct", async (req, res) => {
   const deleteFields = { p_CRUD_TYPE, p_PRODUCT_ID };
 
   const response = await deleteProduct(deleteFields);
+  res.status(200).json({ msg: response });
+});
+
+// // Get All product details for Frontend
+productRoute.get("/api/v5/productsWithDetails", async (_, res) => {
+  const response = await getProductDetails();
+
   res.status(200).json({ msg: response });
 });
 

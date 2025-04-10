@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography, Button, Container } from "@mui/material";
 import ImageListComponent from "../components/imglist";
 import ProductSlider from "../components/ProductCard";
-import MapBox from "../components/AllProducts";
+import AllProducts from "../components/AllProducts";
 import { useNavigate } from "react-router-dom";
 
 const Onboarding = () => {
@@ -60,7 +60,7 @@ const Onboarding = () => {
           Trending Products
         </Typography>
       </Container>
-      <MapBox />
+      <AllProducts />
       <Box sx={{ height: "800px" }}></Box>
     </>
   );
