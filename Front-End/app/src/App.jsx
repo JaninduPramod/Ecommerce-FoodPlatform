@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import Footer from "./components/Footer.jsx";
 import NavBar from "./components/navbar";
-import HomePage from "./pages/Home.jsx";
+// import HomePage from "./pages/Home.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
 import Onboarding from "./pages/onboarding";
 import AuthSection from "./pages/Login.jsx";
