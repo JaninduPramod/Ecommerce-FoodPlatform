@@ -42,15 +42,7 @@ export const getSuppliers = async () => {
   }
 };
 
-// export const getSuppliers = async () => {
-//   try {
-//     const response = await api.get("/api/v3/allSuppliers");
-//     return response.data.msg || [];
-//   } catch (error) {
-//     console.error("Error fetching suppliers:", error);
-//     throw error;
-//   }
-// };
+
 
 export const getFeedback = async () => {
   try {
@@ -58,6 +50,67 @@ export const getFeedback = async () => {
     return response.data.msg || [];
   } catch (error) {
     console.error("Error fetching feedback:", error);
+    throw error;
+  }
+};
+
+
+
+
+
+// In your api.js file, add these functions:
+
+export const createProduct = async (productData) => {
+  try {
+    const response = await api.post("/api/v5/newProduct", {
+      p_CRUD_TYPE: "CREATE",
+      p_PRODUCT_ID: productData.PRODUCT_ID,
+      p_SUPPLIER_ID: productData.SUPPLIER_ID,
+      p_CATEGORY_ID: productData.CATEGORY_ID,
+      p_NAME: productData.NAME,
+      p_IMAGE_URL: productData.IMAGE_URL,
+      p_WEIGHT: productData.WEIGHT,
+      p_STOCK: productData.STOCK,
+      p_PRICE: productData.PRICE
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating product:", error);
+    throw error;
+  }
+};
+
+export const updateProduct = async (productData) => {
+  try {
+    const response = await api.put("/api/v5/updateProduct", {
+      p_CRUD_TYPE: "UPDATE",
+      p_PRODUCT_ID: productData.PRODUCT_ID,
+      p_SUPPLIER_ID: productData.SUPPLIER_ID,
+      p_CATEGORY_ID: productData.CATEGORY_ID,
+      p_NAME: productData.NAME,
+      p_IMAGE_URL: productData.IMAGE_URL,
+      p_WEIGHT: productData.WEIGHT,
+      p_STOCK: productData.STOCK,
+      p_PRICE: productData.PRICE
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating product:", error);
+    throw error;
+  }
+};
+
+export const deleteProduct = async (productId) => {
+  try {
+    const response = await api.delete("/api/v5/deleteProduct", {
+      data: {
+        p_CRUD_TYPE: "DELETE",
+        p_PRODUCT_ID: productId
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting product:", error);
     throw error;
   }
 };

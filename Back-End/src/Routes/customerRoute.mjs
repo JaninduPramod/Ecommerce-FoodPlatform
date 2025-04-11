@@ -32,14 +32,8 @@ customerRoute.get("/api/v1/allcustomers", async (_, res) => {
   res.status(200).json({ data: response });
 });
 
-// customerRoute.get("/api/v1/allcustomers", async (_, res) => {
-//   console.log("Fetching all customers...");
-//   const response = await getAllCustomers();
-//   console.log("Customers found:", response.length);
-//   res.status(200).json({ data: response });
-// });
 
-// // Fetching Customer by ID
+// Fetching Customer by ID
 customerRoute.post("/api/v1/customer-byid", async (req, res) => {
   const { CUSTOMER_ID } = req.body;
 

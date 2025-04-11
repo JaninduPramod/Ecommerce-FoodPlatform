@@ -12,7 +12,9 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  Tabs,
+  Tab
 } from '@mui/material';
 import {
   getProducts,
@@ -25,7 +27,10 @@ import {
   People as PeopleIcon,
   LocalShipping as LocalShippingIcon,
   Feedback as FeedbackIcon,
+  Dashboard as DashboardIcon,
+  Edit as EditIcon
 } from '@mui/icons-material';
+ import ProductManagement from './ProductManagement';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -42,6 +47,7 @@ const Dashboard = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentTab, setCurrentTab] = useState(0);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -53,23 +59,10 @@ const Dashboard = () => {
           getFeedback(),
         ]);
 
-        // Debugging: Log the full responses
-        console.log('Full API Responses:', {
-          productsRes,
-          customersRes,
-          suppliersRes,
-          feedbackRes
-        });
-
-        // Safely extract data from responses with proper fallbacks
-        const products = Array.isArray(productsRes) ? productsRes : 
-                        (productsRes?.data || productsRes?.msg || []);
-        const customers = Array.isArray(customersRes) ? customersRes : 
-                         (customersRes?.data || customersRes?.msg || []);
-        const suppliers = Array.isArray(suppliersRes) ? suppliersRes : 
-                         (suppliersRes?.data || suppliersRes?.msg || []);
-        const feedback = Array.isArray(feedbackRes) ? feedbackRes : 
-                        (feedbackRes?.data || feedbackRes?.msg || []);
+        const products = Array.isArray(productsRes) ? productsRes : (productsRes?.data || productsRes?.msg || []);
+        const customers = Array.isArray(customersRes) ? customersRes : (customersRes?.data || customersRes?.msg || []);
+        const suppliers = Array.isArray(suppliersRes) ? suppliersRes : (suppliersRes?.data || suppliersRes?.msg || []);
+        const feedback = Array.isArray(feedbackRes) ? feedbackRes : (feedbackRes?.data || feedbackRes?.msg || []);
 
         setStats({
           products: products.length,
@@ -114,6 +107,10 @@ const Dashboard = () => {
     </Paper>
   );
 
+  const handleTabChange = (event, newValue) => {
+    setCurrentTab(newValue);
+  };
+
   if (error) {
     return (
       <Box sx={{ p: 3, marginTop: '50px' }}>
@@ -127,218 +124,226 @@ const Dashboard = () => {
   }
 
   return (
-    <Box sx={{ 
-      p: 3,
-      margin: '100px 20px 20px 20px' // Top margin set to 50px here
-    }}>
-      <Typography variant="h4" sx={{ mb: 2 }}>Dashboard Overview</Typography>
+    <Box sx={{ p: 3, margin: '100px 20px 20px 20px' }}>
+      <Typography variant="h4" sx={{ mb: 2 }}>Admin Dashboard</Typography>
       
-      {/* Statistics Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard
-            icon={<ShoppingCartIcon sx={{ fontSize: 40 }} />}
-            title="Products"
-            value={stats.products}
-            color="#1976d2"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard
-            icon={<PeopleIcon sx={{ fontSize: 40 }} />}
-            title="Customers"
-            value={stats.customers}
-            color="#4caf50"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard
-            icon={<LocalShippingIcon sx={{ fontSize: 40 }} />}
-            title="Suppliers"
-            value={stats.suppliers}
-            color="#ff9800"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatCard
-            icon={<FeedbackIcon sx={{ fontSize: 40 }} />}
-            title="Feedback"
-            value={stats.feedback}
-            color="#f44336"
-          />
-        </Grid>
-      </Grid>
+      <Tabs value={currentTab} onChange={handleTabChange} sx={{ mb: 3 }}>
+        <Tab label="Overview" icon={<DashboardIcon />} iconPosition="start" />
+        <Tab label="Product Management" icon={<EditIcon />} iconPosition="start" />
+      </Tabs>
 
-      {/* Tables Section */}
-      <Typography variant="h5" sx={{ mb: 2, mt: 4 }}>Recent Data Overview</Typography>
-      
-      {/* Products Table */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>Recent Products</Typography>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Category</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>Stock</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell colSpan={5} align="center">
-                    <CircularProgress />
-                  </TableCell>
-                </TableRow>
-              ) : tableData.products.length > 0 ? (
-                tableData.products.map((product) => (
-                  <TableRow key={product.PRODUCT_ID || product.id}>
-                    <TableCell>{product.PRODUCT_ID || product.id}</TableCell>
-                    <TableCell>{product.NAME || product.name}</TableCell>
-                    <TableCell>{product.CATEGORY_ID || product.categoryId}</TableCell>
-                    <TableCell>${product.PRICE || product.price}</TableCell>
-                    <TableCell>{product.STOCK || product.stock}</TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={5} align="center">
-                    No products found
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
+      {currentTab === 0 ? (
+        <>
+          {/* Statistics Cards */}
+          <Grid container spacing={3} sx={{ mb: 4 }}>
+            <Grid item xs={12} sm={6} md={3}>
+              <StatCard
+                icon={<ShoppingCartIcon sx={{ fontSize: 40 }} />}
+                title="Products"
+                value={stats.products}
+                color="#1976d2"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <StatCard
+                icon={<PeopleIcon sx={{ fontSize: 40 }} />}
+                title="Customers"
+                value={stats.customers}
+                color="#4caf50"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <StatCard
+                icon={<LocalShippingIcon sx={{ fontSize: 40 }} />}
+                title="Suppliers"
+                value={stats.suppliers}
+                color="#ff9800"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <StatCard
+                icon={<FeedbackIcon sx={{ fontSize: 40 }} />}
+                title="Feedback"
+                value={stats.feedback}
+                color="#f44336"
+              />
+            </Grid>
+          </Grid>
 
-      {/* Customers Table */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>Recent Customers</Typography>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Address</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell colSpan={4} align="center">
-                    <CircularProgress />
-                  </TableCell>
-                </TableRow>
-              ) : tableData.customers.length > 0 ? (
-                tableData.customers.map((customer) => (
-                  <TableRow key={customer.CUSTOMER_ID || customer.id}>
-                    <TableCell>{customer.CUSTOMER_ID || customer.id}</TableCell>
-                    <TableCell>{customer.FULL_NAME || customer.fullName}</TableCell>
-                    <TableCell>{customer.PHONE || customer.phone}</TableCell>
-                    <TableCell>{customer.ADDRESS || customer.address}</TableCell>
+          {/* Tables Section */}
+          <Typography variant="h5" sx={{ mb: 2, mt: 4 }}>Recent Data Overview</Typography>
+          
+          {/* Products Table */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>Recent Products</Typography>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Category</TableCell>
+                    <TableCell>Price</TableCell>
+                    <TableCell>Stock</TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={4} align="center">
-                    No customers found
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
+                </TableHead>
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={5} align="center">
+                        <CircularProgress />
+                      </TableCell>
+                    </TableRow>
+                  ) : tableData.products.length > 0 ? (
+                    tableData.products.map((product) => (
+                      <TableRow key={product.PRODUCT_ID || product.id}>
+                        <TableCell>{product.PRODUCT_ID || product.id}</TableCell>
+                        <TableCell>{product.NAME || product.name}</TableCell>
+                        <TableCell>{product.CATEGORY_ID || product.categoryId}</TableCell>
+                        <TableCell>${product.PRICE || product.price}</TableCell>
+                        <TableCell>{product.STOCK || product.stock}</TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={5} align="center">
+                        No products found
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
 
-      {/* Suppliers Table */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>Recent Suppliers</Typography>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Address</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell colSpan={4} align="center">
-                    <CircularProgress />
-                  </TableCell>
-                </TableRow>
-              ) : tableData.suppliers.length > 0 ? (
-                tableData.suppliers.map((supplier) => (
-                  <TableRow key={supplier.SUPPLIER_ID || supplier.id}>
-                    <TableCell>{supplier.SUPPLIER_ID || supplier.id}</TableCell>
-                    <TableCell>{supplier.FULL_NAME || supplier.fullName}</TableCell>
-                    <TableCell>{supplier.PHONE || supplier.phone}</TableCell>
-                    <TableCell>{supplier.ADDRESS || supplier.address}</TableCell>
+          {/* Customers Table */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>Recent Customers</Typography>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Phone</TableCell>
+                    <TableCell>Address</TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={4} align="center">
-                    No suppliers found
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
+                </TableHead>
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={4} align="center">
+                        <CircularProgress />
+                      </TableCell>
+                    </TableRow>
+                  ) : tableData.customers.length > 0 ? (
+                    tableData.customers.map((customer) => (
+                      <TableRow key={customer.CUSTOMER_ID || customer.id}>
+                        <TableCell>{customer.CUSTOMER_ID || customer.id}</TableCell>
+                        <TableCell>{customer.FULL_NAME || customer.fullName}</TableCell>
+                        <TableCell>{customer.PHONE || customer.phone}</TableCell>
+                        <TableCell>{customer.ADDRESS || customer.address}</TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4} align="center">
+                        No customers found
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
 
-      {/* Feedback Table */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>Recent Feedback</Typography>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Product ID</TableCell>
-                <TableCell>User ID</TableCell>
-                <TableCell>Message</TableCell>
-                <TableCell>Type</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell colSpan={5} align="center">
-                    <CircularProgress />
-                  </TableCell>
-                </TableRow>
-              ) : tableData.feedback.length > 0 ? (
-                tableData.feedback.map((feedback) => (
-                  <TableRow key={feedback.FEEDBACK_ID || feedback.id}>
-                    <TableCell>{feedback.FEEDBACK_ID || feedback.id}</TableCell>
-                    <TableCell>{feedback.PRODUCT_ID || feedback.productId}</TableCell>
-                    <TableCell>{feedback.USER_ID || feedback.userId}</TableCell>
-                    <TableCell>{feedback.MESSAGE || feedback.message}</TableCell>
-                    <TableCell>{feedback.TYPE || feedback.type}</TableCell>
+          {/* Suppliers Table */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>Recent Suppliers</Typography>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Phone</TableCell>
+                    <TableCell>Address</TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={5} align="center">
-                    No feedback found
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
+                </TableHead>
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={4} align="center">
+                        <CircularProgress />
+                      </TableCell>
+                    </TableRow>
+                  ) : tableData.suppliers.length > 0 ? (
+                    tableData.suppliers.map((supplier) => (
+                      <TableRow key={supplier.SUPPLIER_ID || supplier.id}>
+                        <TableCell>{supplier.SUPPLIER_ID || supplier.id}</TableCell>
+                        <TableCell>{supplier.FULL_NAME || supplier.fullName}</TableCell>
+                        <TableCell>{supplier.PHONE || supplier.phone}</TableCell>
+                        <TableCell>{supplier.ADDRESS || supplier.address}</TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4} align="center">
+                        No suppliers found
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+
+          {/* Feedback Table */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>Recent Feedback</Typography>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Product ID</TableCell>
+                    <TableCell>User ID</TableCell>
+                    <TableCell>Message</TableCell>
+                    <TableCell>Type</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={5} align="center">
+                        <CircularProgress />
+                      </TableCell>
+                    </TableRow>
+                  ) : tableData.feedback.length > 0 ? (
+                    tableData.feedback.map((feedback) => (
+                      <TableRow key={feedback.FEEDBACK_ID || feedback.id}>
+                        <TableCell>{feedback.FEEDBACK_ID || feedback.id}</TableCell>
+                        <TableCell>{feedback.PRODUCT_ID || feedback.productId}</TableCell>
+                        <TableCell>{feedback.USER_ID || feedback.userId}</TableCell>
+                        <TableCell>{feedback.MESSAGE || feedback.message}</TableCell>
+                        <TableCell>{feedback.TYPE || feedback.type}</TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={5} align="center">
+                        No feedback found
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </>
+      ) : (
+        <ProductManagement />
+      )}
     </Box>
   );
 };
