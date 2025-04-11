@@ -60,25 +60,6 @@ export const getFeedback = async () => {
 
 // In your api.js file, add these functions:
 
-export const createProduct = async (productData) => {
-  try {
-    const response = await api.post("/api/v5/newProduct", {
-      p_CRUD_TYPE: "CREATE",
-      p_PRODUCT_ID: productData.PRODUCT_ID,
-      p_SUPPLIER_ID: productData.SUPPLIER_ID,
-      p_CATEGORY_ID: productData.CATEGORY_ID,
-      p_NAME: productData.NAME,
-      p_IMAGE_URL: productData.IMAGE_URL,
-      p_WEIGHT: productData.WEIGHT,
-      p_STOCK: productData.STOCK,
-      p_PRICE: productData.PRICE
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error creating product:", error);
-    throw error;
-  }
-};
 
 export const updateProduct = async (productData) => {
   try {
@@ -103,6 +84,9 @@ export const updateProduct = async (productData) => {
 export const deleteProduct = async (productId) => {
   try {
     const response = await api.delete("/api/v5/deleteProduct", {
+      headers: {
+        'Content-Type': 'application/json',
+      },
       data: {
         p_CRUD_TYPE: "DELETE",
         p_PRODUCT_ID: productId
@@ -110,7 +94,7 @@ export const deleteProduct = async (productId) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error deleting product:", error);
+    console.error("Error deleting product:", error.response?.data || error);
     throw error;
   }
 };

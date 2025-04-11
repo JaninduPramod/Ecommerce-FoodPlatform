@@ -7,7 +7,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
   IconButton,
   TextField,
   Dialog,
@@ -15,10 +14,11 @@ import {
   DialogContent,
   DialogActions,
   Box,
-  Typography
+  Typography,
+  Button
 } from '@mui/material';
-import { Edit, Delete, Add, Search } from '@mui/icons-material';
-import { getProducts, createProduct, updateProduct, deleteProduct } from '../services/api';
+import { Edit, Delete, Search } from '@mui/icons-material';
+import { getProducts, updateProduct, deleteProduct } from '../services/api';
 
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
@@ -27,20 +27,17 @@ const ProductManagement = () => {
   const [error, setError] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isNewProduct, setIsNewProduct] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Fetch products on component mount
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  // Filter products when search term or products change
   useEffect(() => {
     if (searchTerm === '') {
       setFilteredProducts(products);
     } else {
-      const filtered = products.filter(product => 
+      const filtered = products.filter(product =>
         product.PRODUCT_ID.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.NAME.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -68,29 +65,13 @@ const ProductManagement = () => {
 
   const handleEditClick = (product) => {
     setEditingProduct(product);
-    setIsNewProduct(false);
-    setIsDialogOpen(true);
-  };
-
-  const handleAddClick = () => {
-    setEditingProduct({
-      PRODUCT_ID: '',
-      SUPPLIER_ID: '',
-      CATEGORY_ID: '',
-      NAME: '',
-      IMAGE_URL: '',
-      WEIGHT: '',
-      STOCK: '',
-      PRICE: ''
-    });
-    setIsNewProduct(true);
     setIsDialogOpen(true);
   };
 
   const handleDeleteClick = async (productId) => {
     try {
       await deleteProduct(productId);
-      fetchProducts(); // Refresh the list
+      fetchProducts();
     } catch (error) {
       setError(error.message);
     }
@@ -106,13 +87,9 @@ const ProductManagement = () => {
 
   const handleSubmit = async () => {
     try {
-      if (isNewProduct) {
-        await createProduct(editingProduct);
-      } else {
-        await updateProduct(editingProduct);
-      }
+      await updateProduct(editingProduct);
       setIsDialogOpen(false);
-      fetchProducts(); // Refresh the list
+      fetchProducts();
     } catch (error) {
       setError(error.message);
     }
@@ -123,8 +100,8 @@ const ProductManagement = () => {
       <Typography variant="h5" gutterBottom>
         Product Management
       </Typography>
-      
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+
+      <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 2 }}>
         <TextField
           variant="outlined"
           placeholder="Search by ID or Name"
@@ -135,13 +112,6 @@ const ProductManagement = () => {
           }}
           sx={{ width: '300px' }}
         />
-        <Button 
-          variant="contained" 
-          startIcon={<Add />} 
-          onClick={handleAddClick}
-        >
-          Add Product
-        </Button>
       </Box>
 
       {error && (
@@ -198,21 +168,16 @@ const ProductManagement = () => {
         </Table>
       </TableContainer>
 
-      {/* Edit/Add Dialog */}
       <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          {isNewProduct ? 'Add New Product' : 'Edit Product'}
-        </DialogTitle>
+        <DialogTitle>Edit Product</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
             <TextField
               label="Product ID"
               name="PRODUCT_ID"
               value={editingProduct?.PRODUCT_ID || ''}
-              onChange={handleInputChange}
+              disabled
               fullWidth
-              required
-              disabled={!isNewProduct}
             />
             <TextField
               label="Name"
@@ -275,7 +240,7 @@ const ProductManagement = () => {
         <DialogActions>
           <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
           <Button onClick={handleSubmit} color="primary" variant="contained">
-            {isNewProduct ? 'Create' : 'Update'}
+            Update
           </Button>
         </DialogActions>
       </Dialog>
