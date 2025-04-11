@@ -128,6 +128,7 @@ const NavBar = () => {
             <Typography
               variant="h6"
               component={Link}
+              to="/orders"
               sx={{
                 fontFamily: "cursive",
                 color: "black",
