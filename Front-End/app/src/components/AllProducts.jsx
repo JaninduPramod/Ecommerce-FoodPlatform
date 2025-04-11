@@ -1,5 +1,4 @@
 import {
-  Container,
   Box,
   Typography,
   Paper,
@@ -7,59 +6,78 @@ import {
   CardContent,
   CardMedia,
   Button,
+  TextField,
+  Pagination,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
-const CardLayout = ({ Product }) => {
+export const CardLayout = ({ Product }) => {
   return (
-    <>
-      <Paper
-        elevation={2}
-        sx={{ width: "400px", borderRadius: "25px", margin: "10px" }}
-      >
-        <Card sx={{ borderRadius: "25px" }}>
-          <CardMedia
-            component="img"
-            image="https://freshgo-webibazaar.myshopify.com/cdn/shop/products/1_350x.jpg?v=1625658832"
-          />
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              {Product.PRODUCT_ID}
-            </Typography>
-            <Typography sx={{ mt: "5px" }} variant="h6">
-              {Product.NAME}
-            </Typography>
-            <Typography variant="h6" color="primary">
-              {Product.PRICE}
-            </Typography>
+    <Paper
+      elevation={2}
+      sx={{ width: "400px", borderRadius: "25px", margin: "10px" }}
+    >
+      <Card sx={{ borderRadius: "25px" }}>
+        <CardMedia
+          component="img"
+          image="https://freshgo-webibazaar.myshopify.com/cdn/shop/products/1_350x.jpg?v=1625658832"
+        />
+        <CardContent>
+          <Typography variant="body2" color="text.secondary">
+            {Product.CATEGORY_NAME}
+          </Typography>
+          <Typography sx={{ mt: "5px" }} variant="h6">
+            {Product.PRODUCT_NAME}
+          </Typography>
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            ${Product.PRICE}
+          </Typography>
+          <Box display="flex" alignItems="center" gap={1}>
+            <Typography variant="body1">Qty</Typography>
+            <TextField
+              type="number"
+              defaultValue={1}
+              inputProps={{ min: 1 }}
+              size="small"
+              sx={{ width: 65 }}
+            />
+          </Box>
 
-            <Button
-              variant="contained"
-              color={Product.STOCK ? "primary" : "error"}
-              sx={{ mt: 1 }}
-            >
-              {Product.STOCK ? "Add to Cart" : "Sold Out"}
-            </Button>
-          </CardContent>
-        </Card>
-      </Paper>
-    </>
+          <Button
+            variant="contained"
+            color={Product.STOCK ? "primary" : "error"}
+            sx={{ mt: 1, backgroundColor: "#ff7d01" }}
+          >
+            {Product.STOCK ? "Add to Cart" : "Sold Out"}
+          </Button>
+          <Button sx={{ mt: "10px", marginLeft: "18px" }} variant="outlined">
+            View Product
+          </Button>
+        </CardContent>
+      </Card>
+    </Paper>
   );
 };
 
-const MapBox = () => {
+const AllProducts = ({ whatToFetch }) => {
   const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const productsPerPage = 12;
+  const containerRef = useRef(null);
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/v5/allproducts");
+      const response = await fetch(whatToFetch);
       const data = await response.json();
 
+      console.log("Fetched products:", data.msg);
+
       if (data.msg && Array.isArray(data.msg)) {
-        setProducts(data.msg); // Update the products state with the fetched data
+        setProducts(data.msg);
       } else {
         console.warn("No products available or invalid response format.");
-        setProducts([]); // Clear the products state if no products are available
+        setProducts([]);
       }
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -70,34 +88,71 @@ const MapBox = () => {
     fetchProducts();
   }, []);
 
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct,
+  );
+
+  const scrollToTop = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+    scrollToTop();
+  };
+
   return (
     <>
       <Box
+        ref={containerRef}
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          flexDirection: "column",
         }}
       >
         <Box
           sx={{
             mt: "25px",
-            backgroundColor: "#121212",
-            width: "75%",
-            height: "50%",
+            width: "1260px",
             display: "flex",
             flexWrap: "wrap",
             flexDirection: "row",
             alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
           }}
         >
-          {products.map((product, index) => (
+          {currentProducts.map((product, index) => (
             <CardLayout key={index} Product={product} />
           ))}
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "75%",
+            mt: 3,
+          }}
+        >
+          <Pagination
+            count={Math.ceil(products.length / productsPerPage)}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          />
         </Box>
       </Box>
     </>
   );
 };
 
-export default MapBox;
+export default AllProducts;

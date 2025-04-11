@@ -11,6 +11,8 @@ import {
   Typography,
   Button,
   Paper,
+  TextField,
+  Box,
 } from "@mui/material";
 
 const ProductSlider = () => {
@@ -43,8 +45,11 @@ const ProductSlider = () => {
 
   const cardMapper = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/v5/allproducts");
+      const res = await fetch(
+        "http://localhost:3000/api/v5/productsWithDetails",
+      );
       const data = await res.json();
+      console.log("Fetched products:", data.msg);
 
       if (data.msg && Array.isArray(data.msg)) {
         setProducts(data.msg);
@@ -82,19 +87,29 @@ const ProductSlider = () => {
               />
               <CardContent>
                 <Typography variant="body2" color="text.secondary">
-                  {product.PRODUCT_ID}
+                  {product.CATEGORY_NAME}
                 </Typography>
                 <Typography sx={{ mt: "5px" }} variant="h6">
-                  {product.NAME}
+                  {product.PRODUCT_NAME}
                 </Typography>
-                <Typography variant="h6" color="primary">
-                  {product.PRICE}
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  ${product.PRICE}
                 </Typography>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Typography variant="body1">Qty</Typography>
+                  <TextField
+                    type="number"
+                    defaultValue={1}
+                    inputProps={{ min: 1 }}
+                    size="small"
+                    sx={{ width: 65 }}
+                  />
+                </Box>
 
                 <Button
                   variant="contained"
                   color={product.STOCK ? "primary" : "error"}
-                  sx={{ mt: 1 }}
+                  sx={{ mt: 1, backgroundColor: "#ff7d01" }}
                   onClick={() => handleAddToCart(product)}
                 >
                   {product.STOCK ? "Add to Cart" : "Sold Out"}

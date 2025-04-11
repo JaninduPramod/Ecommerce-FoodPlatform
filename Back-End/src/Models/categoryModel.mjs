@@ -110,10 +110,23 @@ const deleteCategory = async (deleteFields) => {
   }
 };
 
+// Get Category Names for FrontEnd Method
+const getAllCategoryNames = async () => {
+  const query = "SELECT NAME FROM CATEGORIES";
+  const response = await execution(query);
+
+  if (response.length > 0) {
+    return response;
+  } else {
+    return "No Categories Available !!!";
+  }
+};
+
 export {
   getAllCategories,
   createCategory,
   getCategoryByID,
   updateCategory,
   deleteCategory,
+  getAllCategoryNames,
 };
