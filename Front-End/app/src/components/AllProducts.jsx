@@ -59,7 +59,7 @@ export const CardLayout = ({ Product }) => {
   );
 };
 
-const AllProducts = ({ whatToFetch }) => {
+const AllProducts = ({ whatToFetch, filterParams }) => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -68,7 +68,27 @@ const AllProducts = ({ whatToFetch }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(whatToFetch);
+      let response;
+
+      if (whatToFetch === "http://localhost:3000/api/v5/productsWithDetails") {
+        // Send a GET request for all products
+        response = await fetch(whatToFetch, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      } else {
+        // Send a POST request for filtered products
+        response = await fetch(whatToFetch, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(filterParams || {}), // Send filter parameters in the request body
+        });
+      }
+
       const data = await response.json();
 
       console.log("Fetched products:", data.msg);
@@ -86,7 +106,7 @@ const AllProducts = ({ whatToFetch }) => {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [whatToFetch, filterParams]); // Refetch products when whatToFetch or filterParams changes
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
