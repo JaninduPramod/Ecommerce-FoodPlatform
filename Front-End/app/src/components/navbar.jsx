@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import Person2Icon from "@mui/icons-material/Person2";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import CartDialog from "./CartDialog"; // Import the CartDialog
+import CartDialog from "./CartDialog";
 import axios from "axios";
 
 const NavBar = () => {
@@ -21,7 +21,6 @@ const NavBar = () => {
   const [cartItems, setCartItems] = useState([]);
   const [cartCount, setCartCount] = useState(0);
 
-  // Fetch cart items when dialog opens
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -40,10 +39,9 @@ const NavBar = () => {
 
         console.log("Fetched cart items:", response.data);
 
-        // Ensure the `msg` field is extracted and set to `cartItems`
         if (response.data && Array.isArray(response.data.msg)) {
-          setCartItems(response.data.msg); // Update cartItems state
-          setCartCount(response.data.msg.length); // Update cartCount
+          setCartItems(response.data.msg);
+          setCartCount(response.data.msg.length);
         } else {
           console.warn("Invalid response format or no items in cart.");
           setCartItems([]);
@@ -79,7 +77,6 @@ const NavBar = () => {
             justifyContent: "space-between",
           }}
         >
-          {/* Left side - Logo */}
           <Box
             component="img"
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Foody-Logo.svg/2093px-Foody-Logo.svg.png"
@@ -92,7 +89,6 @@ const NavBar = () => {
             }}
           ></Box>
 
-          {/* Middle - Navigation Links */}
           <Box
             sx={{
               height: "75%",
@@ -139,11 +135,10 @@ const NavBar = () => {
                 ":hover": { color: "#ff7d01" },
               }}
             >
-              Tab 5
+              My Orders
             </Typography>
           </Box>
 
-          {/* Right side - Icons */}
           <Box
             sx={{
               color: "black",
@@ -210,7 +205,7 @@ const NavBar = () => {
         open={cartOpen}
         onClose={handleCartClose}
         cartItems={cartItems}
-        setCartItems={setCartItems} // Pass setCartItems to CartDialog
+        setCartItems={setCartItems}
       />
     </>
   );

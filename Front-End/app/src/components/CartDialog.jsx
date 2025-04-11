@@ -16,16 +16,20 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const CartDialog = ({ open, onClose, cartItems, setCartItems }) => {
-  // Calculate the total price of all items in the cart
+  const navigate = useNavigate();
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + item.PRODUCT_PRICE * item.QUANTITY,
     0,
   );
 
-  // Function to remove an item from the cart
+  const handleProceedToCheckout = () => {
+    navigate("/checkout", { state: { cartItems, totalPrice } });
+  };
+
   const removeItem = async cartId => {
     try {
       const token = localStorage.getItem("token");
@@ -34,7 +38,6 @@ const CartDialog = ({ open, onClose, cartItems, setCartItems }) => {
         data: { CART_ID: cartId },
       });
 
-      // Update the cartItems state after successful deletion
       setCartItems(prevItems =>
         prevItems.filter(item => item.CART_ID !== cartId),
       );
@@ -116,6 +119,7 @@ const CartDialog = ({ open, onClose, cartItems, setCartItems }) => {
           color="primary"
           size="large"
           disabled={cartItems.length === 0}
+          onClick={handleProceedToCheckout}
         >
           Proceed to Checkout
         </Button>

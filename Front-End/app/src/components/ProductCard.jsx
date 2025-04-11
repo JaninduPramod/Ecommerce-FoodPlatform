@@ -17,9 +17,8 @@ import {
 
 const ProductSlider = () => {
   const [products, setProducts] = useState([]);
-  const [quantities, setQuantities] = useState({}); // State to track quantities for each product
+  const [quantities, setQuantities] = useState({});
 
-  // Handle quantity change
   const handleQuantityChange = (productId, value) => {
     setQuantities(prevQuantities => ({
       ...prevQuantities,
@@ -27,11 +26,10 @@ const ProductSlider = () => {
     }));
   };
 
-  // Handle add to cart
   const handleAddToCart = async product => {
     try {
       const token = localStorage.getItem("token");
-      const quantity = quantities[product.PRODUCT_ID] || 1; // Default to 1 if no quantity is set
+      const quantity = quantities[product.PRODUCT_ID] || 1;
 
       const res = await fetch("http://localhost:3000/api/v6/addToCart", {
         method: "POST",

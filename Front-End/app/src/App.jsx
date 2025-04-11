@@ -14,11 +14,12 @@ import Onboarding from "./pages/onboarding";
 import AuthSection from "./pages/Login.jsx";
 import SignUpPage from "./pages/SignUp.jsx";
 import Profile from "./pages/Profile.jsx";
+import CheckoutPage from "./pages/CheckoutPage.jsx";
 
 const AppLayout = () => {
   const location = useLocation();
 
-  const hideLayout = ["/", "/signup"];
+  const hideLayout = ["/", "/signup", "/checkout"];
   const shouldHideLayout = hideLayout.includes(location.pathname);
 
   return (
@@ -29,6 +30,7 @@ const AppLayout = () => {
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/product" element={<ProductPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
       {!shouldHideLayout && <Footer />}

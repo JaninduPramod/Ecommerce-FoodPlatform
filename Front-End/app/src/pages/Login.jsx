@@ -63,7 +63,6 @@ const AuthSection = () => {
           bgcolor: "white",
         }}
       >
-        {/* Signup Section */}
         <Paper
           sx={{ padding: 2, width: "30%", textAlign: "left", height: "300px" }}
           elevation={3}
@@ -95,7 +94,6 @@ const AuthSection = () => {
           </Button>
         </Paper>
 
-        {/* Login */}
         <Paper
           sx={{ padding: 2, textAlign: "center", height: "300px" }}
           elevation={3}

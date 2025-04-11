@@ -11,7 +11,11 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState, useRef } from "react";
 
-export const CardLayout = ({ Product }) => {
+export const CardLayout = ({
+  Product,
+  handleQuantityChange,
+  handleAddToCart,
+}) => {
   return (
     <Paper
       elevation={2}
@@ -40,6 +44,9 @@ export const CardLayout = ({ Product }) => {
               inputProps={{ min: 1 }}
               size="small"
               sx={{ width: 65 }}
+              onChange={e =>
+                handleQuantityChange(Product.PRODUCT_ID, e.target.value)
+              }
             />
           </Box>
 
@@ -47,6 +54,7 @@ export const CardLayout = ({ Product }) => {
             variant="contained"
             color={Product.STOCK ? "primary" : "error"}
             sx={{ mt: 1, backgroundColor: "#ff7d01" }}
+            onClick={() => handleAddToCart(Product)}
           >
             {Product.STOCK ? "Add to Cart" : "Sold Out"}
           </Button>
@@ -61,17 +69,55 @@ export const CardLayout = ({ Product }) => {
 
 const AllProducts = ({ whatToFetch, filterParams }) => {
   const [products, setProducts] = useState([]);
+  const [quantities, setQuantities] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
 
   const productsPerPage = 12;
   const containerRef = useRef(null);
+
+  const handleQuantityChange = (productId, value) => {
+    setQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [productId]: value,
+    }));
+  };
+
+  const handleAddToCart = async product => {
+    try {
+      const token = localStorage.getItem("token");
+      const quantity = quantities[product.PRODUCT_ID] || 1;
+
+      const res = await fetch("http://localhost:3000/api/v6/addToCart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          p_PRODUCT_ID: product.PRODUCT_ID,
+          p_QUANTITY: quantity,
+        }),
+      });
+
+      const data = await res.json();
+      console.log("Add to Cart Response:", data);
+
+      if (data.msg === "Product added to cart successfully.") {
+        alert("Product added to cart successfully.");
+      } else {
+        alert(data.msg || "Failed to add product to cart.");
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      alert("Something went wrong.");
+    }
+  };
 
   const fetchProducts = async () => {
     try {
       let response;
 
       if (whatToFetch === "http://localhost:3000/api/v5/productsWithDetails") {
-        // Send a GET request for all products
         response = await fetch(whatToFetch, {
           method: "GET",
           headers: {
@@ -79,13 +125,12 @@ const AllProducts = ({ whatToFetch, filterParams }) => {
           },
         });
       } else {
-        // Send a POST request for filtered products
         response = await fetch(whatToFetch, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(filterParams || {}), // Send filter parameters in the request body
+          body: JSON.stringify(filterParams || {}),
         });
       }
 
@@ -106,7 +151,7 @@ const AllProducts = ({ whatToFetch, filterParams }) => {
 
   useEffect(() => {
     fetchProducts();
-  }, [whatToFetch, filterParams]); // Refetch products when whatToFetch or filterParams changes
+  }, [whatToFetch, filterParams]);
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -150,7 +195,12 @@ const AllProducts = ({ whatToFetch, filterParams }) => {
           }}
         >
           {currentProducts.map((product, index) => (
-            <CardLayout key={index} Product={product} />
+            <CardLayout
+              key={index}
+              Product={product}
+              handleQuantityChange={handleQuantityChange}
+              handleAddToCart={handleAddToCart}
+            />
           ))}
         </Box>
 

@@ -1,4 +1,5 @@
 import execution from "../config/db.mjs";
+import oracledb from "oracledb";
 
 // Add product to Cart Method
 export const addToCart = async (newProduct) => {
@@ -65,4 +66,25 @@ export const deleteCartItem = async (CART_ID) => {
   }
 };
 
-export default { addToCart, getMyProducts, deleteCartItem };
+// Customer Place Order Method
+export const placeOrderFor = async (CUSTOMER_ID) => {
+  const query = `
+    BEGIN
+    PlaceOrderByCart(
+        p_customer_id =>:CUSTOMER_ID
+      );
+    END; `;
+
+  try {
+    await execution(query, [CUSTOMER_ID]);
+    return "Successfully Placed order ...";
+  } catch (error) {
+    if (error.errorNum === 20001) {
+      return "Failed to order!!!";
+    } else {
+      console.log("Database error :", error);
+    }
+  }
+};
+
+export default { addToCart, getMyProducts, deleteCartItem, placeOrderFor };

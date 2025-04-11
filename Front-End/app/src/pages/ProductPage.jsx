@@ -19,10 +19,9 @@ const ProductPage = () => {
     p_MIN_PRICE: "",
     p_MAX_PRICE: "",
     p_MIN_STOCK: "",
-  }); // State to store filter inputs
-  const [filterParams, setFilterParams] = useState(null); // State to store the filter parameters
+  });
+  const [filterParams, setFilterParams] = useState(null);
 
-  // Fetch categories from API
   const fetchCategories = async () => {
     try {
       const response = await fetch(
@@ -31,7 +30,7 @@ const ProductPage = () => {
       const data = await response.json();
 
       if (data.data && Array.isArray(data.data)) {
-        setCategories(data.data); // Update categories state
+        setCategories(data.data);
       } else {
         console.warn("No categories available or invalid response format.");
         setCategories([]);
@@ -45,13 +44,11 @@ const ProductPage = () => {
     fetchCategories();
   }, []);
 
-  // Handle dropdown selection
   const handleCategoryChange = event => {
     setSelectedCategory(event.target.value);
-    console.log("Selected Category:", event.target.value); // Debugging log
+    console.log("Selected Category:", event.target.value);
   };
 
-  // Handle filter input changes
   const handleFilterChange = event => {
     const { name, value } = event.target;
     setFilters(prevFilters => ({
@@ -60,16 +57,15 @@ const ProductPage = () => {
     }));
   };
 
-  // Handle filter button click
   const applyFilters = () => {
     const filterParams = {
       ...filters,
       p_CATEGORY_NAME: selectedCategory || undefined,
     };
 
-    setWhatToFetch("http://localhost:3000/api/v5/filterProducts"); // Switch to filter endpoint
-    setFilterParams(filterParams); // Pass the filter parameters to AllProducts
-    console.log("Filters applied:", filterParams); // Debugging log
+    setWhatToFetch("http://localhost:3000/api/v5/filterProducts");
+    setFilterParams(filterParams);
+    console.log("Filters applied:", filterParams);
   };
 
   return (
@@ -84,13 +80,12 @@ const ProductPage = () => {
             borderRadius: "8px",
           }}
         >
-          {/* All Products Button */}
           <Button
             onClick={() => {
               setWhatToFetch(
                 "http://localhost:3000/api/v5/productsWithDetails",
               );
-              setFilterParams(null); // Clear filter parameters
+              setFilterParams(null);
             }}
             variant="outlined"
           >
@@ -101,7 +96,6 @@ const ProductPage = () => {
             Filter Products
           </Typography>
 
-          {/* Category Dropdown */}
           <Select
             value={selectedCategory}
             onChange={handleCategoryChange}
@@ -124,7 +118,6 @@ const ProductPage = () => {
             ))}
           </Select>
 
-          {/* Price Range Inputs */}
           <TextField
             label="Min Price"
             variant="outlined"
@@ -144,7 +137,6 @@ const ProductPage = () => {
             onChange={handleFilterChange}
           />
 
-          {/* Stock Input */}
           <TextField
             label="Min Stock"
             variant="outlined"
@@ -155,7 +147,6 @@ const ProductPage = () => {
             onChange={handleFilterChange}
           />
 
-          {/* Apply Filters Button */}
           <Button
             variant="contained"
             fullWidth
@@ -166,16 +157,12 @@ const ProductPage = () => {
           </Button>
         </Box>
 
-        {/* Right Box with All Products */}
         <Box
           sx={{
             marginLeft: "60px",
           }}
         >
-          <AllProducts
-            whatToFetch={whatToFetch}
-            filterParams={filterParams} // Pass filter parameters to AllProducts
-          />
+          <AllProducts whatToFetch={whatToFetch} filterParams={filterParams} />
         </Box>
       </Box>
     </>

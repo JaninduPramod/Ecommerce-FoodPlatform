@@ -3,6 +3,7 @@ import {
   addToCart,
   getMyProducts,
   deleteCartItem,
+  placeOrderFor,
 } from "../Models/cartModel.mjs";
 import { verifyToken } from "../Auth/AuthController.mjs";
 
@@ -29,6 +30,13 @@ CartRoute.get("/api/v6/cartProducts", verifyToken, async (req, res) => {
 // Delete Cart Item By ID
 CartRoute.delete("/api/v6/deleteCartItem", async (req, res) => {
   const response = await deleteCartItem(req.body.CART_ID);
+  res.status(200).json({ msg: response });
+});
+
+// place Order for Customer
+CartRoute.post("/api/v6/placeOrder", verifyToken, async (req, res) => {
+  const response = await placeOrderFor(req.userId);
+
   res.status(200).json({ msg: response });
 });
 
