@@ -1,0 +1,212 @@
+import React, { useState, useEffect } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Paper,
+  Button,
+  Badge,
+  IconButton,
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
+import Person2Icon from "@mui/icons-material/Person2";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import CartDialog from "./CartDialog"; // Import the CartDialog
+import axios from "axios";
+
+const NavBar = () => {
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+  const [cartCount, setCartCount] = useState(0);
+
+  // Fetch cart items when dialog opens
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          "http://localhost:3000/api/v6/cartProducts",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        console.log("Fetched cart items:", response.data);
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+      }
+    };
+
+    if (cartOpen) fetchCartItems();
+  }, [cartOpen]);
+
+  const handleCartOpen = () => setCartOpen(true);
+  const handleCartClose = () => setCartOpen(false);
+
+  const removeItem = async cartId => {
+    try {
+      await axios.delete(`http://localhost:3000/api/cart/${cartId}`);
+      setCartItems(cartItems.filter(item => item.CART_ID !== cartId));
+      setCartCount(cartCount - 1);
+    } catch (error) {
+      console.error("Error removing item:", error);
+    }
+  };
+
+  return (
+    <>
+      <AppBar sx={{ alignItems: "center" }}>
+        <Paper
+          elevation={3}
+          sx={{
+            height: "90px",
+            width: "90%",
+            backgroundColor: "lightyellow",
+            marginTop: 1,
+            borderRadius: "18px",
+            position: "fixed",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          {/* Left side - Logo */}
+          <Box
+            component="img"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Foody-Logo.svg/2093px-Foody-Logo.svg.png"
+            sx={{
+              color: "black",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          ></Box>
+
+          {/* Middle - Navigation Links */}
+          <Box
+            sx={{
+              height: "75%",
+              width: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 5,
+            }}
+          >
+            <Typography
+              variant="h6"
+              component={Link}
+              to="/onboarding"
+              sx={{
+                fontFamily: "cursive",
+                color: "black",
+                textDecoration: "none",
+                ":hover": { color: "#ff7d01" },
+              }}
+            >
+              Home
+            </Typography>
+            <Typography
+              variant="h6"
+              component={Link}
+              to="/product"
+              sx={{
+                fontFamily: "cursive",
+                color: "black",
+                textDecoration: "none",
+                ":hover": { color: "#ff7d01" },
+              }}
+            >
+              Products
+            </Typography>
+            <Typography
+              variant="h6"
+              component={Link}
+              sx={{
+                fontFamily: "cursive",
+                color: "black",
+                textDecoration: "none",
+                ":hover": { color: "#ff7d01" },
+              }}
+            >
+              Tab 5
+            </Typography>
+          </Box>
+
+          {/* Right side - Icons */}
+          <Box
+            sx={{
+              color: "black",
+              height: "75%",
+              width: "20%",
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              justifyContent: "center",
+            }}
+          >
+            <SearchIcon
+              sx={{
+                fontSize: "30px",
+                ":hover": { color: "#ff7d01" },
+                cursor: "pointer",
+              }}
+            />
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                ":hover": { color: "#ff7d01" },
+                cursor: "pointer",
+              }}
+            >
+              <Person2Icon sx={{ fontSize: "30px" }} />
+              <Typography
+                component={Link}
+                to={"/profile"}
+                sx={{
+                  fontSize: "16px",
+                  color: "black",
+                  textDecoration: "none",
+                }}
+              >
+                Profile
+              </Typography>
+            </Box>
+
+            <IconButton
+              onClick={handleCartOpen}
+              sx={{
+                backgroundColor: "#ff7d01",
+                height: "40px",
+                width: "120px",
+                ":hover": { backgroundColor: "black" },
+                borderRadius: "20px",
+              }}
+            >
+              <Badge badgeContent={cartCount} color="error">
+                <ShoppingCartIcon sx={{ color: "white" }} />
+              </Badge>
+              <Typography variant="body2" sx={{ color: "white", ml: 1 }}>
+                {cartCount === 1 ? "1 Item" : `${cartCount} Items`}
+              </Typography>
+            </IconButton>
+          </Box>
+        </Paper>
+      </AppBar>
+
+      {/* Cart Dialog */}
+      <CartDialog
+        open={cartOpen}
+        onClose={handleCartClose}
+        cartItems={cartItems}
+        removeItem={removeItem}
+      />
+    </>
+  );
+};
+
+export default NavBar;

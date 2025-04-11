@@ -1,0 +1,50 @@
+// Cart Triggers
+
+
+// add to cart
+
+CREATE OR REPLACE PROCEDURE AddToCart(
+    p_CUSTOMER_ID IN  CART.CUSTOMER_ID %TYPE,
+    p_PRODUCT_ID  IN  CART.PRODUCT_ID %TYPE,
+    p_QUANTITY    IN  CART.QUANTITY %TYPE
+)
+AS
+BEGIN
+    INSERT INTO CART (CUSTOMER_ID, PRODUCT_ID,QUANTITY)
+    VALUES (p_CUSTOMER_ID,p_PRODUCT_ID,p_QUANTITY);
+    
+    
+    COMMIT;
+EXCEPTION
+
+    WHEN OTHERS THEN
+    
+        RAISE;
+           
+END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

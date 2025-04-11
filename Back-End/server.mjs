@@ -30,7 +30,7 @@ app.use(
 );
 
 const uri =
-  "mongodb+srv://JaninduPramod:702150@urbanfoodecommerce.jebi4.mongodb.net/UrbanFood";
+  "mongodb+srv://Nadun:nadun12345@cluster0.nq4qv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 const connectMongoose = () => {
   mongoose
@@ -39,7 +39,7 @@ const connectMongoose = () => {
     .catch((error) => console.log("Error: ", error));
 };
 
-// connectMongoose();
+connectMongoose();
 
 const server = app.listen(3000, () => {
   console.log(server.address().port);
