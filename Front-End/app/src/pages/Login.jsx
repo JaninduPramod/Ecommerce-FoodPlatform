@@ -38,6 +38,9 @@ const AuthSection = () => {
         } else if (response.data.role === "customer") {
           console.log(response.data.role, "Logged In ");
           navigate("/onboarding");
+        } else if (response.data.role === "admin") {
+          console.log(response.data.role, "Logged In ");
+          navigate("/admin");
         }
       } else {
         alert(response.data.msg);
