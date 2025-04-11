@@ -116,7 +116,7 @@ const Dashboard = () => {
 
   if (error) {
     return (
-      <Box sx={{ p: 3 }}>
+      <Box sx={{ p: 3, marginTop: '50px' }}>
         <Alert severity="error">
           Failed to load dashboard data: {error}
           <br />
@@ -129,7 +129,7 @@ const Dashboard = () => {
   return (
     <Box sx={{ 
       p: 3,
-      margin: '20px'
+      margin: '100px 20px 20px 20px' // Top margin set to 50px here
     }}>
       <Typography variant="h4" sx={{ mb: 2 }}>Dashboard Overview</Typography>
       
