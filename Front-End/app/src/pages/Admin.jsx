@@ -1,26 +1,31 @@
-import React, { useEffect, useState } from "react";
-import "./Admin.css";
-import {
-  Box,
-  Grid,
-  Typography,
-  Paper,
-  CircularProgress,
+import React, { useEffect, useState } from 'react';
+import './Admin.css';
+import { 
+  Box, 
+  Grid, 
+  Typography, 
+  Paper, 
+  CircularProgress, 
   Alert,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
-} from "@mui/material";
-import { getProducts, getCustomers, getSuppliers } from "../services/api";
+  TableRow
+} from '@mui/material';
+import {
+  getProducts,
+  getCustomers,
+  getSuppliers,
+  getFeedback,
+} from '../services/api';
 import {
   ShoppingCart as ShoppingCartIcon,
   People as PeopleIcon,
   LocalShipping as LocalShippingIcon,
   Feedback as FeedbackIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -33,7 +38,7 @@ const Dashboard = () => {
     products: [],
     customers: [],
     suppliers: [],
-    feedback: [],
+    feedback: []
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -41,46 +46,49 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [productsRes, customersRes, suppliersRes] = await Promise.all([
+        const [productsRes, customersRes, suppliersRes, feedbackRes] = await Promise.all([
           getProducts(),
           getCustomers(),
           getSuppliers(),
+          getFeedback(),
         ]);
 
         // Debugging: Log the full responses
-        console.log("Full API Responses:", {
+        console.log('Full API Responses:', {
           productsRes,
           customersRes,
           suppliersRes,
+          feedbackRes
         });
 
         // Safely extract data from responses with proper fallbacks
-        const products = Array.isArray(productsRes)
-          ? productsRes
-          : productsRes?.data || productsRes?.msg || [];
-        const customers = Array.isArray(customersRes)
-          ? customersRes
-          : customersRes?.data || customersRes?.msg || [];
-        const suppliers = Array.isArray(suppliersRes)
-          ? suppliersRes
-          : suppliersRes?.data || suppliersRes?.msg || [];
+        const products = Array.isArray(productsRes) ? productsRes : 
+                        (productsRes?.data || productsRes?.msg || []);
+        const customers = Array.isArray(customersRes) ? customersRes : 
+                         (customersRes?.data || customersRes?.msg || []);
+        const suppliers = Array.isArray(suppliersRes) ? suppliersRes : 
+                         (suppliersRes?.data || suppliersRes?.msg || []);
+        const feedback = Array.isArray(feedbackRes) ? feedbackRes : 
+                        (feedbackRes?.data || feedbackRes?.msg || []);
 
         setStats({
           products: products.length,
           customers: customers.length,
           suppliers: suppliers.length,
+          feedback: feedback.length,
         });
 
         setTableData({
           products: products.slice(0, 5),
           customers: customers.slice(0, 5),
           suppliers: suppliers.slice(0, 5),
+          feedback: feedback.slice(0, 5)
         });
 
         setLoading(false);
       } catch (error) {
-        console.error("Error:", error);
-        setError(error.message || "Failed to fetch data from server");
+        console.error('Error:', error);
+        setError(error.message || 'Failed to fetch data from server');
         setLoading(false);
       }
     };
@@ -89,22 +97,18 @@ const Dashboard = () => {
   }, []);
 
   const StatCard = ({ icon, title, value, color }) => (
-    <Paper
-      sx={{
-        p: 3,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        backgroundColor: color,
-        color: "white",
-        margin: "0px",
-      }}
-    >
+    <Paper sx={{ 
+      p: 3, 
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center', 
+      backgroundColor: color, 
+      color: 'white',
+      margin: '0px'
+    }}>
       {icon}
-      <Typography variant="h6" sx={{ mt: 1 }}>
-        {title}
-      </Typography>
-      <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+      <Typography variant="h6" sx={{ mt: 1 }}>{title}</Typography>
+      <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
         {loading ? <CircularProgress size={24} color="inherit" /> : value}
       </Typography>
     </Paper>
@@ -123,16 +127,12 @@ const Dashboard = () => {
   }
 
   return (
-    <Box
-      sx={{
-        p: 3,
-        margin: "20px",
-      }}
-    >
-      <Typography variant="h4" sx={{ mb: 2 }}>
-        Dashboard Overview
-      </Typography>
-
+    <Box sx={{ 
+      p: 3,
+      margin: '20px'
+    }}>
+      <Typography variant="h4" sx={{ mb: 2 }}>Dashboard Overview</Typography>
+      
       {/* Statistics Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid item xs={12} sm={6} md={3}>
@@ -170,15 +170,11 @@ const Dashboard = () => {
       </Grid>
 
       {/* Tables Section */}
-      <Typography variant="h5" sx={{ mb: 2, mt: 4 }}>
-        Recent Data Overview
-      </Typography>
-
+      <Typography variant="h5" sx={{ mb: 2, mt: 4 }}>Recent Data Overview</Typography>
+      
       {/* Products Table */}
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          Recent Products
-        </Typography>
+        <Typography variant="h6" sx={{ mb: 2 }}>Recent Products</Typography>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -198,13 +194,11 @@ const Dashboard = () => {
                   </TableCell>
                 </TableRow>
               ) : tableData.products.length > 0 ? (
-                tableData.products.map(product => (
+                tableData.products.map((product) => (
                   <TableRow key={product.PRODUCT_ID || product.id}>
                     <TableCell>{product.PRODUCT_ID || product.id}</TableCell>
                     <TableCell>{product.NAME || product.name}</TableCell>
-                    <TableCell>
-                      {product.CATEGORY_ID || product.categoryId}
-                    </TableCell>
+                    <TableCell>{product.CATEGORY_ID || product.categoryId}</TableCell>
                     <TableCell>${product.PRICE || product.price}</TableCell>
                     <TableCell>{product.STOCK || product.stock}</TableCell>
                   </TableRow>
@@ -223,9 +217,7 @@ const Dashboard = () => {
 
       {/* Customers Table */}
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          Recent Customers
-        </Typography>
+        <Typography variant="h6" sx={{ mb: 2 }}>Recent Customers</Typography>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -244,16 +236,12 @@ const Dashboard = () => {
                   </TableCell>
                 </TableRow>
               ) : tableData.customers.length > 0 ? (
-                tableData.customers.map(customer => (
+                tableData.customers.map((customer) => (
                   <TableRow key={customer.CUSTOMER_ID || customer.id}>
                     <TableCell>{customer.CUSTOMER_ID || customer.id}</TableCell>
-                    <TableCell>
-                      {customer.FULL_NAME || customer.fullName}
-                    </TableCell>
+                    <TableCell>{customer.FULL_NAME || customer.fullName}</TableCell>
                     <TableCell>{customer.PHONE || customer.phone}</TableCell>
-                    <TableCell>
-                      {customer.ADDRESS || customer.address}
-                    </TableCell>
+                    <TableCell>{customer.ADDRESS || customer.address}</TableCell>
                   </TableRow>
                 ))
               ) : (
@@ -270,9 +258,7 @@ const Dashboard = () => {
 
       {/* Suppliers Table */}
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          Recent Suppliers
-        </Typography>
+        <Typography variant="h6" sx={{ mb: 2 }}>Recent Suppliers</Typography>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -291,16 +277,12 @@ const Dashboard = () => {
                   </TableCell>
                 </TableRow>
               ) : tableData.suppliers.length > 0 ? (
-                tableData.suppliers.map(supplier => (
+                tableData.suppliers.map((supplier) => (
                   <TableRow key={supplier.SUPPLIER_ID || supplier.id}>
                     <TableCell>{supplier.SUPPLIER_ID || supplier.id}</TableCell>
-                    <TableCell>
-                      {supplier.FULL_NAME || supplier.fullName}
-                    </TableCell>
+                    <TableCell>{supplier.FULL_NAME || supplier.fullName}</TableCell>
                     <TableCell>{supplier.PHONE || supplier.phone}</TableCell>
-                    <TableCell>
-                      {supplier.ADDRESS || supplier.address}
-                    </TableCell>
+                    <TableCell>{supplier.ADDRESS || supplier.address}</TableCell>
                   </TableRow>
                 ))
               ) : (
@@ -316,6 +298,47 @@ const Dashboard = () => {
       </Box>
 
       {/* Feedback Table */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>Recent Feedback</Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Product ID</TableCell>
+                <TableCell>User ID</TableCell>
+                <TableCell>Message</TableCell>
+                <TableCell>Type</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={5} align="center">
+                    <CircularProgress />
+                  </TableCell>
+                </TableRow>
+              ) : tableData.feedback.length > 0 ? (
+                tableData.feedback.map((feedback) => (
+                  <TableRow key={feedback.FEEDBACK_ID || feedback.id}>
+                    <TableCell>{feedback.FEEDBACK_ID || feedback.id}</TableCell>
+                    <TableCell>{feedback.PRODUCT_ID || feedback.productId}</TableCell>
+                    <TableCell>{feedback.USER_ID || feedback.userId}</TableCell>
+                    <TableCell>{feedback.MESSAGE || feedback.message}</TableCell>
+                    <TableCell>{feedback.TYPE || feedback.type}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} align="center">
+                    No feedback found
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     </Box>
   );
 };

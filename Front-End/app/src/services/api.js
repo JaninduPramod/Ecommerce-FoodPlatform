@@ -41,12 +41,12 @@ export const getSuppliers = async () => {
   }
 };
 
-// export const getFeedback = async () => {
-//   try {
-//     const response = await api.get("/api/v6/allFeedbacks");
-//     return response.data.msg || [];
-//   } catch (error) {
-//     console.error("Error fetching feedback:", error);
-//     throw error;
-//   }
-// };
+export const getFeedback = async () => {
+  try {
+    const response = await api.get("/api/v6/allFeedbacks");
+    return response.data.msg || [];
+  } catch (error) {
+    console.error("Error fetching feedback:", error);
+    throw error;
+  }
+};
