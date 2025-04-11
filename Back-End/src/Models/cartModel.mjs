@@ -49,4 +49,20 @@ export const getMyProducts = async (IncomingData) => {
   }
 };
 
-export default { addToCart, getMyProducts };
+// Delete Cart Item By Cart ID Method
+export const deleteCartItem = async (CART_ID) => {
+  const query = `DELETE FROM CART WHERE CART_ID = :CART_ID `;
+
+  try {
+    await execution(query, [CART_ID]);
+    return "Item Removed Successfully ...";
+  } catch (error) {
+    if (error.errorNum === 20001) {
+      return "Invalid Cart ID !!!";
+    } else {
+      console.log("Database error :", error);
+    }
+  }
+};
+
+export default { addToCart, getMyProducts, deleteCartItem };

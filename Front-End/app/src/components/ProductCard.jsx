@@ -17,12 +17,22 @@ import {
 
 const ProductSlider = () => {
   const [products, setProducts] = useState([]);
+  const [quantities, setQuantities] = useState({}); // State to track quantities for each product
 
-  // handling add to cart
-  // Inside ProductSlider Component
+  // Handle quantity change
+  const handleQuantityChange = (productId, value) => {
+    setQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [productId]: value,
+    }));
+  };
+
+  // Handle add to cart
   const handleAddToCart = async product => {
     try {
       const token = localStorage.getItem("token");
+      const quantity = quantities[product.PRODUCT_ID] || 1; // Default to 1 if no quantity is set
+
       const res = await fetch("http://localhost:3000/api/v6/addToCart", {
         method: "POST",
         headers: {
@@ -31,12 +41,18 @@ const ProductSlider = () => {
         },
         body: JSON.stringify({
           p_PRODUCT_ID: product.PRODUCT_ID,
-          p_QUANTITY: 1,
+          p_QUANTITY: quantity,
         }),
       });
 
       const data = await res.json();
-      console.log(data);
+      console.log("Add to Cart Response:", data);
+
+      if (data.msg === "Product added to cart successfully.") {
+        alert("Product added to cart successfully.");
+      } else {
+        alert(data.msg || "Failed to add product to cart.");
+      }
     } catch (error) {
       console.error("Error adding to cart:", error);
       alert("Something went wrong.");
@@ -57,8 +73,6 @@ const ProductSlider = () => {
         console.warn("No products available or invalid response format.");
         setProducts([]);
       }
-
-      console.log("Fetched products:", data.msg);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -103,6 +117,9 @@ const ProductSlider = () => {
                     inputProps={{ min: 1 }}
                     size="small"
                     sx={{ width: 65 }}
+                    onChange={e =>
+                      handleQuantityChange(product.PRODUCT_ID, e.target.value)
+                    }
                   />
                 </Box>
 

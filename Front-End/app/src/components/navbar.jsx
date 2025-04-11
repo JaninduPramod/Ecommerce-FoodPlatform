@@ -62,16 +62,6 @@ const NavBar = () => {
   const handleCartOpen = () => setCartOpen(true);
   const handleCartClose = () => setCartOpen(false);
 
-  const removeItem = async cartId => {
-    try {
-      await axios.delete(`http://localhost:3000/api/cart/${cartId}`);
-      setCartItems(cartItems.filter(item => item.CART_ID !== cartId));
-      setCartCount(cartCount - 1);
-    } catch (error) {
-      console.error("Error removing item:", error);
-    }
-  };
-
   return (
     <>
       <AppBar sx={{ alignItems: "center" }}>
@@ -219,8 +209,8 @@ const NavBar = () => {
       <CartDialog
         open={cartOpen}
         onClose={handleCartClose}
-        cartItems={cartItems} // Ensure this is populated
-        removeItem={removeItem}
+        cartItems={cartItems}
+        setCartItems={setCartItems} // Pass setCartItems to CartDialog
       />
     </>
   );

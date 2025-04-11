@@ -16,13 +16,34 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
 
-const CartDialog = ({ open, onClose, cartItems, removeItem }) => {
+const CartDialog = ({ open, onClose, cartItems, setCartItems }) => {
   // Calculate the total price of all items in the cart
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + item.PRODUCT_PRICE * item.QUANTITY,
     0,
   );
+
+  // Function to remove an item from the cart
+  const removeItem = async cartId => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete("http://localhost:3000/api/v6/deleteCartItem", {
+        headers: { Authorization: `Bearer ${token}` },
+        data: { CART_ID: cartId },
+      });
+
+      // Update the cartItems state after successful deletion
+      setCartItems(prevItems =>
+        prevItems.filter(item => item.CART_ID !== cartId),
+      );
+      alert("Item removed from the cart successfully.");
+    } catch (error) {
+      console.error("Error removing item:", error);
+      alert("Failed to remove the item. Please try again.");
+    }
+  };
 
   return (
     <Dialog

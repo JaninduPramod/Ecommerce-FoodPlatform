@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { addToCart, getMyProducts } from "../Models/cartModel.mjs";
+import {
+  addToCart,
+  getMyProducts,
+  deleteCartItem,
+} from "../Models/cartModel.mjs";
 import { verifyToken } from "../Auth/AuthController.mjs";
 
 const CartRoute = Router();
@@ -19,6 +23,12 @@ CartRoute.get("/api/v6/cartProducts", verifyToken, async (req, res) => {
 
   const response = await getMyProducts(USER_ID);
 
+  res.status(200).json({ msg: response });
+});
+
+// Delete Cart Item By ID
+CartRoute.delete("/api/v6/deleteCartItem", async (req, res) => {
+  const response = await deleteCartItem(req.body.CART_ID);
   res.status(200).json({ msg: response });
 });
 
