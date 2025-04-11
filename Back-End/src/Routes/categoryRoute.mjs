@@ -5,6 +5,7 @@ import {
   getCategoryByID,
   updateCategory,
   deleteCategory,
+  getAllCategoryNames,
 } from "../Models/categoryModel.mjs";
 const CategoriesRoute = Router();
 
@@ -57,6 +58,13 @@ CategoriesRoute.delete("/api/v4/deleteCategory", async (req, res) => {
   const deleteFields = { p_CRUD_TYPE, p_CATEGORY_ID };
   const response = await deleteCategory(deleteFields);
   res.status(200).json({ msg: response });
+});
+
+// fetch ALL Category Names
+CategoriesRoute.get("/api/v4/allCategoryNames", async (_, res) => {
+  const response = await getAllCategoryNames();
+
+  res.status(200).json({ data: response });
 });
 
 export default CategoriesRoute;

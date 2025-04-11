@@ -6,27 +6,26 @@ const dbconfig = {
   connectString: "localhost:1521/FREEPDB1",
 };
 
-const execution = async (query, bodyParam = []) => {
+const execution = async (query, params = {}) => {
   let connection;
 
   try {
     connection = await oracledb.getConnection(dbconfig);
 
-    const result = await connection.execute(query, bodyParam, {
+    const result = await connection.execute(query, params, {
       outFormat: oracledb.OUT_FORMAT_OBJECT,
       autoCommit: true,
     });
 
-    return result.rows;
-  } catch (error) {
-    console.error("Database Error:", error);
-    throw error;
+    return result.rows || result;
+  } catch (err) {
+    throw err;
   } finally {
     if (connection) {
       try {
         await connection.close();
-      } catch (error) {
-        console.error("Database Error:", error);
+      } catch (err) {
+        console.error("Error closing connection:", err);
       }
     }
   }

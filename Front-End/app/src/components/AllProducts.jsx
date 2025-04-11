@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState, useRef } from "react";
 
-const CardLayout = ({ Product }) => {
+export const CardLayout = ({ Product }) => {
   return (
     <Paper
       elevation={2}
@@ -50,23 +50,25 @@ const CardLayout = ({ Product }) => {
           >
             {Product.STOCK ? "Add to Cart" : "Sold Out"}
           </Button>
+          <Button sx={{ mt: "10px", marginLeft: "18px" }} variant="outlined">
+            View Product
+          </Button>
         </CardContent>
       </Card>
     </Paper>
   );
 };
 
-const AllProducts = () => {
+const AllProducts = ({ whatToFetch }) => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+
   const productsPerPage = 12;
   const containerRef = useRef(null);
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/v5/productsWithDetails",
-      );
+      const response = await fetch(whatToFetch);
       const data = await response.json();
 
       console.log("Fetched products:", data.msg);
@@ -118,8 +120,7 @@ const AllProducts = () => {
         <Box
           sx={{
             mt: "25px",
-            backgroundColor: "#121212",
-            width: "75%",
+            width: "1260px",
             display: "flex",
             flexWrap: "wrap",
             flexDirection: "row",
