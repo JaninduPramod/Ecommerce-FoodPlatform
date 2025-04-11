@@ -1,5 +1,4 @@
 import execution from "../config/db.mjs";
-import oracledb from "oracledb";
 
 // Add product to Cart Method
 export const addToCart = async (newProduct) => {

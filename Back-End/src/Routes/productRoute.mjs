@@ -87,6 +87,7 @@ productRoute.get("/api/v5/productsWithDetails", async (_, res) => {
 
 // Filtered Product Details
 productRoute.post("/api/v5/filterProducts", async (req, res) => {
+  console.log("Received filters:", req.body);
   const filters = req.body;
   const response = await filteredProductDetails(filters);
 

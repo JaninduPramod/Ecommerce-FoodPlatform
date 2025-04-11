@@ -60,14 +60,14 @@ const ProductPage = () => {
   const applyFilters = () => {
     const filterParams = {
       ...filters,
-      p_CATEGORY_NAME: selectedCategory || undefined,
+      p_CATEGORY_NAME: selectedCategory || null, //
       p_MIN_PRICE: filters.p_MIN_PRICE ? parseFloat(filters.p_MIN_PRICE) : null,
       p_MAX_PRICE: filters.p_MAX_PRICE ? parseFloat(filters.p_MAX_PRICE) : null,
+      p_MIN_STOCK: filters.p_MIN_STOCK ? parseFloat(filters.p_MIN_STOCK) : null,
     };
 
     setWhatToFetch("http://localhost:3000/api/v5/filterProducts");
     setFilterParams(filterParams);
-    console.log("Filters applied:", filterParams); // Debugging log
   };
 
   return (

@@ -116,6 +116,8 @@ const AllProducts = ({ whatToFetch, filterParams }) => {
   const fetchProducts = async () => {
     try {
       let response;
+      console.log("Fetching from:", whatToFetch);
+      console.log("Filter params:", filterParams);
 
       if (whatToFetch === "http://localhost:3000/api/v5/productsWithDetails") {
         response = await fetch(whatToFetch, {
