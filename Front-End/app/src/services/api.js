@@ -81,20 +81,28 @@ export const updateProduct = async (productData) => {
   }
 };
 
-export const deleteProduct = async (productId) => {
+export const deleteProduct = async (data) => {
   try {
-    const response = await api.delete("/api/v5/deleteProduct", {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        p_CRUD_TYPE: "DELETE",
-        p_PRODUCT_ID: productId
-      }
+    const response = await api.delete("/api/v5/deleteProduct", { 
+      data: data 
     });
     return response.data;
   } catch (error) {
-    console.error("Error deleting product:", error.response?.data || error);
+    console.error("Error deleting product:", error);
+    throw error;
+  }
+};
+
+
+
+export const deleteFeedback = async (feedbackId) => {
+  try {
+    const response = await api.delete("/api/v6/deleteFeedback", { 
+      data: { _id: feedbackId } 
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting feedback:", error);
     throw error;
   }
 };

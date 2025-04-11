@@ -14,13 +14,20 @@ import {
   TableHead,
   TableRow,
   Tabs,
-  Tab
+  Tab,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button
 } from '@mui/material';
 import {
   getProducts,
   getCustomers,
   getSuppliers,
   getFeedback,
+  deleteFeedback
 } from '../services/api';
 import {
   ShoppingCart as ShoppingCartIcon,
@@ -28,9 +35,10 @@ import {
   LocalShipping as LocalShippingIcon,
   Feedback as FeedbackIcon,
   Dashboard as DashboardIcon,
-  Edit as EditIcon
+  Edit as EditIcon,
+  Delete as DeleteIcon
 } from '@mui/icons-material';
- import ProductManagement from './ProductManagement';
+import ProductManagement from './ProductManagement';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -48,6 +56,8 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentTab, setCurrentTab] = useState(0);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [feedbackToDelete, setFeedbackToDelete] = useState(null);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -109,6 +119,36 @@ const Dashboard = () => {
 
   const handleTabChange = (event, newValue) => {
     setCurrentTab(newValue);
+  };
+
+  const handleDeleteClick = (feedbackId) => {
+    setFeedbackToDelete(feedbackId);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!feedbackToDelete) return;
+    
+    try {
+      await deleteFeedback(feedbackToDelete);
+      // Refresh the feedback data
+      const feedbackRes = await getFeedback();
+      const feedbackData = Array.isArray(feedbackRes) ? feedbackRes : 
+                        (feedbackRes?.data || feedbackRes?.msg || []);
+      setTableData(prev => ({
+        ...prev,
+        feedback: feedbackData.slice(0, 5)
+      }));
+      setStats(prev => ({
+        ...prev,
+        feedback: feedbackData.length
+      }));
+      setDeleteDialogOpen(false);
+    } catch (error) {
+      console.error('Error deleting feedback:', error);
+      setError(error.message || 'Failed to delete feedback');
+      setDeleteDialogOpen(false);
+    }
   };
 
   if (error) {
@@ -298,7 +338,7 @@ const Dashboard = () => {
             </TableContainer>
           </Box>
 
-          {/* Feedback Table */}
+          {/* Feedback Table with Delete Action */}
           <Box sx={{ mb: 4 }}>
             <Typography variant="h6" sx={{ mb: 2 }}>Recent Feedback</Typography>
             <TableContainer component={Paper}>
@@ -310,12 +350,13 @@ const Dashboard = () => {
                     <TableCell>User ID</TableCell>
                     <TableCell>Message</TableCell>
                     <TableCell>Type</TableCell>
+                    <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {loading ? (
                     <TableRow>
-                      <TableCell colSpan={5} align="center">
+                      <TableCell colSpan={6} align="center">
                         <CircularProgress />
                       </TableCell>
                     </TableRow>
@@ -327,11 +368,19 @@ const Dashboard = () => {
                         <TableCell>{feedback.USER_ID || feedback.userId}</TableCell>
                         <TableCell>{feedback.MESSAGE || feedback.message}</TableCell>
                         <TableCell>{feedback.TYPE || feedback.type}</TableCell>
+                        <TableCell>
+                          <IconButton 
+                            onClick={() => handleDeleteClick(feedback.FEEDBACK_ID || feedback.id)}
+                            color="error"
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </TableCell>
                       </TableRow>
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={5} align="center">
+                      <TableCell colSpan={6} align="center">
                         No feedback found
                       </TableCell>
                     </TableRow>
@@ -344,6 +393,28 @@ const Dashboard = () => {
       ) : (
         <ProductManagement />
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+      >
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to delete this feedback?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+          <Button 
+            onClick={handleConfirmDelete} 
+            color="error" 
+            variant="contained"
+            startIcon={<DeleteIcon />}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

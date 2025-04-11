@@ -38,9 +38,10 @@ const ProductManagement = () => {
       setFilteredProducts(products);
     } else {
       const filtered = products.filter(product =>
-        product.PRODUCT_ID.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        String(product.PRODUCT_ID).toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.NAME.toLowerCase().includes(searchTerm.toLowerCase())
       );
+      
       setFilteredProducts(filtered);
     }
   }, [searchTerm, products]);
