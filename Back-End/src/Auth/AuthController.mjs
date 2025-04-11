@@ -14,6 +14,10 @@ const LoginUser = async (req, res) => {
 
     const user = response[0];
 
+    if (user.USER_ROLE == "supplier") {
+      console.log(user.USER_ROLE);
+    }
+
     const token = jwt.sign(
       {
         userId: user.USER_ID,
@@ -27,6 +31,7 @@ const LoginUser = async (req, res) => {
     res.status(200).json({
       msg: "Login successful",
       token,
+      role: user.USER_ROLE,
     });
   } catch (error) {
     console.error("Login error:", error);

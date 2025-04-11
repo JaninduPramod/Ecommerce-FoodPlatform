@@ -32,8 +32,13 @@ const AuthSection = () => {
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
 
-        console.log(response.data.token);
-        navigate("/onboarding");
+        if (response.data.role === "supplier") {
+          // navigate("/supplierPage");
+          console.log(response.data.role, "Logged In ");
+        } else if (response.data.role === "customer") {
+          console.log(response.data.role, "Logged In ");
+          navigate("/onboarding");
+        }
       } else {
         alert(response.data.msg);
       }
