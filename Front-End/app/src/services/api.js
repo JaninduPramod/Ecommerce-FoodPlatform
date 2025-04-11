@@ -34,12 +34,23 @@ export const getCustomers = async () => {
 export const getSuppliers = async () => {
   try {
     const response = await api.get("/api/v3/allSuppliers");
-    return response.data.msg || [];
+    console.log('Suppliers API Response:', response); // Debug log
+    return response.data.data || [];
   } catch (error) {
-    console.error("Error fetching suppliers:", error);
+    console.error("Error fetching suppliers:", error.response?.data || error.message);
     throw error;
   }
 };
+
+// export const getSuppliers = async () => {
+//   try {
+//     const response = await api.get("/api/v3/allSuppliers");
+//     return response.data.msg || [];
+//   } catch (error) {
+//     console.error("Error fetching suppliers:", error);
+//     throw error;
+//   }
+// };
 
 export const getFeedback = async () => {
   try {
