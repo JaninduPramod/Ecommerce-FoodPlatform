@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import Footer from "./components/Footer.jsx";
 import NavBar from "./components/navbar";
-// import HomePage from "./pages/Home.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
 import Onboarding from "./pages/onboarding";
 import AuthSection from "./pages/Login.jsx";
@@ -17,7 +16,6 @@ import Profile from "./pages/Profile.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import SupplierProfile from "./pages/SupplierProfile.jsx";
 import Admin from "./pages/Admin.jsx";
-import ProductManagement from "./pages/ProductManagement.jsx";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -37,7 +35,6 @@ const AppLayout = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/supplierPage" element={<SupplierProfile />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/ProductManagement" element={<ProductManagement />} />
       </Routes>
       {!shouldHideLayout && <Footer />}
     </>
