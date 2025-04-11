@@ -26,15 +26,33 @@ const NavBar = () => {
     const fetchCartItems = async () => {
       try {
         const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No token found in localStorage");
+          return;
+        }
+
         const response = await axios.get(
           "http://localhost:3000/api/v6/cartProducts",
           {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
+
         console.log("Fetched cart items:", response.data);
+
+        // Ensure the `msg` field is extracted and set to `cartItems`
+        if (response.data && Array.isArray(response.data.msg)) {
+          setCartItems(response.data.msg); // Update cartItems state
+          setCartCount(response.data.msg.length); // Update cartCount
+        } else {
+          console.warn("Invalid response format or no items in cart.");
+          setCartItems([]);
+          setCartCount(0);
+        }
       } catch (error) {
         console.error("Error fetching cart items:", error);
+        setCartItems([]);
+        setCartCount(0);
       }
     };
 
@@ -198,11 +216,10 @@ const NavBar = () => {
         </Paper>
       </AppBar>
 
-      {/* Cart Dialog */}
       <CartDialog
         open={cartOpen}
         onClose={handleCartClose}
-        cartItems={cartItems}
+        cartItems={cartItems} // Ensure this is populated
         removeItem={removeItem}
       />
     </>

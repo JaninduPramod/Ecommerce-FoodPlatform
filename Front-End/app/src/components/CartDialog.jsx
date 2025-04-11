@@ -13,14 +13,14 @@ import {
   IconButton,
   Typography,
   Button,
-  Badge,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const CartDialog = ({ open, onClose, cartItems, removeItem }) => {
+  // Calculate the total price of all items in the cart
   const totalPrice = cartItems.reduce(
-    (sum, item) => sum + item.PRICE * item.QUANTITY,
+    (sum, item) => sum + item.PRODUCT_PRICE * item.QUANTITY,
     0,
   );
 
@@ -63,11 +63,11 @@ const CartDialog = ({ open, onClose, cartItems, removeItem }) => {
                   <TableRow key={item.CART_ID}>
                     <TableCell>{item.PRODUCT_NAME}</TableCell>
                     <TableCell align="right">
-                      ${item.PRICE.toFixed(2)}
+                      ${item.PRODUCT_PRICE.toFixed(2)}
                     </TableCell>
                     <TableCell align="right">{item.QUANTITY}</TableCell>
                     <TableCell align="right">
-                      ${(item.PRICE * item.QUANTITY).toFixed(2)}
+                      ${(item.PRODUCT_PRICE * item.QUANTITY).toFixed(2)}
                     </TableCell>
                     <TableCell align="right">
                       <IconButton onClick={() => removeItem(item.CART_ID)}>

@@ -29,7 +29,18 @@ export const addToCart = async (newProduct) => {
 
 // Get cart Products Method
 export const getMyProducts = async (IncomingData) => {
-  const query = `SELECT * FROM CART WHERE CUSTOMER_ID=:p_USER_ID`;
+  const query = `
+  SELECT 
+    CART.CART_ID,
+    CART.CUSTOMER_ID,
+    CART.PRODUCT_ID,
+    CART.QUANTITY,
+    PRODUCTS.NAME AS PRODUCT_NAME,
+    PRODUCTS.PRICE AS PRODUCT_PRICE
+  FROM CART
+  INNER JOIN PRODUCTS ON CART.PRODUCT_ID = PRODUCTS.PRODUCT_ID
+  WHERE CART.CUSTOMER_ID = :CUSTOMER_ID
+`;
   const response = await execution(query, [IncomingData.p_USER_ID]);
   if (response.length <= 0) {
     return "No products added to Cart ...";
