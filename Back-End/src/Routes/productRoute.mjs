@@ -8,7 +8,7 @@ import {
   getProductDetails,
   filteredProductDetails,
 } from "../Models/productModel.mjs";
-
+import { verifyToken } from "../Auth/AuthController.mjs";
 const productRoute = Router();
 
 // // API for fetch ALL Products
@@ -19,28 +19,8 @@ productRoute.get("/api/v5/allProducts", async (_, res) => {
 });
 
 // Create new Product
-productRoute.post("/api/v5/newProduct", async (req, res) => {
-  const {
-    p_CRUD_TYPE,
-    p_SUPPLIER_ID,
-    p_CATEGORY_ID,
-    p_NAME,
-    p_IMAGE_URL,
-    p_WEIGHT,
-    p_STOCK,
-    p_PRICE,
-  } = req.body;
-
-  const newProduct = {
-    p_CRUD_TYPE,
-    p_SUPPLIER_ID,
-    p_CATEGORY_ID,
-    p_NAME,
-    p_IMAGE_URL,
-    p_WEIGHT,
-    p_STOCK,
-    p_PRICE,
-  };
+productRoute.post("/api/v5/newProduct", verifyToken, async (req, res) => {
+  const newProduct = { ...req.body, p_SUPPLIER_ID: req.userId };
 
   const response = await createProduct(newProduct);
 

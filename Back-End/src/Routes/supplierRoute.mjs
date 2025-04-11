@@ -6,6 +6,7 @@ import {
   updateSupplier,
   deleteSupplier,
 } from "../Models/supplierModel.mjs";
+
 const supplierRoute = Router();
 
 // // API for fetch ALL Suppliers

@@ -61,11 +61,13 @@ const ProductPage = () => {
     const filterParams = {
       ...filters,
       p_CATEGORY_NAME: selectedCategory || undefined,
+      p_MIN_PRICE: filters.p_MIN_PRICE ? parseFloat(filters.p_MIN_PRICE) : null,
+      p_MAX_PRICE: filters.p_MAX_PRICE ? parseFloat(filters.p_MAX_PRICE) : null,
     };
 
     setWhatToFetch("http://localhost:3000/api/v5/filterProducts");
     setFilterParams(filterParams);
-    console.log("Filters applied:", filterParams);
+    console.log("Filters applied:", filterParams); // Debugging log
   };
 
   return (
