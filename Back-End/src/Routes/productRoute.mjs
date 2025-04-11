@@ -22,6 +22,7 @@ productRoute.get("/api/v5/allProducts", async (_, res) => {
 productRoute.post("/api/v5/newProduct", verifyToken, async (req, res) => {
   const newProduct = { ...req.body, p_SUPPLIER_ID: req.userId };
 
+  console.log("onna Id eka", req.userId);
   const response = await createProduct(newProduct);
 
   res.status(200).json({ msg: response });

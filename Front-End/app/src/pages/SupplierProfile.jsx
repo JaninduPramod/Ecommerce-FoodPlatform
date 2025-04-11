@@ -41,7 +41,9 @@ const SupplierProfile = () => {
   // Fetch categories
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/v4/allCategories");
+      const response = await axios.get(
+        "http://localhost:3000/api/v4/allCategories",
+      );
       if (response.data.data) {
         setCategories(response.data.data);
       }
@@ -55,22 +57,18 @@ const SupplierProfile = () => {
     fetchCategories();
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     setProductData({ ...productData, [e.target.name]: e.target.value });
   };
 
-  const handleAddProduct = async (e) => {
+  const handleAddProduct = async e => {
     e.preventDefault();
     const token = localStorage.getItem("token");
-
-    if (!supplierId) {
-      alert("Supplier ID not loaded.");
-      return;
-    }
+    console.log(token);
 
     try {
       const payload = {
-        p_CRUD_TYPE: "INSERT",   
+        p_CRUD_TYPE: "INSERT",
         p_CATEGORY_ID: parseInt(productData.categoryId),
         p_NAME: productData.name,
         p_IMAGE_URL: productData.imageUrl || "",
@@ -86,7 +84,7 @@ const SupplierProfile = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.data.msg === "Product Created Successfully ...") {
@@ -103,7 +101,10 @@ const SupplierProfile = () => {
         alert(" Error: " + response.data.msg);
       }
     } catch (error) {
-      console.error("Error adding product:", error.response?.data || error.message);
+      console.error(
+        "Error adding product:",
+        error.response?.data || error.message,
+      );
       alert(" Failed to add product.");
     }
   };
@@ -199,7 +200,7 @@ const SupplierProfile = () => {
             required
           >
             <MenuItem value="">Select Category</MenuItem>
-            {categories.map((cat) => (
+            {categories.map(cat => (
               <MenuItem key={cat.CATEGORY_ID} value={cat.CATEGORY_ID}>
                 {cat.NAME}
               </MenuItem>
@@ -210,8 +211,10 @@ const SupplierProfile = () => {
             type="submit"
             variant="contained"
             fullWidth
-           
-            sx={{ backgroundColor: "#ff7f00", ":hover": { backgroundColor: "#cc6a00" } }}
+            sx={{
+              backgroundColor: "#ff7f00",
+              ":hover": { backgroundColor: "#cc6a00" },
+            }}
           >
             Add Product
           </Button>
