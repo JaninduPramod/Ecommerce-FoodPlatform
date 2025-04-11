@@ -15,6 +15,7 @@ import AuthSection from "./pages/Login.jsx";
 import SignUpPage from "./pages/SignUp.jsx";
 import Profile from "./pages/Profile.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
+import SupplierProfile from "./pages/SupplierProfile.jsx";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -32,6 +33,7 @@ const AppLayout = () => {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/supplierPage" element={<SupplierProfile />} />
       </Routes>
       {!shouldHideLayout && <Footer />}
     </>

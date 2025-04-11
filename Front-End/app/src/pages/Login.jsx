@@ -33,7 +33,7 @@ const AuthSection = () => {
         localStorage.setItem("token", response.data.token);
 
         if (response.data.role === "supplier") {
-          // navigate("/supplierPage");
+          navigate("/supplierPage");
           console.log(response.data.role, "Logged In ");
         } else if (response.data.role === "customer") {
           console.log(response.data.role, "Logged In ");
