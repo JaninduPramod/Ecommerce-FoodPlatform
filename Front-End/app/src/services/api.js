@@ -24,7 +24,7 @@ export const getProducts = async () => {
 export const getCustomers = async () => {
   try {
     const response = await api.get("/api/v1/allcustomers");
-    return response.data.msg || [];
+    return response.data.data || []; // Match backend response structure
   } catch (error) {
     console.error("Error fetching customers:", error);
     throw error;

@@ -25,12 +25,19 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-// // API for fetch ALL Customers
+// API for fetch ALL Customers
 customerRoute.get("/api/v1/allcustomers", async (_, res) => {
   const response = await getAllCustomers();
 
   res.status(200).json({ data: response });
 });
+
+// customerRoute.get("/api/v1/allcustomers", async (_, res) => {
+//   console.log("Fetching all customers...");
+//   const response = await getAllCustomers();
+//   console.log("Customers found:", response.length);
+//   res.status(200).json({ data: response });
+// });
 
 // // Fetching Customer by ID
 customerRoute.post("/api/v1/customer-byid", async (req, res) => {
