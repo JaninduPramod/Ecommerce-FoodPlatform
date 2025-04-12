@@ -30,13 +30,14 @@ feedBackRoute.post(
   "/api/v6/feedbackByUserId",
   verifyToken,
   async (req, res) => {
+    console.log(req.userId);
     const response = await getFeedbackByUserID(req.userId);
 
     res.status(200).json({ msg: response });
   }
 );
 
-// Update Product By ID
+// Update Feedback By ID
 feedBackRoute.put("/api/v6/updateFeedback", async (req, res) => {
   const { _id, ...updateFields } = req.body;
 
@@ -45,7 +46,7 @@ feedBackRoute.put("/api/v6/updateFeedback", async (req, res) => {
   res.status(200).json({ msg: response });
 });
 
-// Delete Product By ID
+// Delete Feedback By ID
 feedBackRoute.delete("/api/v6/deleteFeedback", async (req, res) => {
   const response = await deleteFeedback(req.body._id);
   res.status(200).json({ msg: response });

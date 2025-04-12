@@ -11,7 +11,7 @@ export const submitFeedback = async (data) => {
 };
 
 export const getFeedbackByUserID = async (id) => {
-  const feedback = await ProductFeedback.findOne({ USER_ID: id });
+  const feedback = await ProductFeedback.find({ USER_ID: id });
   return feedback || "Feedback not found!";
 };
 
