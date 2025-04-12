@@ -124,10 +124,42 @@ const deleteSupplier = async (deleteFields) => {
   }
 };
 
+// Get Supplier by ID Method
+const getSupplierProfile = async (userId) => {
+
+  
+  const query = `
+    SELECT 
+      USERS.USER_EMAIL as email,
+      USERS.USER_PASSWORD as password,
+      USERS.USER_ROLE as role,
+      USERS.USER_NAME as username,
+      SUPPLIER.PHONE as contact,
+      SUPPLIER.ADDRESS as address,
+      SUPPLIER.FULL_NAME as fullname
+    FROM 
+      USERS
+    LEFT JOIN 
+      SUPPLIER ON USERS.USER_ID = SUPPLIER.SUPPLIER_ID
+    WHERE 
+      USERS.USER_ID = :userId
+  `;
+
+  const params = { userId };
+  const response = await execution(query, params);
+
+  if (response.length === 0) {
+    throw new Error("Supplier not found");
+  }
+
+  return response[0];
+};
+
 export {
   getAllSuppliers,
   createSupplier,
   getSupplierByID,
   updateSupplier,
   deleteSupplier,
+  getSupplierProfile
 };

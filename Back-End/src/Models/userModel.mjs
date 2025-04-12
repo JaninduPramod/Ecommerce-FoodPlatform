@@ -63,6 +63,8 @@ const userLogin = async (loginCredentials) => {
 
 // Get User by ID Method
 const getUserProfile = async (userId) => {
+
+
   const query = `
     SELECT 
       USERS.USER_EMAIL as email,
@@ -89,6 +91,9 @@ const getUserProfile = async (userId) => {
 
   return response[0];
 };
+
+
+
 
 // Update User By ID
 const updateUser = async (updateFields) => {

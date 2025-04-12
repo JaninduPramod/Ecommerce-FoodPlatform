@@ -25,7 +25,7 @@ const SupplierNavbar = ({ drawerOpen, setDrawerOpen }) => {
 
   return (
     <>
-      <AppBar position="static" sx={{ bgcolor: "#2E7D32" }}>
+      <AppBar position="static" sx={{ bgcolor: "#2E7D32", padding: 3 }}>
         <Toolbar>
           <IconButton edge="start" color="inherit" sx={{ mr: 2 }} onClick={() => setDrawerOpen(true)}>
             <MenuIcon />

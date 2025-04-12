@@ -42,7 +42,7 @@ const SupProfile = () => {
   const fetchUserProfile = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:3000/api/v2/profile", {
+      const response = await axios.get("http://localhost:3000/api/v3/getSupplier", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -57,9 +57,9 @@ const SupProfile = () => {
         username: response.data.USERNAME || "",
         role: response.data.ROLE || "",
       });
+      
     } catch (error) {
       console.error("Error fetching profile:", error);
-      navigate("/login");
     }
   };
 
@@ -80,7 +80,10 @@ const SupProfile = () => {
         p_FULL_NAME: user.fullName,
         p_PHONE: user.contact,
         p_ADDRESS: user.address,
+        p_IMAGE_URL: "image.src"
       };
+
+      console.log(user.role);
 
       await axios.put(
         "http://localhost:3000/api/v3/updateSupplier",
@@ -116,7 +119,6 @@ const SupProfile = () => {
 
       alert("Your account has been deleted successfully.");
       localStorage.removeItem("token");
-      navigate("/login");
     } catch (error) {
       console.error("Error deleting user:", error);
       alert("Failed to delete the account. Please try again.");
@@ -158,6 +160,7 @@ const SupProfile = () => {
             width: { xs: "80%", md: "40%" },
             padding: 5,
             mt: 9.5,
+            height:"200 px"
           }}
           elevation={3}
         >
@@ -238,7 +241,7 @@ const SupProfile = () => {
               <Button
                 variant="contained"
                 size="small"
-                sx={{ mt: 3, backgroundColor: "#ff7f00" }}
+                sx={{ mt: 3, background: "linear-gradient(90deg, #28a745, #218838)" }}
                 onClick={handleEditClick}
                 startIcon={<EditNoteIcon />}
               >
@@ -248,7 +251,7 @@ const SupProfile = () => {
               <Button
                 variant="contained"
                 size="small"
-                sx={{ mt: 3, backgroundColor: "#ff7f00", ml: 3 }}
+                sx={{ mt: 3, background: "linear-gradient(90deg, #28a745, #218838)", ml: 3 }}
                 startIcon={<LogoutIcon />}
                 onClick={handleLogout}
               >
@@ -298,7 +301,7 @@ const SupProfile = () => {
                 <Box>
                   <Button
                     variant="contained"
-                    sx={{ backgroundColor: "#ff7f00", mr: 2 }}
+                    sx={{ background: "linear-gradient(90deg, #28a745, #218838)", mr: 2 }}
                     onClick={handleUpdateProfile}
                   >
                     Update Profile

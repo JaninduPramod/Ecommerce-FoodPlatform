@@ -5,7 +5,9 @@ import {
   getSupplierByID,
   updateSupplier,
   deleteSupplier,
+  getSupplierProfile
 } from "../Models/supplierModel.mjs";
+import { verifyToken } from "../Auth/AuthController.mjs";
 
 const supplierRoute = Router();
 
@@ -51,24 +53,8 @@ supplierRoute.post("/api/v3/supplier-byid", async (req, res) => {
 });
 
 // Update Supplier By ID
-supplierRoute.put("/api/v3/updateSupplier", async (req, res) => {
-  const {
-    p_CRUD_TYPE,
-    p_SUPPLIER_ID,
-    p_FULL_NAME,
-    p_PHONE,
-    p_ADDRESS,
-    p_IMAGE_URL,
-  } = req.body;
-
-  const updateFields = {
-    p_CRUD_TYPE,
-    p_SUPPLIER_ID,
-    p_FULL_NAME,
-    p_PHONE,
-    p_ADDRESS,
-    p_IMAGE_URL,
-  };
+supplierRoute.put("/api/v3/updateSupplier",verifyToken, async (req, res) => {
+  const updateFields = { ...req.body, p_SUPPLIER_ID: req.userId };
 
   const response = await updateSupplier(updateFields);
 
@@ -87,5 +73,18 @@ supplierRoute.delete("/api/v3/deleteSupplier", async (req, res) => {
   const response = await deleteSupplier(deleteFields);
   res.status(200).json({ msg: response });
 });
+
+
+// Get Supplier by ID
+supplierRoute.get("/api/v3/getSupplier", verifyToken, async (req, res) => {
+  try {
+    const profile = await getSupplierProfile(req.userId);
+    res.status(200).json(profile);
+  } catch (error) {
+    console.error("Profile error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 export default supplierRoute;
