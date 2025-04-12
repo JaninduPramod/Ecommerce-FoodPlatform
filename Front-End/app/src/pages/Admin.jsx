@@ -60,6 +60,7 @@ const Dashboard = () => {
     suppliers: 0,
     feedback: 0,
   });
+  const [allProducts, setAllProducts] = useState([]);
   const [tableData, setTableData] = useState({
     products: [],
     customers: [],
@@ -87,6 +88,7 @@ const Dashboard = () => {
         const suppliers = Array.isArray(suppliersRes) ? suppliersRes : (suppliersRes?.data || suppliersRes?.msg || []);
         const feedback = Array.isArray(feedbackRes) ? feedbackRes : (feedbackRes?.data || feedbackRes?.msg || []);
 
+        setAllProducts(products);
         setStats({
           products: products.length,
           customers: customers.length,
@@ -112,57 +114,9 @@ const Dashboard = () => {
     fetchStats();
   }, []);
 
-  // Chart data configuration
-  const chartData = {
-    labels: ['Products', 'Customers', 'Suppliers', 'Feedback'],
-    datasets: [
-      {
-        label: 'Count',
-        data: [stats.products, stats.customers, stats.suppliers, stats.feedback],
-        backgroundColor: [
-          'rgba(25, 118, 210, 0.7)',
-          'rgba(76, 175, 80, 0.7)',
-          'rgba(255, 152, 0, 0.7)',
-          'rgba(244, 67, 54, 0.7)'
-        ],
-        borderColor: [
-          'rgba(25, 118, 210, 1)',
-          'rgba(76, 175, 80, 1)',
-          'rgba(255, 152, 0, 1)',
-          'rgba(244, 67, 54, 1)'
-        ],
-        borderWidth: 1,
-      }
-    ]
-  };
-
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'System Statistics',
-        font: {
-          size: 18
-        }
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: {
-          stepSize: 1
-        }
-      }
-    }
-  };
-
-  // Product Category Chart Data
+  // Product Category Chart Data (using all products)
   const productCategoryChartData = {
-    labels: tableData.products.reduce((categories, product) => {
+    labels: allProducts.reduce((categories, product) => {
       const category = `Category ${product.CATEGORY_ID || product.categoryId}`;
       if (!categories.includes(category)) {
         categories.push(category);
@@ -172,7 +126,7 @@ const Dashboard = () => {
     datasets: [
       {
         label: 'Products per Category',
-        data: tableData.products.reduce((counts, product) => {
+        data: allProducts.reduce((counts, product) => {
           const category = `Category ${product.CATEGORY_ID || product.categoryId}`;
           counts[category] = (counts[category] || 0) + 1;
           return counts;
@@ -184,7 +138,31 @@ const Dashboard = () => {
     ]
   };
 
-  const productCategoryChartOptions = {
+  // Product Stock by Category Chart (using all products)
+  const productStockChartData = {
+    labels: allProducts.reduce((categories, product) => {
+      const category = `Category ${product.CATEGORY_ID || product.categoryId}`;
+      if (!categories.includes(category)) {
+        categories.push(category);
+      }
+      return categories;
+    }, []),
+    datasets: [
+      {
+        label: 'Total Stock per Category',
+        data: allProducts.reduce((stocks, product) => {
+          const category = `Category ${product.CATEGORY_ID || product.categoryId}`;
+          stocks[category] = (stocks[category] || 0) + (product.STOCK || product.stock || 0);
+          return stocks;
+        }, {}),
+        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      }
+    ]
+  };
+
+  const productChartOptions = {
     responsive: true,
     plugins: {
       legend: {
@@ -192,9 +170,9 @@ const Dashboard = () => {
       },
       title: {
         display: true,
-        text: 'Products by Category',
+        text: 'Product Distribution',
         font: {
-          size: 18
+          size: 16
         }
       },
     },
@@ -240,7 +218,6 @@ const Dashboard = () => {
     
     try {
       await deleteFeedback(feedbackToDelete);
-      // Refresh the feedback data
       const feedbackRes = await getFeedback();
       const feedbackData = Array.isArray(feedbackRes) ? feedbackRes : 
                         (feedbackRes?.data || feedbackRes?.msg || []);
@@ -319,45 +296,61 @@ const Dashboard = () => {
             </Grid>
           </Grid>
 
-          {/* Bar Chart Section */}
-          <Box sx={{ mb: 4, p: 2, backgroundColor: 'background.paper', borderRadius: 1 }}>
-            <Typography variant="h5" sx={{ mb: 2 }}>Statistics Overview</Typography>
-            <Box sx={{ height: '400px' }}>
-              {loading ? (
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                  <CircularProgress />
+          {/* Dual Product Charts Section */}
+          <Grid container spacing={3} sx={{ mb: 4 }}>
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 2, height: '100%', borderRadius: 1 }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>Products by Category</Typography>
+                <Box sx={{ height: '300px' }}>
+                  {loading ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                      <CircularProgress />
+                    </Box>
+                  ) : allProducts.length > 0 ? (
+                    <Bar data={productCategoryChartData} options={productChartOptions} />
+                  ) : (
+                    <Box sx={{ 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      height: '100%',
+                      color: 'text.secondary'
+                    }}>
+                      <InventoryIcon sx={{ fontSize: 60, mb: 2 }} />
+                      <Typography variant="h6">No product data available</Typography>
+                    </Box>
+                  )}
                 </Box>
-              ) : (
-                <Bar data={chartData} options={chartOptions} />
-              )}
-            </Box>
-          </Box>
-
-          {/* Product Category Chart Section */}
-          <Box sx={{ mb: 4, p: 2, backgroundColor: 'background.paper', borderRadius: 1 }}>
-            <Typography variant="h5" sx={{ mb: 2 }}>Product Distribution</Typography>
-            <Box sx={{ height: '400px' }}>
-              {loading ? (
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                  <CircularProgress />
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 2, height: '100%', borderRadius: 1 }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>Stock by Category</Typography>
+                <Box sx={{ height: '300px' }}>
+                  {loading ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                      <CircularProgress />
+                    </Box>
+                  ) : allProducts.length > 0 ? (
+                    <Bar data={productStockChartData} options={productChartOptions} />
+                  ) : (
+                    <Box sx={{ 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      height: '100%',
+                      color: 'text.secondary'
+                    }}>
+                      <InventoryIcon sx={{ fontSize: 60, mb: 2 }} />
+                      <Typography variant="h6">No stock data available</Typography>
+                    </Box>
+                  )}
                 </Box>
-              ) : tableData.products.length > 0 ? (
-                <Bar data={productCategoryChartData} options={productCategoryChartOptions} />
-              ) : (
-                <Box sx={{ 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  alignItems: 'center', 
-                  justifyContent: 'center', 
-                  height: '100%',
-                  color: 'text.secondary'
-                }}>
-                  <InventoryIcon sx={{ fontSize: 60, mb: 2 }} />
-                  <Typography variant="h6">No product data available</Typography>
-                </Box>
-              )}
-            </Box>
-          </Box>
+              </Paper>
+            </Grid>
+          </Grid>
 
           {/* Tables Section */}
           <Typography variant="h5" sx={{ mb: 2, mt: 4 }}>Recent Data Overview</Typography>
