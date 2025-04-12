@@ -551,6 +551,7 @@ const Dashboard = () => {
             onClick={handleConfirmDelete} 
             color="error" 
             variant="contained"
+           
             startIcon={<DeleteIcon />}
           >
             Delete
