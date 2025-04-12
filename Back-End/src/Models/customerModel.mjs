@@ -126,10 +126,56 @@ const createCustomer = async (newCustomer) => {
   }
 };
 
+// Pay For the Order Method
+const doPayment = async (ORDER_ID) => {
+  const query = `
+  
+    BEGIN UpdatePaymentStatus(
+    p_ORDER_ID => :ORDER_ID
+    );
+    END;
+  `;
+
+  const params = {
+    ORDER_ID: ORDER_ID,
+  };
+
+  try {
+    await execution(query, params);
+    return "Payment Done Successfully ...";
+  } catch (error) {
+    console.log("Database Error:", error);
+    if (error.errorNum == 20001) {
+      return "Order ID Not Found !!!";
+    }
+  }
+};
+
+// Cancel Order Method
+const cancelOrder = async (ORDER_ID) => {
+  const query = `DELETE FROM ORDERS WHERE ORDER_ID = :ORDER_ID`;
+
+  const params = {
+    ORDER_ID: ORDER_ID,
+  };
+
+  try {
+    await execution(query, params);
+    return "Order Cancelled Successfully !!";
+  } catch (error) {
+    console.log("Database Error:", error);
+    if (error.errorNum == 20001) {
+      return "Order ID Not Found !!!";
+    }
+  }
+};
+
 export {
   getAllCustomers,
   getCustomerByID,
   updateCustomer,
   deleteCustomer,
   createCustomer,
+  doPayment,
+  cancelOrder,
 };

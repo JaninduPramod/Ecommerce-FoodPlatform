@@ -17,6 +17,7 @@ import CheckoutPage from "./pages/CheckoutPage.jsx";
 import SupplierProfile from "./pages/SupplierProfile.jsx";
 import Admin from "./pages/Admin.jsx";
 import ProductManagement from "./pages/ProductManagement.jsx";
+import OrdersPage from "./pages/Orders.jsx";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -37,6 +38,7 @@ const AppLayout = () => {
         <Route path="/supplierPage" element={<SupplierProfile />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/productManagement" element={<ProductManagement />} />
+        <Route path="/orders" element={<OrdersPage />} />
       </Routes>
       {!shouldHideLayout && <Footer />}
     </>
