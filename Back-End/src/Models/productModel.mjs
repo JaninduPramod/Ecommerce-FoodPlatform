@@ -139,6 +139,7 @@ const deleteProduct = async (deleteFields) => {
       return "Invalid Product ID !!!";
     } else {
       console.log("Database error :", error);
+      throw error;
     }
   }
 };

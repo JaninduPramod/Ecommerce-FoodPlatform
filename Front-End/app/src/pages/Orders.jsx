@@ -27,34 +27,86 @@ const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(
-          "http://localhost:3000/api/v7/orderDetails",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
+  // Function to handle payment
+  const handlePayment = async orderId => {
+    try {
+      const response = await fetch("http://localhost:3000/api/v1/pay", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ORDER_ID: orderId,
+        }),
+      });
 
-        const data = await response.json();
-        if (data.msg && Array.isArray(data.msg)) {
-          setOrders(data.msg);
-        } else {
-          setOrders([]);
-        }
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-      } finally {
-        setLoading(false);
+      const data = await response.json();
+      if (data.msg == "Payment Done Successfully ...") {
+        alert("Payment Done Successfully ...");
+      } else {
+        alert("Payment Failed ...");
       }
-    };
+      console.log("Payment response:", data.msg);
+    } catch (exception) {
+      console.log(exception);
+    }
+  };
 
+  // Function to handle order cancellation
+  const cancelOrder = async orderId => {
+    try {
+      const response = await fetch("http://localhost:3000/api/v1/cancelOrder", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ORDER_ID: orderId,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.msg == "Order Cancelled Successfully !!") {
+        alert("Order Cancelled Successfully ...");
+        fetchOrders();
+      }
+
+      console.log("Response:", data.msg);
+    } catch (exception) {
+      console.log(exception);
+    }
+  };
+
+  const fetchOrders = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        "http://localhost:3000/api/v7/orderDetails",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const data = await response.json();
+      if (data.msg && Array.isArray(data.msg)) {
+        setOrders(data.msg);
+      } else {
+        console.log("No orders found or invalid response format.");
+        setOrders([]);
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchOrders();
   }, []);
 
@@ -125,7 +177,17 @@ const OrdersPage = () => {
   }
 
   return (
-    <Box sx={{ p: 4, mt: "150px" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        p: 4,
+        mt: "140px",
+        marginBottom: "100px",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: "bold" }}>
         My Orders
       </Typography>
@@ -136,7 +198,7 @@ const OrdersPage = () => {
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Order ID</TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Amount
+                Total Price
               </TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Payment Status</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Delivery Date</TableCell>
@@ -172,11 +234,22 @@ const OrdersPage = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Button variant="outlined" size="small" sx={{ mr: 1 }}>
-                    View Details
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    sx={{ mr: 1, fontWeight: "bold" }}
+                    onClick={() => handlePayment(order.ORDER_ID)}
+                  >
+                    Pay Now
                   </Button>
-                  <Button variant="contained" size="small" color="primary">
-                    Track Order
+                  <Button
+                    sx={{ fontWeight: "bold" }}
+                    variant="outlined"
+                    size="small"
+                    color="error"
+                    onClick={() => cancelOrder(order.ORDER_ID)}
+                  >
+                    Cancel Order
                   </Button>
                 </TableCell>
               </TableRow>

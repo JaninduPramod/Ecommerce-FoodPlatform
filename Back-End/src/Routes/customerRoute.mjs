@@ -5,6 +5,8 @@ import {
   updateCustomer,
   deleteCustomer,
   createCustomer,
+  doPayment,
+  cancelOrder,
 } from "../Models/customerModel.mjs";
 import jwt from "jsonwebtoken";
 
@@ -31,7 +33,6 @@ customerRoute.get("/api/v1/allcustomers", async (_, res) => {
 
   res.status(200).json({ data: response });
 });
-
 
 // Fetching Customer by ID
 customerRoute.post("/api/v1/customer-byid", async (req, res) => {
@@ -85,6 +86,20 @@ customerRoute.post("/api/v1/newcustomer", async (req, res) => {
   };
 
   const response = await createCustomer(newCustomer);
+
+  res.status(200).json({ msg: response });
+});
+
+// Do payment API
+customerRoute.post("/api/v1/pay", async (req, res) => {
+  const response = await doPayment(req.body.ORDER_ID);
+
+  res.status(200).json({ msg: response });
+});
+
+// Do payment API
+customerRoute.post("/api/v1/cancelOrder", async (req, res) => {
+  const response = await cancelOrder(req.body.ORDER_ID);
 
   res.status(200).json({ msg: response });
 });

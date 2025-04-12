@@ -136,7 +136,7 @@ const NavBar = () => {
                 ":hover": { color: "#ff7d01" },
               }}
             >
-              My Orders
+              Orders
             </Typography>
           </Box>
 
