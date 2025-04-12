@@ -32,7 +32,7 @@ app.use(
 );
 
 const uri =
-  "mongodb+srv://JaninduPramod:702150@urbanfoodecommerce.jebi4.mongodb.net/?retryWrites=true&w=majority&appName=UrbanFoodEcommerce";
+  "mongodb+srv://JaninduPramod:702150@urbanfoodecommerce.jebi4.mongodb.net/UrbanFood?retryWrites=true&w=majority";
 //  "mongodb+srv://Nadun:nadun12345@cluster0.nq4qv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 const connectMongoose = () => {
   mongoose
