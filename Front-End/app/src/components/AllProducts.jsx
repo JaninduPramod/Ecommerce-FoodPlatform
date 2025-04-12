@@ -17,13 +17,59 @@ import {
   Chip,
 } from "@mui/material";
 import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
 
 const ProductDialog = ({ product, open, onClose, onAddToCart }) => {
   const [quantity, setQuantity] = useState(1);
+  const [feedback, setFeedback] = useState("");
+
+  const handleSubmitFeedback = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("You must be logged in to submit feedback.");
+        return;
+      }
+
+      if (!feedback.trim()) {
+        alert("Feedback cannot be empty.");
+        return;
+      }
+
+      const feedbackData = {
+        PRODUCT_ID: product.PRODUCT_ID, // Pass the product ID
+        MESSAGE: feedback, // Pass the feedback message
+      };
+
+      const response = await axios.post(
+        "http://localhost:3000/api/v6/submitFeedback",
+        feedbackData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Pass the token in the headers
+          },
+        },
+      );
+
+      if (response.data.msg === "MongoDB Feedback Submitted Successfully!") {
+        alert("Feedback submitted successfully!");
+        setFeedback(""); // Clear the feedback input after submission
+      } else {
+        alert(response.data.msg || "Failed to submit feedback.");
+      }
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      alert("Something went wrong. Please try again.");
+    }
+  };
 
   const handleQuantityChange = e => {
     const value = Math.max(1, parseInt(e.target.value) || 1);
     setQuantity(value);
+  };
+
+  const handleFeedbackChange = e => {
+    setFeedback(e.target.value); // Update feedback state
   };
 
   return (
@@ -81,32 +127,6 @@ const ProductDialog = ({ product, open, onClose, onAddToCart }) => {
               </Typography>
             </Box>
 
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold" }}>
-                Product Details
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                <strong>Product ID:</strong> {product.PRODUCT_ID}
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                <strong>Supplier:</strong> {product.SUPPLIER_NAME || "N/A"}
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 1 }}>
-                <strong>Weight:</strong> {product.WEIGHT || "N/A"} kg
-              </Typography>
-              {product.DESCRIPTION && (
-                <>
-                  <Typography
-                    variant="h6"
-                    sx={{ mt: 2, mb: 1, fontWeight: "bold" }}
-                  >
-                    Description
-                  </Typography>
-                  <Typography variant="body1">{product.DESCRIPTION}</Typography>
-                </>
-              )}
-            </Box>
-
             <Box display="flex" alignItems="center" gap={2} sx={{ mt: 3 }}>
               <TextField
                 type="number"
@@ -139,15 +159,32 @@ const ProductDialog = ({ product, open, onClose, onAddToCart }) => {
           </Grid>
         </Grid>
       </DialogContent>
+
       <DialogActions
         sx={{
           borderTop: "1px solid #e0e0e0",
           p: 2,
         }}
       >
-        <Button onClick={onClose} variant="outlined" sx={{ mr: 2 }}>
-          Close
-        </Button>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 60 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <TextField
+              value={feedback}
+              onChange={handleFeedbackChange}
+              fullWidth
+              multiline
+              rows={2}
+              placeholder="Enter your feedback here"
+            />
+            <Button onClick={handleSubmitFeedback} variant="contained">
+              Submit Feedback
+            </Button>
+          </Box>
+
+          <Button onClick={onClose} variant="outlined" sx={{ mr: 2 }}>
+            Close
+          </Button>
+        </Box>
       </DialogActions>
     </Dialog>
   );
