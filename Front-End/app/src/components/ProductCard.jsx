@@ -94,8 +94,9 @@ const ProductSlider = () => {
           <Paper elevation={2} sx={{ width: "400px", borderRadius: "25px" }}>
             <Card sx={{ borderRadius: "25px" }}>
               <CardMedia
+                sx={{ height: "250px" }}
                 component="img"
-                image="https://freshgo-webibazaar.myshopify.com/cdn/shop/products/1_350x.jpg?v=1625658832"
+                image={product.IMAGE_URL}
               />
               <CardContent>
                 <Typography variant="body2" color="text.secondary">
