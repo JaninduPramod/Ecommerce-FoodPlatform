@@ -8,6 +8,7 @@ import productRoute from "./src/Routes/productRoute.mjs";
 import feedBackRoute from "./src/Routes/feedbackRoute.mjs";
 import CartRoute from "./src/Routes/CartRoute.mjs";
 import mongoose from "mongoose";
+import OrderRoute from "./src/Routes/orderRoute.mjs";
 
 const app = express();
 
@@ -26,12 +27,13 @@ app.use(
   supplierRoute,
   CategoriesRoute,
   feedBackRoute,
-  CartRoute
+  CartRoute,
+  OrderRoute
 );
 
 const uri =
-  "mongodb+srv://JaninduPramod:702150@urbanfoodecommerce.jebi4.mongodb.net/UrbanFood";
-
+  //"mongodb+srv://JaninduPramod:702150@urbanfoodecommerce.jebi4.mongodb.net/?retryWrites=true&w=majority&appName=UrbanFoodEcommerce";
+   "mongodb+srv://Nadun:nadun12345@cluster0.nq4qv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 const connectMongoose = () => {
   mongoose
     .connect(uri)
@@ -39,7 +41,7 @@ const connectMongoose = () => {
     .catch((error) => console.log("Error: ", error));
 };
 
-// connectMongoose();
+connectMongoose();
 
 const server = app.listen(3000, () => {
   console.log(server.address().port);

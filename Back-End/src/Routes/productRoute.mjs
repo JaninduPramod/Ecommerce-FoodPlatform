@@ -22,6 +22,7 @@ productRoute.get("/api/v5/allProducts", async (_, res) => {
 productRoute.post("/api/v5/newProduct", verifyToken, async (req, res) => {
   const newProduct = { ...req.body, p_SUPPLIER_ID: req.userId };
 
+  console.log("onna Id eka", req.userId);
   const response = await createProduct(newProduct);
 
   res.status(200).json({ msg: response });
@@ -86,6 +87,7 @@ productRoute.get("/api/v5/productsWithDetails", async (_, res) => {
 
 // Filtered Product Details
 productRoute.post("/api/v5/filterProducts", async (req, res) => {
+  console.log("Received filters:", req.body);
   const filters = req.body;
   const response = await filteredProductDetails(filters);
 
