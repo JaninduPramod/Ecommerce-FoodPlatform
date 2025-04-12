@@ -15,7 +15,8 @@ import {
   DialogActions,
   Box,
   Typography,
-  Button
+  Button,
+  TablePagination
 } from '@mui/material';
 import { Edit, Delete, Search } from '@mui/icons-material';
 import { getProducts, updateProduct, deleteProduct } from '../services/api';
@@ -28,6 +29,8 @@ const ProductManagement = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     fetchProducts();
@@ -41,9 +44,9 @@ const ProductManagement = () => {
         String(product.PRODUCT_ID).toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.NAME.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      
       setFilteredProducts(filtered);
     }
+    setPage(0); // Reset to first page when search changes
   }, [searchTerm, products]);
 
   const fetchProducts = async () => {
@@ -58,6 +61,15 @@ const ProductManagement = () => {
       setError(error.message);
       setLoading(false);
     }
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const handleSearchChange = (e) => {
@@ -96,8 +108,14 @@ const ProductManagement = () => {
     }
   };
 
+  // Calculate the products to display on the current page
+  const paginatedProducts = filteredProducts.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return (
-    <Box sx={{ p: 3, mt: '100px' }}>
+    <Box sx={{ p: 3, mt: '10px' }}>
       <Typography variant="h5" gutterBottom>
         Product Management
       </Typography>
@@ -121,8 +139,8 @@ const ProductManagement = () => {
         </Typography>
       )}
 
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer component={Paper} sx={{ maxHeight: 640 }}>
+        <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
@@ -140,14 +158,14 @@ const ProductManagement = () => {
                   Loading...
                 </TableCell>
               </TableRow>
-            ) : filteredProducts.length === 0 ? (
+            ) : paginatedProducts.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} align="center">
                   {searchTerm ? 'No matching products found' : 'No products found'}
                 </TableCell>
               </TableRow>
             ) : (
-              filteredProducts.map((product) => (
+              paginatedProducts.map((product) => (
                 <TableRow key={product.PRODUCT_ID}>
                   <TableCell>{product.PRODUCT_ID}</TableCell>
                   <TableCell>{product.NAME}</TableCell>
@@ -168,6 +186,16 @@ const ProductManagement = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={filteredProducts.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
 
       <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} maxWidth="sm" fullWidth>
         <DialogTitle>Edit Product</DialogTitle>

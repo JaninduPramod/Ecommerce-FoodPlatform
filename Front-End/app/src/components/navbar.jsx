@@ -15,7 +15,7 @@ import Person2Icon from "@mui/icons-material/Person2";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CartDialog from "./CartDialog";
 import axios from "axios";
-
+import img4 from "../assets/foodylogo.png";
 const NavBar = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
@@ -68,7 +68,7 @@ const NavBar = () => {
           sx={{
             height: "90px",
             width: "90%",
-            backgroundColor: "lightyellow",
+            backgroundColor: "lightgreen",
             marginTop: 1,
             borderRadius: "18px",
             position: "fixed",
@@ -79,7 +79,7 @@ const NavBar = () => {
         >
           <Box
             component="img"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Foody-Logo.svg/2093px-Foody-Logo.svg.png"
+            src={img4}
             sx={{
               color: "black",
               height: "100%",
