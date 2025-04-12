@@ -18,11 +18,13 @@ import SupplierProfile from "./pages/SupplierProfile.jsx";
 import Admin from "./pages/Admin.jsx";
 import ProductManagement from "./pages/ProductManagement.jsx";
 import OrdersPage from "./pages/Orders.jsx";
+import SupplierProducts from "./pages/SupplierProducts";
+import SupProfile from "./pages/SupProfile.jsx";
 
 const AppLayout = () => {
   const location = useLocation();
 
-  const hideLayout = ["/", "/signup", "/checkout"];
+  const hideLayout = ["/", "/signup", "/checkout", "/supplierPage", "/my-products", "/sup-prof"];
   const shouldHideLayout = hideLayout.includes(location.pathname);
 
   return (
@@ -39,6 +41,8 @@ const AppLayout = () => {
         <Route path="/admin" element={<Admin />} />
         <Route path="/productManagement" element={<ProductManagement />} />
         <Route path="/orders" element={<OrdersPage />} />
+        <Route path="/my-products" element={<SupplierProducts />} />
+        <Route path="/sup-prof" element={<SupProfile />} />
       </Routes>
       {!shouldHideLayout && <Footer />}
     </>
